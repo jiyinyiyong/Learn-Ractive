@@ -1,0 +1,31 @@
+<table class='color-mixer'>
+  <tr>
+    <th>Colour</th>
+    <th>Amount</th>
+  </tr>
+
+  <tr>
+    <td>red:</td>
+    <td><div style='background-color: red;
+    	            width: {{red | multiply[100] }}%;'></div></td>
+  </tr>
+
+  <tr>
+    <td>green:</td>
+    <td><div style='background-color: green;
+    	            width: {{green | multiply[100] }}%;'></div></td>
+  </tr>
+
+  <tr>
+    <td>blue:</td>
+    <td><div style='background-color: blue;
+    	            width: {{blue | multiply[100] }}%;'></div></td>
+  </tr>
+
+  <tr>
+    <td><strong>result:</strong></td>
+    <td><div style='background-color: rgb({{red   | multiply[255] | round}},
+    	                                    {{green | multiply[255] | round}},
+    	                                    {{blue  | multiply[255] | round}})'></div></td>
+  </tr>
+</table>

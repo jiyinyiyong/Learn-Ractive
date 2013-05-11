@@ -296,13 +296,15 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 					throw new Error( 'Missing completed code for this step' );
 				}
 
+				while ( teardownQueue.length ) {
+					teardownQueue.pop().teardown();
+				}
+
 				editors.template.setValue( fixed.template || currentStep.template || '' );
 				editors.javascript.setValue( fixed.javascript || currentStep.javascript || '' );
 				editors.console.setValue( fixed.console || currentStep.console || '' );
 
-				while ( teardownQueue.length ) {
-					teardownQueue.pop().teardown();
-				}
+				executeJs();
 			},
 			reset: function () {
 				reset( app.state.get( 'currentStep' ) );

@@ -1,0 +1,1 @@
+view.set( 'num', Math.random().toFixed( 2 ) );

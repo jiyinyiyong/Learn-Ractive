@@ -1,0 +1,34 @@
+<h2>Chaining modifiers</h2>
+
+<p>The output of one modifer can be used as the input for the next one. Seen the movie <em>The Human Centipede</em>? It's a bit like that. In this latest contrived example, we're going to use chaining to make a colour mixer.</p>
+
+<p>First, we want to show how much we're using of each colour. We'll use <code>&lt;div&gt;</code> elements with a percentage width corresponding to the amount. All the colour values are between 0 and 1, so we can reuse our percentage-ifier from the last step:</p>
+
+<pre class='prettyprint lang-html'>
+&lt;div style='background-color: red;
+    	    width: {{red | multiply[100] }}%;'&gt;&lt;/div&gt;
+</pre>
+
+<p>Update the first three <code>&lt;div&gt;</code> elements in the template so they use the <code>multiply</code> modifier.</p>
+
+<p>To show the result, we can use an <code>rgb(r,g,b)</code> CSS colour value. But instead of percentages, these need to be between 0-255:</p>
+
+<pre class='prettyprint lang-html'>
+&lt;div style='background-color: rgb({{red   | multiply[255] }},
+    	                          {{green | multiply[255] }},
+    	                          {{blue  | multiply[255] }})'&gt;&lt;/div&gt;
+</pre>
+
+<p>Update the template and execute the code. Did it work?</p>
+
+<p>No, it didn't. That's because CSS insists that you use integers &ndash; no decimals allowed. So let's create a <code>round</code> modifier to turn the numbers into integers:</p>
+
+<pre class='prettyprint lang-js'>
+function ( num ) {
+  return Math.round( num );
+}
+</pre>
+
+<p>Add that, then add the modifier to the template, then execute the code.</p>
+
+<p>Try changing the colours using the console. For extra credit, try adding a <code>clamp</code> modifier which ensures the input values are clamped to between 0 and 1 before they get multiplied.</p>

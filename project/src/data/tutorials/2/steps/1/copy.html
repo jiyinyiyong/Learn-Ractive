@@ -1,0 +1,23 @@
+<h2>Modifiers with arguments</h2>
+
+<p>You can specify arguments for modifiers by placing them in square brackets. In the example below, we've correctly multiplied 0.5 by 100 to get an answer of 50%, but 100 is a <a href='http://en.wikipedia.org/wiki/Magic_number_(programming)#Unnamed_numerical_constants'>magic number</a>, so we should try to remove it.</p>
+
+<p>First, let's add 100 as an argument for our <code>multiply</code> modifier:</p>
+
+<pre class='prettyprint lang-html'>
+{{num | multiply[100] }}
+</pre>
+
+<p>Then, we change the modifier so it receives the argument:</p>
+
+<pre class='prettyprint lang-html'>
+function ( num, multiplier ) {
+  return num * multiplier;
+}
+</pre>
+
+<p>Go ahead and edit the code. When you execute it, nothing should change, except that fewer kittens will die as a result of you using magic numbers.</p>
+
+<div class='hint'>
+	<p>You can have as many arguments as you like, but they must be parsable by <code>JSON.parse</code>. That means that <code>formatter[1,2,3]</code> or <code>formatter["some text"]</code> are valid argument sets, but <code>formatter['some text']</code> is not (strings must be double quoted), and neither is <code>formatter[someVariable]</code> since variable names are not valid JSON.</p>
+</div>

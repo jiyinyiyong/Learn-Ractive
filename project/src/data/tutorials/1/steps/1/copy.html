@@ -12,6 +12,12 @@
 
 <p>Note the <code>#</code> character, indicating that we're dealing with a section, and also the closing mustache with a <code>/</code> character.</p>
 
+<div class='hint'>
+	<p>If you're used to the Handlebars way of doing things, this is equivalent to Handlebars' <code>#with</code> block helper. In mustache, a <code class='prettyprint lang-html'>{{#section}}&lt;!-- stuff --&gt;{{/section}}</code> can in fact be a context section, a list section (<code>#each</code> in Handlebars), or conditional section (<code>#if</code>), depending on whether it is given an object, an array, or a primitive value.</p>
+
+	<p>That might sound confusing, but in practice it isn't at all &ndash; it's just nice and concise. We'll learn about lists and conditionals in future tutorials.</p>
+</div>
+
 <p>Go ahead and update the template, creating a section for the capital as well. (You can either create a <code>{{#country.capital}}</code> section, or a <code>{{#capital}}</code> section <em>inside</em> the <code>{{#country}}</code> section. Use whichever structure is easier in a given situation.)</p>
 
 <div class='hint'>
