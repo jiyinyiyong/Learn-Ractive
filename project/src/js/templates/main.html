@@ -1,0 +1,64 @@
+<div id='header'>
+	<h1>Learn Ractive.js</h1>
+
+	<div class='tutorial-buttons'>
+		<a class='button {{prevTutorialDisabled}}' proxy-tap='prevTutorial'>&laquo;</a> <strong>{{tutorialNum}}/{{numTutorials}}</strong> <a class='button {{nextTutorialDisabled}}' proxy-tap='nextTutorial'>&raquo;</a>
+	</div>
+
+	<h2>{{title}}</h2>
+</div>
+
+<div id='content'>
+
+	<div id='copy-block' class='block copy-block'>
+		<div class='info'>
+			<div class='buttons'>
+				<a class='button' proxy-tap='reset'>reset</a>
+			</div>
+			<div class='buttons-left'>
+				<a class='button {{prevDisabled}}' proxy-tap='prev'>&laquo;</a> <strong>{{stepNum}}/{{numSteps}}</strong> <a class='button {{nextDisabled}}' proxy-tap='next'>&raquo;</a>
+			</div>
+		</div>
+		<div id='copy' class='content'>
+			{{{copy}}}
+			<div class='button-container-left'>
+				<a class='button block-button {{fixDisabled}}' proxy-tap='fix'>fix code</a>
+			</div>
+
+			<div class='button-container-right'>
+				<a class='button block-button' proxy-tap='next'>next {{stepOrTutorial}} &raquo;</a>
+			</div>
+		</div>
+	</div>
+
+	<div id='output-block' class='block output-block'>
+		<div class='info'><strong>#output</strong></div>
+		<div id='output' class='content'></div>
+	</div>
+
+	<div id='template' class='block code-block'>
+		<div class='info'><strong>#template</strong></div>
+		<div class='content' id='template-editor'></div>
+	</div>
+	
+	<div id='javascript' class='block code-block'>
+		<div class='info'>
+			<div class='buttons'>
+				<a class='button' proxy-tap='execute-js'>execute (Shift-Enter)</a>
+			</div>
+			<strong>#javascript</strong>
+		</div>
+		<div class='content' id='javascript-editor'></div>
+	</div>
+	
+	<div id='console' class='block code-block'>
+		<div class='info'>
+			<div class='buttons'>
+				<a class='button' proxy-tap='execute-console'>execute (Shift-Enter)</a>
+			</div>
+			<strong>#console</strong>
+		</div>
+		<div class='content' id='console-editor'></div>
+	</div>
+
+</div>

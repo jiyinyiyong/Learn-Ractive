@@ -1,0 +1,78 @@
+@import "base";
+
+$keyword: $blue;
+$var: #444;
+$punctuation: #888;
+$string: $green;
+$type: $blue;
+$comment: #888;
+$tag: rgb(50,150,50);
+
+
+code, pre {
+	font-family: monospace;
+	font-size: 0.8em;
+	border: 1px solid rgb(242,245,239);
+	border-radius: 0.2em;
+	background-color: $light-green;
+	color: #444;
+}
+
+
+pre {
+	white-space: pre;
+	display: block;
+	padding: 0.5em;
+	overflow-x: auto;
+	margin: 0 0 1em 0;
+	line-height: 1.5;
+}
+
+code {
+	font-weight: normal;
+	padding: 0.15em 0.3em;
+	position: relative;
+}
+
+
+.prettyprinted {
+	color: #aaa;
+}
+
+.prettyprint {
+	.pln { color: $var; }
+	.pun { color: #888; }
+	.str { color: $green; }
+	.kwd { color: $blue; }
+	.typ { color: $blue; }
+	.tag { color: $tag; }
+}
+
+.cm-s-ractive {
+	font-size: 0.8em;
+	line-height: 1.5 !important;
+	div.CodeMirror-selected { background: #b36539 !important; }
+	.CodeMirror-gutters { background: #fcfcfc; border-right: 1px solid #eee; }
+	.CodeMirror-linenumber { color: #d0d0d0; }
+	.CodeMirror-cursor { border-left: 1px solid black !important; }
+	.CodeMirror-lines { padding: 10px 0; }
+
+	span.cm-comment { color: $comment; }
+	span.cm-atom { color: #845dc4; }
+	span.cm-number, span.cm-attribute { color: #ff80e1; }
+	span.cm-keyword { color: $keyword; }
+	span.cm-string { color: $string; }
+	span.cm-meta { color: #ff9d00; }
+	span.cm-variable, span.cm-variable-2 { color: $var; }
+	span.cm-variable-3, span.cm-def { color: $var; }
+	span.cm-tag { color: $tag; }
+	span.cm-error { color: #9d1e15; }
+	span.cm-bracket { color: #d8d8d8; }
+	span.cm-builtin, span.cm-special { color: #ff9e59; }
+	span.cm-link { color: #845dc4; }
+
+	&.CodeMirror-focused {
+		background: #f9f9f9;
+		.CodeMirror-gutters { background: #f6f6f6; border-right: 1px solid #eee; }
+	}
+}
