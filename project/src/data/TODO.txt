@@ -1,10 +1,10 @@
 SVG
 Animation
-Extending
 Precompilation
-Two-way binding
 Data binding
 Partials
 Custom delimiters (part of compilation?)
-Events
 Data visualisation
+
+
+Events

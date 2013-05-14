@@ -11,8 +11,14 @@ define( [ 'Ractive', 'Divvy', 'rv!templates/main' ], function ( Ractive, Divvy, 
 			this.divvy = new Divvy({
 				el: document.getElementById( 'content' ),
 				columns: [
-					[{ id: 'copy-block', size: 3 }, { id: 'output-block', size: 2 }],
-					[{ id: 'template', size: 3 }, { id: 'javascript', size: 5 }, { id: 'console', size: 2 }]
+					{
+						size: 45,
+						children: [{ id: 'copy-block', size: 3 }, { id: 'output-block', size: 2 }]
+					},
+					{
+						size: 55,
+						children: [{ id: 'template', size: 3 }, { id: 'javascript', size: 5 }, { id: 'console', size: 2 }]
+					}
 				]
 			});
 		}
