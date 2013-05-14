@@ -1,0 +1,39 @@
+<h2>Making it sortable (part 1)</h2>
+
+<p>It's time to make our table sortable. We've added a 'sortable' class to the three headers to indicate they can be clicked on.</p>
+
+<p>First, let's add a proxy <code>sort</code> event to each column header:</p>
+
+<pre class='prettyprint lang-html'>
+&lt;th class='sortable' proxy-tap='sort'&gt;Superhero name&lt;/th&gt;
+&lt;th class='sortable' proxy-tap='sort'&gt;Real name&lt;/th&gt;
+&lt;th class='sortable' proxy-tap='sort'&gt;Superpower&lt;/th&gt;
+</pre>
+
+<p>That way, when the user taps one of the column headers, the <code>view</code> will fire a <code>sort</code> event.</p>
+
+<p>Next, we add a <code>data-column</code> property indicating which column each header belongs to.:</p>
+
+<pre class='prettyprint lang-html'>
+&lt;th class='sortable' proxy-tap='sort' data-column='name'&gt;Superhero name&lt;/th&gt;
+&lt;!-- and so on... --&gt;
+</pre>
+
+<p>That way, we can retrieve the column ID within our handler, and sort the list accordingly:</p>
+
+<pre class='prettyprint lang-js'>
+var sort, sortColumn;
+
+sort = function () {
+  // our actual sorting logic, which we'll add
+  // in the next section. For now...
+  alert( 'Sorting by ' + sortColumn );	
+};
+
+view.on( 'sort', function ( event, el ) {
+  sortColumn = el.getAttribute( 'data-column' );
+  sort();
+});
+</pre>
+
+<p>Execute the code. When you tap on the three sortable headers, the browser should alert the name of the column we're sorting by. Now we just need to add the sorting logic.</p>

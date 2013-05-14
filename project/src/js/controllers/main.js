@@ -4,7 +4,7 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 	
 	'use strict';
 
-	var eval2 = eval, teardownQueue; // changes to global context. Bet you didn't know that! Thanks, http://stackoverflow.com/questions/8694300/how-eval-in-javascript-changes-the-calling-context
+	var eval2 = eval, teardownQueue, prop; // changes to global context. Bet you didn't know that! Thanks, http://stackoverflow.com/questions/8694300/how-eval-in-javascript-changes-the-calling-context
 
 	teardownQueue = [];
 
@@ -17,6 +17,12 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 	};
 
 	window.Ractive.prototype = Ractive.prototype;
+
+	for ( prop in Ractive ) {
+		if ( Ractive.hasOwnProperty( prop ) ) {
+			window.Ractive[ prop ] = Ractive[ prop ];
+		}
+	}
 
 	return function ( app ) {
 		var mainView,
@@ -56,8 +62,6 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 
 		executeJs = function () {
 			var code = editors.javascript.getValue();
-
-			console.log( 'executing js' );
 
 			while ( teardownQueue.length ) {
 				teardownQueue.pop().teardown();
@@ -157,20 +161,38 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 		app.state.compute({
 			currentTutorial: '${tutorials}[ ${tutorialIndex } ]',
 			currentStep: '${currentTutorial}.steps[ ${stepIndex} ]',
+			nextStepDisabled: '${stepIndex} >= ( ${currentTutorial}.steps.length - 1 )',
+			prevStepDisabled: '${stepIndex} === 0',
+			nextTutorialDisabled: '${tutorialIndex} >= ( ${tutorials}.length - 1 )',
+			prevTutorialDisabled: '${tutorialIndex} === 0'
 		});
 
-		app.state.observe( 'stepIndex', function ( index ) {
-			var isFirst, isLast;
+		app.state.observe({
+			stepIndex: function ( index ) {
+				var isFirst, isLast;
 
-			isFirst = ( index === 0 );
-			isLast = ( index === this.get( 'currentTutorial.steps.length' ) - 1 );
+				isFirst = ( index === 0 );
+				isLast = ( index === this.get( 'currentTutorial.steps.length' ) - 1 );
 
-			mainView.set({
-				stepNum: index + 1,
-				prevDisabled: ( isFirst ? 'disabled' : '' ),
-				nextDisabled: ( isLast ? 'disabled' : '' ),
-				stepOrTutorial: ( isLast ? 'tutorial' : 'step' )
-			});
+				mainView.set({
+					stepNum: index + 1,
+					// prevDisabled: ( isFirst ? 'disabled' : '' ),
+					// nextDisabled: ( isLast ? 'disabled' : '' ),
+					stepOrTutorial: ( isLast ? 'tutorial' : 'step' )
+				});
+			},
+			nextStepDisabled: function ( disabled ) {
+				mainView.set( 'nextDisabled', disabled ? 'disabled' : '' )
+			},
+			prevStepDisabled: function ( disabled ) {
+				mainView.set( 'prevDisabled', disabled ? 'disabled' : '' )
+			},
+			nextTutorialDisabled: function ( disabled ) {
+				mainView.set( 'nextTutorialDisabled', disabled ? 'disabled' : '' )
+			},
+			prevTutorialDisabled: function ( disabled ) {
+				mainView.set( 'prevTutorialDisabled', disabled ? 'disabled' : '' )
+			}
 		});
 
 		reset = function ( step ) {

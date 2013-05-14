@@ -9,6 +9,7 @@
 	border-radius: 0.2em;
 	font-family: 'Voltaire', 'Helvetica Neue', 'Arial';
 	font-size: 0.9em;
+	@include no-select;
 
 	&:hover {
 		background-color: #666;

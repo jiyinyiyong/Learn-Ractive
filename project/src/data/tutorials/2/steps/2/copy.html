@@ -5,8 +5,8 @@
 <p>First, we want to show how much we're using of each colour. We'll use <code>&lt;div&gt;</code> elements with a percentage width corresponding to the amount. All the colour values are between 0 and 1, so we can reuse our percentage-ifier from the last step:</p>
 
 <pre class='prettyprint lang-html'>
-&lt;div style='background-color: red;
-    	    width: {{red | multiply[100] }}%;'&gt;&lt;/div&gt;
+&lt;td&gt;&lt;div style='background-color: red;
+    	        width: {{red}}%;'&gt;&lt;/div&gt;&lt;/td&gt;
 </pre>
 
 <p>Update the first three <code>&lt;div&gt;</code> elements in the template so they use the <code>multiply</code> modifier.</p>

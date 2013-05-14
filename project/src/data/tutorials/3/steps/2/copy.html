@@ -1,30 +1,38 @@
-<h2>True or false?</h2>
+<h2>Unsubscribing from events</h2>
 
-<p>In fact, we can be even more efficient. The condition in a conditional section doesn't have to be <code>true</code> or <code>false</code> &ndash; instead it is evaluated as <em>truthy</em> or <em>falsy</em>.</p>
+<p>There are a couple of ways to unsubscribe from events. If you've used jQuery, you'll be used to this syntax:</p>
 
-<p>Let's stipulate that the <code>user</code> property only exists if a user is signed in, and that if they are signed in, <code>user</code> is an object with a <code>name</code> property.</p>
+<pre class='prettypring lang-js'>
+view.on( 'select', selectHandler );
 
-<p>Edit the sign-in code accordingly:</p>
-
-<pre class='prettyprint lang-js'>
-document.getElementById( 'signIn' ).addEventListener( 'click', function () {
-  var name = prompt( 'Enter your username to sign in', 'ractive_fan' );
-  view.set( 'user.name', name });
-});
+// later...
+view.off( 'select', selectHandler );
 </pre>
 
+<p>That's fine, as long as you stored a reference to <code>selectHandler</code> (i.e. you didn't just use an anonymous function). If you didn't, you can also do this:</p>
+
+<pre class='prettypring lang-js'>
+view.off( 'select' ); // unsubscribes ALL 'select' handlers
+view.off(); // unsubscribes all handlers of any type
+</pre>
+
+<p>Alternatively, you can do this:</p>
+
+<pre class='prettypring lang-js'>
+var listener = view.on( 'select', selectHandler );
+
+var otherListeners = view.on({
+  activate: function () { alert( 'Activating' ); },
+  dectivate: function () { alert( 'Deactivating!' ); }
+});
+
+// later...
+listener.cancel();
+otherListeners.cancel();
+</pre>
+
+<p>Try adding a 'silence' button which removes the 'activate' and 'deactivate' handlers.</p>
+
 <div class='hint'>
-	<p>Here, we're setting a property on an object that doesn't exist yet. That's fine &ndash; <span class='logo'>Ractive.js</span> will create the object. If we'd done <code>view.set( 'user[0]', name )</code> or <code>view.set( 'user.0', name )</code> it would assume we wanted to create an array instead of an object.</p>
-</div>
-
-<p>Initially, <code>user</code> will be <code>undefined</code>, but once someone signs in, <code>user</code> will be an object. Since <code>undefined</code> is falsy and objects are always truthy, we can use <code>user</code> instead of <code>signedIn</code>.</p>
-
-<p>Update the template accordingly, discarding <code>signedIn</code> in favour of <code>user</code>. Notice that <code>{{#user}}</code> isn't just a conditional section any more &ndash; it's also a <em>context section</em>. So we can use the <code>{{name}}</code> property in our 'welcome back!' message.</p>
-
-<p>Execute the code.</p>
-
-<div class='hint'>
-	<p>In JavaScript, the following values are falsy: <code>undefined</code>, <code>null</code>, <code>NaN</code>, <code>0</code>, <code>""</code> (the empty string), and <code>false</code>.</p>
-
-	<p>However in mustache, there is a special case &ndash; arrays with a length of 0 are treated as falsy. This will make sense when we tackle list sections in the next tutorial.</p>
+	<p>We haven't yet covered <code>view.teardown()</code>, which removes your view from the DOM and cleans up after it. However as you'd expect this will remove any event handlers bound with <code>view.on()</code>.</p>
 </div>

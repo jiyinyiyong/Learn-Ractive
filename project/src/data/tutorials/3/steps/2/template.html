@@ -1,9 +1,2 @@
-{{^signedIn}}
-  <!-- message for non-signed-in users -->
-  <p>Hi there! Please <a class='button' id='signIn'>sign in</a></p>
-{{/signedIn}}
-
-{{#signedIn}}
-  <!-- message for signed-in users -->
-  <p>Welcome back, {{username}}!</p>
-{{/signedIn}}
+<button proxy-click='activate'>Activate!</button>
+<button proxy-click='deactivate'>Deactivate!</button>

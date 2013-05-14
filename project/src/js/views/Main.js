@@ -8,8 +8,6 @@ define( [ 'Ractive', 'Divvy', 'rv!templates/main' ], function ( Ractive, Divvy, 
 		template: main,
 
 		init: function ( options ) {
-			console.log( 'initing' );
-
 			this.divvy = new Divvy({
 				el: document.getElementById( 'content' ),
 				columns: [

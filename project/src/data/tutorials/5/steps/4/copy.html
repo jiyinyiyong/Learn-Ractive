@@ -1,0 +1,48 @@
+<h2>Making it sortable (part 2)</h2>
+
+<p>So we've wired up our event handler, and it's behaving as it should. The next step is to add some logic that actually sorts the table. For bonus points, we'll add a 'sorted' class to the header of the sorted column.</p>
+
+<p>There's a nice easy way to ensure that the table remains sorted, even when we add more data: a modifier.</p>
+
+<p>Add a <code>sort</code> modifier to the template:</p>
+
+<pre class='prettyprint lang-html'>
+{{#superheroes | sort : num}}
+  &lt;tr&gt;
+   &lt;!-- row contents --&gt;
+  &lt;/tr&gt;
+{{/superheroes}}
+</pre>
+
+<p>Then add the modifier to the view code &ndash; here's a function that will sort the array by whichever is the currently selected column (if you're not sure why this works, <a href='https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/sort'>here's an MDN page</a> that will help explain):</p>
+
+<pre class='prettyprint lang-js'>
+function ( array ) {
+  array = array.slice(); // clone, so we don't modify the underlying data
+  
+  return array.sort( function ( a, b ) {
+    return a[ sortColumn ] < b[ sortColumn ] ? -1 : 1;
+  });
+}
+</pre>
+
+<p>The last step is to trigger a view update each the sort column changes. For bonus points, we'll add a 'sorted' class to the header of the sorted column &ndash; for this, we'll use jQuery:</p>
+
+<pre class='prettyprint lang-js'>
+sort = function () {
+  view.update( 'superheroes' );
+
+  $( 'th.sorted' ).removeClass( 'sorted' );
+  $( 'th[data-column="' + sortColumn + '"]' ).addClass( 'sorted' ); 
+};
+
+// sort by name initially
+sortColumn = 'name';
+sort();
+</pre>
+
+<div class='hint'>
+	<p>Of course, there are many ways you could do this, with or without jQuery. But there's an important point here &ndash; <span class='logo'>Ractive.js</span> isn't a jQuery replacement. You can use it alongside the libraries you're already familiar &ndash; it's all about picking the best tool for a particular job.</p>
+</div>
+
+<p>Now comes the fun part &ndash; add Storm back to the table via the console. The table will maintain its sort order.</p>

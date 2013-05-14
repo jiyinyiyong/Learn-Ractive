@@ -1,11 +1,16 @@
-<h2>If this then NOT that</h2>
+<h2>Subscribing to multiple events</h2>
 
-<p>Having two properties (<code>signedIn</code> and <code>notSignedIn</code>) to represent one piece of data (whether or not the user is signed in) is the sort of thing that makes most programmers itch uncontrollably.</p>
+<p>You can subscribe to multiple proxy events in one go:</p>
 
-<p>Fortunately mustache has us covered. We can use an <em>inverted section</em>:</p>
-
-<pre class='prettyprint lang-html'>
-{{^signedIn}}&lt;!-- not-signed-in block --&gt;{{/signedIn}}
+<pre class='prettyprint lang-js'>
+view.on({
+  activate: function () {
+    alert( 'Activating!' );
+  },
+  deactivate: function () {
+    alert( 'Deactivating!' );
+  }
+});
 </pre>
 
-<p>Replace the <code>{{#notSignedIn}}</code> section with a <code>{{^signedIn}}</code> section. Then, remove the references to <code>notSignedIn</code> in the JavaScript. Then breathe a sigh of relief &ndash; doesn't that feel better?</p>
+<p>Add a 'deactivate' button and wire it up.</p>

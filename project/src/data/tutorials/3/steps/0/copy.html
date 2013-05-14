@@ -1,18 +1,28 @@
-<h2>If this then that</h2>
+<h2>Events, dear boy, events</h2>
 
-<p>Often, you want to show or hide part of your view depending on whether a particular condition is met. For example you might want to show a slightly different view to users depending on whether they're signed in or not.</p>
+<p>DOM events are central to anything interactive on the web. You've probably written <code>element.addEventListener( 'click', handler );</code> or <code>$( '#button' ).on( 'click', handler );</code> style code a thousand times.</p>
 
-<p>In this example we've already set up a mock sign-in mechanism &ndash; click the 'sign in' button and enter your name in the prompt.</p>
-
-<p>All we need to do is hide the 'please sign in' message when we're signed in, and the 'welcome back!' message when we're not.</p>
-
-<p>Wrap the first block in a conditional section that uses the <code>notSignedIn</code> property:</p>
+<p>With <span class='logo'>Ractive.js</span>, you can subscribe to <em>proxy events</em> instead. You declare a proxy event like this...</p>
 
 <pre class='prettyprint lang-html'>
-{{#notSignedIn}}
-  &lt;!-- message for non-signed-in users --&gt;
-  &lt;p&gt;Hi there! Please &lt;a class='button' id='signIn'&gt;sign in&lt;/a&gt;.&lt;/p&gt;
-{{/notSignedIn}}
+&lt;button proxy-click='activate'&gt;Activate!&lt;/button&gt;
 </pre>
 
-<p>Now do the same for the other block, except with the <code>signedIn</code> property. Execute the code.</p>
+<p>...and subscribe to it like this:</p>
+
+<pre class='prettyprint lang-js'>
+view.on( 'activate', function ( event, el ) {
+  // `this` is the view
+  // `event` is the underlying DOM event
+  // `el` is the element the event was triggered on
+  alert( 'Activating!' );
+});
+</pre>
+
+<p>This is generally more convenient &ndash; you don't need to pepper the DOM with <code>id</code> and <code>class</code> attributes just so you've got a hook to identify elements with, and proxy event names carry meaning about the user's intended action in a way that <code>mouseover</code> and friends don't, making your templates and your code easier to reason about.</p>
+
+<p>Update the template and JavaScript, then execute.</p>
+
+<div class='hint'>
+	<p>If you use your developer tools to inspect the button, you'll notice that it doesn't have a <code>proxy-click</code> attribute. When <span class='logo'>Ractive.js</span> compiles the template, it knows to treat attributes beginning <code>proxy-</code> differently. You'll learn more about compilation in a later tutorial.</p>
+</div>

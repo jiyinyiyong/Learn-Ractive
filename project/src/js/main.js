@@ -9,7 +9,8 @@
 			Ractive: 'lib/Ractive',
 			Statesman: 'lib/Statesman',
 			Divvy: 'lib/Divvy'
-		}
+		},
+		urlArgs: 'bust=' + Date.now()
 	});
 
 	require([ 'app' ]);

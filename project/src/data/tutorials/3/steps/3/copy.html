@@ -1,0 +1,19 @@
+<h2>Custom events</h2>
+
+<p>It's possible to define custom events in <span class='logo'>Ractive.js</span>. Explaining how to <em>create</em> them is outside the scope of this tutorial, but <em>using</em> them is easy:</p>
+
+<pre class='prettyprint lang-html'>
+&lt;button proxy-tap='activate'&gt;Activate!&lt;/button&gt;
+</pre>
+
+<p>Note that we're using <code>proxy-tap</code> here instead of <code>proxy-click</code> &ndash; <code>tap</code> is a custom event.</p>
+
+<p>The trouble with <code>click</code> is that it's nonsense. If you put your mouse down on the 'activate' button, waggle it about, then lift your finger up after a few seconds, the browser will in most cases consider it a 'click'. I don't. Do you?</p>
+
+<p>Furthermore, if your interface needs to work on touch devices, using <code>click</code> means a 300ms delay between the <code>touchstart</code>-<code>touchend</code> sequence event and the simulated <code>mousedown</code>-<code>mouseup</code>-<code>click</code> sequence.</p>
+
+<p>The <code>tap</code> event corrects for both of these anomalies. Try replacing the <code>click</code> proxies in the template.</p>
+
+<div class='hint'>
+	<p>More custom events (such as cross-browser <code>mouseenter</code>/<code>mouseleave</code> will be added to future versions of <span class='logo'>Ractive.js</span>.</p>
+</div>
