@@ -2,9 +2,9 @@ SVG
 Animation
 Precompilation
 Data binding
-Partials
-Custom delimiters (part of compilation?)
+
 Data visualisation
 
 
 Events
+Custom delimiters (part of compilation?)

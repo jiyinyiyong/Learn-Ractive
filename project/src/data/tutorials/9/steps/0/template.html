@@ -4,9 +4,9 @@
 
 <ul class='todos'>
   {{#items:i}}
-    <li data-index='{{i}}' class='{{#done}}done{{/done}}'>
+    <li data-index='{{i}}' class='{{done ? done : pending}}'>
       <input type='checkbox' checked='{{done}}'>
-      <span proxy-tap='edit'>{{i}}: {{description}}</span>
+      <span proxy-tap='edit'>{{description}}</span>
       <a class='button' proxy-tap='remove'>x</a>
     </li>
   {{/items}}

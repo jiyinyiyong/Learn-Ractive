@@ -5,7 +5,7 @@
 <p>Well, we can. Add this above the rest of the code:</p>
 
 <pre class='prettyprint lang-js'>
-var item = "&lt;li data-index='{{i}}' class='{{#done}}done{{/done}}'&gt;" +
+var item = "&lt;li data-index='{{i}}' class='{{done ? done : pending}}'&gt;" +
               "&lt;input type='checkbox' checked='{{done}}'&gt;" +
               "&lt;span proxy-tap='edit'&gt;{{description}}&lt;/span&gt;" +
               "&lt;a class='button' proxy-tap='remove'&gt;x&lt;/a&gt;" +
@@ -37,3 +37,9 @@ var TodoList = Ractive.extend({
 </pre>
 
 <p>Execute this code.</p>
+
+<div class='hint'>
+  <p>You may have noticed this odd-looking mustache in the template: <code>{{done ? done : pending}}</code>. Students of the <a href='http://mustache.github.io/mustache.5.html'>mustache specification</a> will know that &ndash; like modifiers and index references &ndash; this syntax isn't part of it.</p>
+
+  <p>It's basically a shorthand for <code>{{#done}}done{{/done}}{{^done}}pending{{/done}}</code>. Toggling an element between two class names is a common enough use case in web apps that it makes sense to add this syntax to the mix.</p>
+</div>
