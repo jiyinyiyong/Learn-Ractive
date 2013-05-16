@@ -264,28 +264,71 @@
 		height: 100%;
 	}
 
+	.background {
+		fill: #f9f9f9;
+	}
+
+	.tapcatcher {
+		fill: rgba(255,255,255,0.01);
+		pointer-event: fill;
+	}
+
 	#hotspots {
-		g, ellipse {
+		g, ellipse, circle {
 			cursor: pointer;
 			fill: white;
 			fill-opacity: 0.5;
 			stroke: #1E2458;
 			stroke-width: 2;
 		}
+
+		text.large {
+			fill: #333;
+			font-family: 'Voltaire';
+			font-size: 2em;
+			text-anchor: middle;
+			pointer-events: none;
+
+			&.white {
+				fill: white;
+			}
+		}
+
+		&.visible {
+			opacity: 1;
+			pointer-events: normal;
+			-webkit-transition: opacity 0.3s ease-in-out;
+		}
+
+		&.hidden {
+			opacity: 0;
+			pointer-events: none;
+			-webkit-transition: opacity 1s ease-in-out;
+		}
+	}
+
+	#neuron {
+		cursor: pointer;
 	}
 
 	.detail {
-		opacity: 0;
 		-webkit-transition: opacity 1s ease-in-out;
 
 		&.visible {
 			opacity: 1;
+			pointer-events: normal;
+		}
+
+		&.hidden {
+			opacity: 0;
+			pointer-events: none;
 		}
 	}
 
 	.label {
 		opacity: 0;
 		-webkit-transition: opacity 0.2s ease-in-out;
+		pointer-events: none;
 
 		text {
 			font-family: 'Helvetica Neue', 'Arial';
