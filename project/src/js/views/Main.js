@@ -12,8 +12,8 @@ define( [ 'Ractive', 'Divvy', 'rv!templates/main' ], function ( Ractive, Divvy, 
 				el: document.getElementById( 'content' ),
 				columns: [
 					{
-						size: 95,
-						children: [{ id: 'copy-block', size: 3 }, { id: 'output-block', size: 20 }]
+						size: 45,
+						children: [{ id: 'copy-block', size: 3 }, { id: 'output-block', size: 2 }]
 					},
 					{
 						size: 55,
