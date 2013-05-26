@@ -1,1 +1,1 @@
-view.set( 'country.climate.rainfall', 'very high' );
+ractive.set( 'country.climate.rainfall', 'very high' );

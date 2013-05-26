@@ -1,23 +1,26 @@
-<h2>Modifiers with arguments</h2>
+<h2>By the numbers</h2>
 
-<p>You can specify arguments for modifiers by placing them in square brackets. In the example below, we've correctly multiplied 0.5 by 100 to get an answer of 50%, but 100 is a <a href='http://en.wikipedia.org/wiki/Magic_number_(programming)#Unnamed_numerical_constants'>magic number</a>, so we should try to remove it.</p>
+<p>You can also use mathematical expressions. Let's rummage around in the bag of contrived examples and see what comes out... yep... this one will do... it's a shopping basket.</p>
 
-<p>First, let's add 100 as an argument for our <code>multiply</code> modifier:</p>
+<p>We have an <code>item</code> property, a <code>price</code>, and a <code>quantity</code>. Add an expression where the total should go:</p>
 
 <pre class='prettyprint lang-html'>
-{{num | multiply[100] }}
+&lt;td&gt;{{( price * quantity )}}&lt;/td&gt;
 </pre>
 
-<p>Then, we change the modifier so it receives the argument:</p>
+<p>Execute the code. The total should appear. Now we just need to add a currency formatter &ndash; here's one for the UK (if you're not from here, write one for your own currency for extra credit):</p>
 
-<pre class='prettyprint lang-html'>
-function ( num, multiplier ) {
-  return num * multiplier;
+<pre class='prettyprint lang-js'>
+function ( num ) {
+  if ( num < 1 ) return ( 100 * num ) + 'p';
+  return '£' + num.toFixed( 2 );
 }
 </pre>
 
-<p>Go ahead and edit the code. When you execute it, nothing should change, except that fewer kittens will die as a result of you using magic numbers.</p>
+<p>Add that, and use in the template it for both the price and the total. Try changing the price and the quantity via the console.</p>
 
 <div class='hint'>
-	<p>You can have as many arguments as you like, but they must be parsable by <code>JSON.parse</code>. That means that <code>formatter[1,2,3]</code> or <code>formatter["some text"]</code> are valid argument sets, but <code>formatter['some text']</code> is not (strings must be double quoted), and neither is <code>formatter[someVariable]</code> since variable names are not valid JSON.</p>
+	<p>You might reasonably ask how this works. What happens is this: when the template is parsed, any <em>references</em> inside expressions (such as <code>price</code>, <code>quantity</code> or <code>format</code> in the example above) are identified. At render time, as soon as those references can be <em>resolved</em>, the expression is registered as a dependency of each of the <em>keypaths</em> that the references resolve to, and a function is created to evaluate the expression. (Whenever possible, <span class='logo'>Ractive.js</span> will re-use functions &ndash; for example <code>{{( a+b )}}</code> and <code>{{( c+d )}}</code> would share the same function.)</p>
+
+	<p>When the value of one or more of those dependencies change, the expression is re-evaluated. If the result changes, the DOM is updated.</p>
 </div>

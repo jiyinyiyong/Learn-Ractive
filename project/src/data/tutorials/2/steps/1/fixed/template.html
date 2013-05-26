@@ -1,1 +1,13 @@
-<p>{{num}} expressed as a percentage is {{num | multiply[100] }}%</p>
+<table>
+	<tr>
+		<th>Price per {{item}}</th>
+		<th>Quantity</th>
+		<th>Total</th>
+	</tr>
+
+	<tr>
+		<td>{{( format(price) )}}</td>
+		<td>{{quantity}}</td>
+		<td>{{( format( price * quantity ) )}}</td>
+	</tr>
+</table>

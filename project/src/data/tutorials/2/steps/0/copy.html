@@ -1,16 +1,16 @@
-<h2>Using modifiers</h2>
+<h2>Using expressions</h2>
 
 <p>One problem with the last example &ndash; the population number. Printing out a number like 62641000 (<a href='https://www.google.co.uk/publicdata/explore?ds=d5bncppjof8f9_&ctype=l&strail=false&bcs=d&nselm=h&met_y=sp_pop_totl&scale_y=lin&ind_y=false&rdim=region&idim=country:GBR&ifdim=region&hl=en&dl=en&ind=false&q=uk+population'>the most recent figure for the UK's population</a>) just looks a bit daft.</p>
 
 <p>We <em>could</em> replace the number with a string, like '62.6 million'. But numbers are a hell of a lot easier to work with.</p>
 
-<p>Instead, we use <em>modifiers</em>. Add a modifier to the <code>{{population}}</code> variable using the <code>|</code> character (pronounced 'pipe'):</p>
+<p>Instead, we can use an <em>expression</em>. Expressions look like regular mustaches, except with parentheses inside the curly braces:</p>
 
 <pre class='prettyprint lang-html'>
-{{population | formatNumber}}
+{{( format(population) )}}
 </pre>
 
-<p>Then, we need to add a <code>formatNumber</code> modifier. Here's one you could use:</p>
+<p>Add a <code>format</code> property alongside the country data (it may seem weird adding a function as 'data', but it will make sense in due course!):</p>
 
 <pre class='prettyprint lang-js'>
 function ( num ) {
@@ -24,5 +24,5 @@ function ( num ) {
 <p>Execute the code. Doesn't that look better? Try changing the values via the console.</p>
 
 <div class='hint'>
-	<p>Note that modifiers are not part of the mustache syntax &ndash; they are specific to <span class='logo'>Ractive.js</span>.</p>
+	<p>Note that expressions are not part of the mustache syntax &ndash; they are specific to <span class='logo'>Ractive.js</span>.</p>
 </div>

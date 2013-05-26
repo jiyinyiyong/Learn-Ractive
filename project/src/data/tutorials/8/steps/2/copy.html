@@ -14,7 +14,7 @@
 	<p>I apologise to my fellow Brits, and other English-speaking non-Americans, for the repeated use of <code>color</code> instead of <code>colour</code>. Occupational hazard.</div>
 </div>
 
-<p>Re-render the view. Notice that once again, the data is initialised to the value of the selected <code>&lt;option&gt;</code> &ndash; in this case, blue.</p>
+<p>Re-render the ractive. Notice that once again, the data is initialised to the value of the selected <code>&lt;option&gt;</code> &ndash; in this case, blue.</p>
 
 <p>That's good, but we can go one better &ndash; rather than hard-coding our colours into the template, let's do it properly:</p>
 
@@ -27,7 +27,7 @@
 </pre>
 
 <div class='hint'>
-	<p>We haven't seen <code>{{.}}</code> before. It's called the <em>implicit iterator</em>, and it basically points to the current list item. Previously, whenever we've used lists, they've been lists of objects. The implicit iterator allows us to use lists of primitives (in this case, strings) instead.</p>
+	<p>We haven't seen <code>{{.}}</code> before. It's called the <em>implicit iterator</em>, and it basically points to the current list item. Previously, whenever we've used lists, they've been lists of objects. The implicit iterator allows us to use lists of <em>primitives</em> (in this case, strings) instead.</p>
 </div>
 
 <p>And add some data to our view:</p>
@@ -35,7 +35,7 @@
 <pre class='prettyprint lang-js'>
 var colors = [ 'red', 'green', 'blue' ];
 
-var view = new Ractive({
+var ractive = new Ractive({
   el: output,
   template: template,
   data: {

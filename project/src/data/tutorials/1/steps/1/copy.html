@@ -25,7 +25,7 @@
 
 	<p>We say that the capital <code>{{name}}</code> reference has a two-level <em>context stack</em> &ndash; if the innermost context (<code>country.capital</code>) has a <code>name</code> property, <code>{{name}}</code> resolves to the <code>country.capital.name</code> <em>keypath</em>.</p>
 
-	<p>If not, Ractive moves <em>up the context stack</em> (in this case, to <code>country</code>, and then to the root <code>data</code> object) until it <em>does</em> find a context with a <code>name</code> property. Once a reference is resolved, its keypath is fixed. Unresolved references are re-evaluated with each call to <code>view.set()</code>.</p>
+	<p>If not, Ractive moves <em>up the context stack</em> (in this case, to <code>country</code>, and then to the root <code>data</code> object) until it <em>does</em> find a context with a <code>name</code> property. Once a reference is resolved, its keypath is fixed. Unresolved references are re-evaluated with each call to <code>ractive.set()</code>.</p>
 </div>
 
 <p>If you get stuck, hit the <strong>fix code</strong> button.</p>

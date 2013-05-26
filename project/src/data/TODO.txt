@@ -1,10 +1,7 @@
 SVG
-Animation
-Precompilation
+Precompilation (inc custom delimiters and other options - sanitizing, whitespace... RequireJS plugin)
 Data binding
 
-Data visualisation
 
 
 Events
-Custom delimiters (part of compilation?)

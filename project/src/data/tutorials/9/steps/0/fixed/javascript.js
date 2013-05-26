@@ -1,4 +1,4 @@
-var item = "<li data-index='{{i}}' class='{{done ? done : pending}}'>" +
+var item = "<li data-index='{{i}}' class='{{( done ? \"done\" : \"pending\" )}}'>" +
               "<input type='checkbox' checked='{{done}}'>" +
               "<span proxy-tap='edit'>{{description}}</span>" +
               "<a class='button' proxy-tap='remove'>x</a>" +
@@ -72,7 +72,7 @@ var TodoList = Ractive.extend({
   }
 });
 
-var view = new TodoList({
+var ractive = new TodoList({
   el: output,
   items: [
     { done: true,  description: 'Add a todo item' },

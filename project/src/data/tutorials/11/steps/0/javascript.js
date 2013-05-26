@@ -1,135 +1,93 @@
-var viewBoxes = {
-	normal: { x: 0, y: 0, width: 819.18, height: 596.441 },
-	neuron: { x: 0, y: 100, width: 560, height: 407.451 },
-	axon: { x: 289, y: 195, width: 530, height: 385.623 },
-	synapse: { x: 190, y: 0, width: 525, height: 381.985 }
+var width, height, xScale, yScale, linearScale, getPointsArray, resize;
+
+// this returns a function that scales a value from a given domain
+// to a given range. Hat-tip to D3
+linearScale = function ( domain, range ) {
+  var d0 = domain[0], r0 = range[0], multipler = ( range[1] - r0 ) / ( domain[1] - d0 );
+
+  return function ( num ) {
+    return r0 + ( ( num - d0 ) * multipler );
+  };
 };
 
-var detail = {
-	dendrites: '<strong>Dendrites</strong> conduct electrochemical stimulation from other neurons via synapses',
-	
+// this function takes an array of values, and returns an array of
+// points plotted according to the given x scale and y scale
+getPointsArray = function ( array, xScale, yScale, point ) {
+  var result = array.map( function ( month, i ) {
+    return xScale( i + 0.5 ) + ',' + yScale( month[ point ] );
+  });
+
+  // add the december value in front of january, and the january value after
+  // december, to show the cyclicality
+  result.unshift( xScale( -0.5 ) + ',' + yScale( array[ array.length - 1 ][ point ] ) );
+  result.push( xScale( array.length + 0.5 ) + ',' + yScale( array[0][ point ] ) );
+
+  return result;
 };
 
-var view = new Ractive({
+var ractive = new Ractive({
   el: output,
   template: template,
-  data: { viewBox: viewBoxes.normal }
-});
-
-// after the view renders, fade in hotspots
-setTimeout( function () {
-	view.set( 'hotspotsVisible', true );
-}, 1000 );
-
-
-var info, closeup;
-
-view.on({
-  reset: function () {
-    this.set({
-      info: null,
-      closeup: null
-    });
-  },
-
-  moreInfo: function ( event, el ) {
-    var hotspotId = el.getAttribute( 'data-hotspot' );
-
-    this.set( 'info', hotspotId );
-    this.nodes[ hotspotId + '-label' ].style.opacity = 1;
-  },
-
-  showCloseUp: function ( event, el ) {
-    this.set( 'closeup', el.getAttribute( 'data-closeup' ) );
-  },
-
-  'set:info': function ( newInfo ) {
-    if ( newInfo !== info ) {
-      if ( info ) {
-        this.nodes[ info + '-label' ].style.opacity = 0;
+  data: {
+    format: function ( val, degreeType ) {
+      if ( degreeType === 'fahrenheit' ) {
+        // convert celsius to fahrenheit
+        val = ( val * 1.8 ) + 32;
       }
 
-      info = newInfo;
-    }
+      return val.toFixed( 1 ) + '°';
+    },
+    getBand: function ( array, xScale, yScale ) {
+      var high = [], low = [];
 
-    if ( info ) {
-      this.nodes[ info + '-label' ].style.opacity = 1;
-      this.set( 'hotspotsVisible', false );
-    } else {
-      this.set( 'hotspotsVisible', true );
-    }
-  },
+      high = getPointsArray( array, xScale, yScale, 'high' );
+      low = getPointsArray( array, xScale, yScale, 'low' );
 
-  'set:closeup': function ( newCloseup ) {
-    var viewBox;
-
-    if ( closeup === newCloseup ) {
-      return;
-    }
-
-    // previous
-    if ( closeup ) {
-      this.set( closeup + 'Visible', false );
-      this.set( 'hotspotsVisible', false );
-    }
-
-    // new
-    viewBox = ( newCloseup ? viewBoxes[ newCloseup ] : viewBoxes.normal );
-
-    this.animate( 'viewBox', viewBox, {
-      duration: 300,
-      easing: 'easeInOut',
-      complete: function () {
-        if ( newCloseup ) {
-          view.set( newCloseup + 'Visible', true );
-          view.set( 'hotspotsVisible', false );
-        } else {
-          view.set( 'hotspotsVisible', true );
-        }
-      }
-    });
-
-    closeup = newCloseup;
+      return high.concat( low.reverse() ).join( ' ' );
+    },
+    getLine: function ( array, xScale, yScale, point ) {
+      return getPointsArray( array, xScale, yScale, point ).join( ' ' );
+    },
+    monthNames: [ 'J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D' ]
   }
 });
 
 
+// because we're using SVG, we need to manually redraw
+// when the container resizes
+resize = function () {
+  width = ractive.nodes.svg.clientWidth;
+  height = ractive.nodes.svg.clientHeight;
 
-/*var hotspots = [], hotspotNodes, hotspotOver, i;
+  ractive.set( 'width', width );
+  ractive.get( 'height', height );
 
-hotspotNodes = view.el.getElementsByClassName( 'hotspot' );
-i = hotspotNodes.length;
-
-hotspotOver = function ( event ) {
-  var hotspotId, label;
-
-  hotspotId = this.getAttribute( 'data-hotspot' );
-  label = document.getElementById( hotspotId + '-label' );
-
-  if ( !label ) {
-  	console.log( 'no label: %s', hotspotId );
-  } else {
-  	console.log( label );
-  	label.style.opacity = 1;
-  }
+  ractive.set( 'xScale', linearScale([ 0, 12 ], [ 0, width ]) );
+  ractive.set( 'yScale', linearScale([ -10, 40 ], [ height - 20, 25 ]) );
 };
 
-hotspotOut = function ( event ) {
-  var hotspotId, label;
+// For the purposes of this tutorial, we've got a global
+// onResize function which lets us safely add resize handlers
+// (they are removed each time this code re-executes)
+onResize( resize );
+resize();
 
-  hotspotId = this.getAttribute( 'data-hotspot' );
-  label = document.getElementById( hotspotId + '-label' );
 
-  if ( !label ) {
-  	console.log( 'no label: %s', hotspotId );
-  } else {
-  	console.log( label );
-  	label.style.opacity = 0;
-  }
-}
+// respond to user input
+ractive.observe( 'selected', function ( index ) {
+  this.animate( 'selectedCity', cities[ index ], {
+    easing: 'easeOut',
+    duration: 300
+  });
+});
 
-while ( i-- ) {
-	hotspots[i] = hotspotNodes[i];
-	hotspots[i].addEventListener( 'mouseover', hotspotOver );
-	hotspots[i].addEventListener( 'mouseout', hotspotOut );
-}*/
+
+// load our data
+$.getJSON( 'files/data/temperature.json' ).then( function ( data ) {
+  cities = data;
+
+  ractive.set({
+    cities: cities,
+    selectedCity: cities[0] // initialise to London
+  });
+});

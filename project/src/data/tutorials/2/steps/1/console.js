@@ -1,1 +1,5 @@
-view.set( 'num', Math.random().toFixed( 2 ) );
+ractive.set({
+  item: 'banana',
+  price: 0.19,
+  qty: 7
+});

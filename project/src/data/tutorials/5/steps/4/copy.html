@@ -2,22 +2,24 @@
 
 <p>So we've wired up our event handler, and it's behaving as it should. The next step is to add some logic that actually sorts the table. For bonus points, we'll add a 'sorted' class to the header of the sorted column.</p>
 
-<p>There's a nice easy way to ensure that the table remains sorted, even when we add more data: a modifier.</p>
+<p>There's a nice easy way to ensure that the table remains sorted, even when we add more data: an expression. That's right, you can use expressions with sections.</p>
 
-<p>Add a <code>sort</code> modifier to the template:</p>
+<p>Update the template:</p>
 
 <pre class='prettyprint lang-html'>
-{{#superheroes | sort : num}}
+{{#( sort(superheroes, sortColumn) ) :num}}
   &lt;tr&gt;
    &lt;!-- row contents --&gt;
   &lt;/tr&gt;
-{{/superheroes}}
+{{/()}}
 </pre>
 
-<p>Then add the modifier to the view code &ndash; here's a function that will sort the array by whichever is the currently selected column (if you're not sure why this works, <a href='https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/sort'>here's an MDN page</a> that will help explain):</p>
+<p>Notice that the section <code>#</code> character and the index reference both sit outside the expression in parentheses, and that the section is closed with <code>{{/()}}</code>.</p> 
+
+<p>Now we need to add the <code>sort</code> function. Here's one (if you're not sure why this works, <a href='https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array/sort'>here's an MDN page</a> that will help explain):</p>
 
 <pre class='prettyprint lang-js'>
-function ( array ) {
+function ( array, sortColumn ) {
   array = array.slice(); // clone, so we don't modify the underlying data
   
   return array.sort( function ( a, b ) {
@@ -26,23 +28,23 @@ function ( array ) {
 }
 </pre>
 
-<p>The last step is to trigger a view update each the sort column changes. For bonus points, we'll add a 'sorted' class to the header of the sorted column &ndash; for this, we'll use jQuery:</p>
+<p>Wiring it up is easy:</p>
 
 <pre class='prettyprint lang-js'>
-sort = function () {
-  view.update( 'superheroes' );
-
-  $( 'th.sorted' ).removeClass( 'sorted' );
-  $( 'th[data-column="' + sortColumn + '"]' ).addClass( 'sorted' ); 
-};
-
-// sort by name initially
-sortColumn = 'name';
-sort();
+ractive.on( 'sort', function ( event, el ) {
+  var column = el.getAttribute( 'data-column' );
+  this.set( 'sortColumn', column );
+});
 </pre>
 
-<div class='hint'>
-	<p>Of course, there are many ways you could do this, with or without jQuery. But there's an important point here &ndash; <span class='logo'>Ractive.js</span> isn't a jQuery replacement. You can use it alongside the libraries you're already familiar &ndash; it's all about picking the best tool for a particular job.</p>
-</div>
+<p>Try executing this code. Aaargh! It doesn't work!</p>
 
-<p>Now comes the fun part &ndash; add Storm back to the table via the console. The table will maintain its sort order.</p>
+<p>No, it doesn't. That's because we haven't initialised <code>sortColumn</code> &ndash; without it, the expression can't evaluate. Add <code>sortColumn: 'name'</code> to <code>data</code> and try again.</p>
+
+<p>The last job is to add a <code>sorted</code> class to the header of the currently sorted column. There are several ways we could do this &ndash; you could use a bit of jQuery inside the <code>sort</code> proxy event handler, for example. But for this demonstration we'll put the logic in the template, using the conditional operator:</p>
+
+<pre class='prettyprint lang-html'>
+&lt;th class='sortable {{( sortColumn === "name" ? "sorted" : "" )}}' proxy-tap='sort' data-column='name'&gt;Superhero name&lt;/th&gt;
+</pre>
+
+<p>Do this for each of the headers, then execute the code. Congratulations! You've built a sortable table in just a few steps. Now comes the fun part &ndash; add Storm back to the table via the console. The table will maintain its sort order.</p>

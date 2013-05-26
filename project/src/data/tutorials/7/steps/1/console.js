@@ -1,1 +1,1 @@
-view.goto( 3 );
+ractive.goto( 3 );

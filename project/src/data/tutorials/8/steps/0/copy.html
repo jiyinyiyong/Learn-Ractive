@@ -17,14 +17,10 @@
 	<p>If you'd rather disable two-way binding altogether, you can do so with <code>twoway: false</code>.</p>
 </div>
 
-<p>That's a cute demo, but it doesn't have much real world use. In all likelihood we want to do something with the data when it changes. For that, we use <code>view.on()</code>:</p>
+<p>That's a cute demo, but it doesn't have much real world use. In all likelihood we want to do something with the data when it changes. For that, we use <code>ractive.observe()</code>:</p>
 
 <pre class='prettyprint lang-js'>
-view.on( 'set:name', function ( name ) {
-  app.user.name = name; // or whatever
+ractive.observe( 'name', function ( newValue, oldValue ) {
+  app.user.name = newValue; // or whatever
 });
 </pre>
-
-<div class='hint'>
-	<p>Whenever data changes (whether as a result of user interaction or not), <span class='logo'>Ractive.js</span> fires <code>set</code> events, with the keypath and value as arguments, and <code>set:[keypath]</code> events, with the value as argument.</p>
-</div>

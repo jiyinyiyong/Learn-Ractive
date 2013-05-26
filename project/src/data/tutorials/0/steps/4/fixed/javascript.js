@@ -1,4 +1,4 @@
-var view = new Ractive({
+var ractive = new Ractive({
   el: output,
   template: template,
   data: {
@@ -12,5 +12,5 @@ var view = new Ractive({
 });
 
 document.getElementById( 'count' ).addEventListener( 'click', function () {
-  view.set( 'counter', view.get( 'counter' ) + 1 );
+  ractive.set( 'counter', ractive.get( 'counter' ) + 1 );
 });

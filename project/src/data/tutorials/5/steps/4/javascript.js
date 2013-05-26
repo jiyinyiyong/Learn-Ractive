@@ -6,26 +6,13 @@ var xmen = [
   { name: 'Wolverine',    realname: 'Howlett, James',   power: 'Regeneration',  info: 'http://www.superherodb.com/Wolverine/10-161/' }
 ];
 
-var view = new Ractive({
+var ractive = new Ractive({
   el: output,
   template: template,
-  data: { superheroes: xmen },
-  modifiers: {
-    plus: function ( a, b ) {
-      return a + b;
-    }
-  }
+  data: { superheroes: xmen }
 });
 
-var sort, sortColumn;
-
-sort = function () {
-  // our actual sorting logic, which we'll add
-  // in the next section. For now...
-  alert( 'Sorting by ' + sortColumn );  
-};
-
-view.on( 'sort', function ( event, el ) {
-  sortColumn = el.getAttribute( 'data-column' );
-  sort();
+ractive.on( 'sort', function ( event, el ) {
+  var sortColumn = el.getAttribute( 'data-column' );
+  alert( 'Sorting by ' + sortColumn );
 });

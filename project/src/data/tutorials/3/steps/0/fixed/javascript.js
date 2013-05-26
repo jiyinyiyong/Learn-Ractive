@@ -1,8 +1,8 @@
-var view = new Ractive({
+var ractive = new Ractive({
   el: output,
   template: template
 });
 
-view.on( 'activate', function ( event, el ) {
+ractive.on( 'activate', function ( event, el ) {
   alert( 'Activating!' );
 });

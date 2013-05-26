@@ -5,19 +5,19 @@
 <p>Instead, we can manipulate views we've already created. Try running this in the console block (lower right):</p>
 
 <pre class='prettyprint lang-js'>
-view.set( 'greeting', 'Bonjour' );
+ractive.set( 'greeting', 'Bonjour' );
 </pre>
 
 <p>And now this:</p>
 
 <pre class='prettyprint lang-js'>
-view.set( 'recipient', 'tout le monde' );
+ractive.set( 'recipient', 'tout le monde' );
 </pre>
 
 <p>Ooh la la! Even better, we could set both properties in one go. Let's do it in Mandarin this time:</p>
 
 <pre class='prettyprint lang-js'>
-view.set({
+ractive.set({
   greeting: '你好',
   recipient: '世界'
 });
@@ -26,5 +26,5 @@ view.set({
 <div class='hint'>
 	<p>What's happening here is that the contents of the <code>&lt;p&gt;</code> element are split into four text nodes &ndash; one for <code>{{greeting}}</code>, one for the space character, one for <code>{{recipient}}</code>, and one for the <code>!</code>. Ractive stores references to the nodes that correspond to the variables, and updates them when the data changes, leaving everything else untouched.</p>
 
-	<p>Surgically updating text nodes is much faster than replacing elements, particularly when you only need to change part of your view.</p>
+	<p>Surgically updating text nodes is much faster than replacing elements, particularly when you only need to change part of your ractive.</p>
 </div>

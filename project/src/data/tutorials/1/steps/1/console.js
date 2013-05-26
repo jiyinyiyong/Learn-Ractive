@@ -1,5 +1,5 @@
 // Once we've rendered our view, we can change the country info
-view.set( 'country', {
+ractive.set( 'country', {
   name: 'Australia',
   climate: { temperature: 'hot', rainfall: 'limited' },
   population: 22620600,

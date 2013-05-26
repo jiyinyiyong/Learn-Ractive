@@ -66,7 +66,7 @@ var TodoList = Ractive.extend({
   }
 });
 
-var view = new TodoList({
+var ractive = new TodoList({
   el: output,
   items: [
     { done: true,  description: 'Add a todo item' },

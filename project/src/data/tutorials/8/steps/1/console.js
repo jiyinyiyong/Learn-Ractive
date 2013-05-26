@@ -1,2 +1,2 @@
-view.set( 'checked', true );
-view.set( 'color', 'green' );
+ractive.set( 'checked', true );
+ractive.set( 'color', 'green' );

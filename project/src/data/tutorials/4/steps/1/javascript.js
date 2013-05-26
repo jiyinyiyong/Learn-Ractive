@@ -1,4 +1,4 @@
-var view = new Ractive({
+var ractive = new Ractive({
   el: output,
   template: template,
   data: {
@@ -7,10 +7,10 @@ var view = new Ractive({
   }
 });
 
-view.on( 'signIn', function () {
+ractive.on( 'signIn', function () {
   var name = prompt( 'Enter your username to sign in', 'ractive_fan' );
 
-  view.set({
+  ractive.set({
     username: name,
     signedIn: true,
     notSignedIn: false

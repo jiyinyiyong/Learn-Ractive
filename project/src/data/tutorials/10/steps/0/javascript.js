@@ -1,70 +1,45 @@
-var months, fahrenheit;
+var cities, ractive;
 
-months = [ 'J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D' ];
-fahrenheit = false;
-
-var view = new Ractive({
+ractive = new Ractive({
   el: output,
   template: template,
-  modifiers: {
-    into: function ( divisor, dividend ) {
-      return dividend / divisor;
-    },
+  data: {
     scale: function ( val ) {
+      // quick and dirty...
       return 2 * Math.abs( val );
     },
-    format: function ( val ) {
-      if ( fahrenheit ) {
+    format: function ( val, degreeType ) {
+      if ( degreeType === 'fahrenheit' ) {
+        // convert celsius to fahrenheit
         val = ( val * 1.8 ) + 32;
       }
 
       return val.toFixed( 1 ) + '°';
     },
-    color: function ( val ) {
-      var red, green, blue, rgb;
+    getColor: function ( val ) {
+      // quick and dirty function to pick a colour - the higher the
+      // temperature, the warmer the colour
+      var r = Math.max( 0, Math.min( 255, Math.floor( 2.56 * ( val + 50 ) ) ) );
+      var g = 100;
+      var b = Math.max( 0, Math.min( 255, Math.floor( 2.56 * ( 50 - val ) ) ) );
 
-      red = Math.max( 0, Math.min( 255, Math.floor( 2.56 * ( val + 50 ) ) ) );
-      green = 100;
-      blue = Math.max( 0, Math.min( 255, Math.floor( 2.56 * ( 50 - val ) ) ) );
-
-      rgb = 'rgb(' + red + ',' + green + ',' + blue + ')';
-
-      return rgb;
+      return 'rgb(' + r + ',' + g + ',' + b + ')';
     },
-    arity: function ( val ) {
-      return val >= 0 ? 'positive' : 'negative';
-    },
-    asMonth: function ( i ) {
-      return months[i];
-    }
+    monthNames: [ 'J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D' ]
   }
 });
 
-view.on({
-  'set:selectedCity': function ( i ) {
-    var city = this.get( 'cities' )[i];
-  
-    this.animate( 'city', this.get( 'cities[' + i + ']' ), {
-      duration: 300,
-      easing: 'easeOut'
-    });
-  },
-
-  'set:degreeType': function ( type ) {
-    if ( type === 'fahrenheit' ) {
-      fahrenheit = true;
-    } else {
-      fahrenheit = false;
-    }
-
-    view.update( 'city' );
-  }
+// when the user makes a selection from the drop-down, update the chart
+ractive.observe( 'selected', function ( index ) {
+  this.set( 'selectedCity', cities[ index ] );
 });
 
 // load our data
 $.getJSON( 'files/data/temperature.json' ).then( function ( data ) {
-  view.set({
-    cities: data,
-    city: data[0]
+  cities = data;
+
+  ractive.set({
+    cities: cities,
+    selectedCity: cities[0] // initialise to London
   });
 });

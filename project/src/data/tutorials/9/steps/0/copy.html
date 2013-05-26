@@ -1,11 +1,11 @@
 <h2>How to use partials</h2>
 
-<p>Partials are a good way to split complex templates up into several more manageable files. Take this todo list, for example. It's not too bad, but the template would look neater if we could separate out the template for an individual item.</p>
+<p>Partials are a good way to split complex templates up into several more manageable files. Take this todo list, for example. It's not too bad, but the template would look neater if we could separate out the code for an individual item.</p>
 
-<p>Well, we can. Add this above the rest of the code:</p>
+<p>Well, we can. Add this above the rest of the JavaScript:</p>
 
 <pre class='prettyprint lang-js'>
-var item = "&lt;li data-index='{{i}}' class='{{done ? done : pending}}'&gt;" +
+var item = "&lt;li data-index='{{i}}' class='{{( done ? \"done\" : \"pending\" )}}'&gt;" +
               "&lt;input type='checkbox' checked='{{done}}'&gt;" +
               "&lt;span proxy-tap='edit'&gt;{{description}}&lt;/span&gt;" +
               "&lt;a class='button' proxy-tap='remove'&gt;x&lt;/a&gt;" +
@@ -13,7 +13,7 @@ var item = "&lt;li data-index='{{i}}' class='{{done ? done : pending}}'&gt;" +
 </pre>
 
 <div class='hint'>
-	<p>If the multiline string offends your aesthetic sensibilities, just imagine you were loading it from a template file or precompiling it instead. We'll cover precompilation in a future tutorial.</p>
+	<p>If the multiline string offends your aesthetic sensibilities, just imagine you were loading it from a template file or preparsing it instead. We'll cover preparsing in a future tutorial.</p>
 </div>
 
 <p>Then, in the main template we replace all that with a partial, which looks like a regular mustache but with a <code>&gt;</code> character:</p>
@@ -37,9 +37,3 @@ var TodoList = Ractive.extend({
 </pre>
 
 <p>Execute this code.</p>
-
-<div class='hint'>
-  <p>You may have noticed this odd-looking mustache in the template: <code>{{done ? done : pending}}</code>. Students of the <a href='http://mustache.github.io/mustache.5.html'>mustache specification</a> will know that &ndash; like modifiers and index references &ndash; this syntax isn't part of it.</p>
-
-  <p>It's basically a shorthand for <code>{{#done}}done{{/done}}{{^done}}pending{{/done}}</code>. Toggling an element between two class names is a common enough use case in web apps that it makes sense to add this syntax to the mix.</p>
-</div>

@@ -4,9 +4,10 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 	
 	'use strict';
 
-	var eval2 = eval, teardownQueue, prop; // changes to global context. Bet you didn't know that! Thanks, http://stackoverflow.com/questions/8694300/how-eval-in-javascript-changes-the-calling-context
+	var eval2 = eval, teardownQueue, onResizeHandlers, prop; // changes to global context. Bet you didn't know that! Thanks, http://stackoverflow.com/questions/8694300/how-eval-in-javascript-changes-the-calling-context
 
 	teardownQueue = [];
+
 
 	window.Ractive = function () {
 		// we need to override the constructor so we can keep track of
@@ -23,6 +24,11 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 			window.Ractive[ prop ] = Ractive[ prop ];
 		}
 	}
+
+	onResizeHandlers = [];
+	window.onResize = function ( handler ) {
+		onResizeHandlers[ onResizeHandlers.length ] = handler;
+	};
 
 	return function ( app ) {
 		var mainView,
@@ -67,6 +73,9 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 				teardownQueue.pop().teardown();
 			}
 
+			// neuter any onResize handlers
+			onResizeHandlers = [];
+
 			window.template = editors.template.getValue();
 			window.output = document.getElementById( 'output' );
 
@@ -93,6 +102,17 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 			el: 'container',
 			data: {
 				numTutorials: tutorials.length
+			}
+		});
+
+		mainView.divvy.on( 'resize', function ( changed ) {
+			if ( !changed[ 'output-block' ] ) {
+				return;
+			}
+			
+			var i = onResizeHandlers.length;
+			while ( i-- ) {
+				onResizeHandlers[i].call();
 			}
 		});
 

@@ -1,1 +1,1 @@
-view.set( 'content', '<a href="http://bit.ly/QOyWC1"><img src="files/gifs/image.gif"/></a>' );
+ractive.set( 'content', '<a href="http://bit.ly/QOyWC1"><img src="files/gifs/image.gif"/></a>' );

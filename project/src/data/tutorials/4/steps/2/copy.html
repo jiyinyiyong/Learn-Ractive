@@ -7,14 +7,14 @@
 <p>Edit the sign-in code accordingly:</p>
 
 <pre class='prettyprint lang-js'>
-view.on( 'signIn', function () {
+ractive.on( 'signIn', function () {
   var name = prompt( 'Enter your username to sign in', 'ractive_fan' );
-  view.set( 'user.name', name });
+  ractive.set( 'user.name', name });
 });
 </pre>
 
 <div class='hint'>
-	<p>Here, we're setting a property on an object that doesn't exist yet. That's fine &ndash; <span class='logo'>Ractive.js</span> will create the object. If we'd done <code>view.set( 'user[0]', name )</code> or <code>view.set( 'user.0', name )</code> it would assume we wanted to create an array instead of an object.</p>
+	<p>Here, we're setting a property on an object that doesn't exist yet. That's fine &ndash; <span class='logo'>Ractive.js</span> will create the object. If we'd done <code>ractive.set( 'user[0]', name )</code> or <code>ractive.set( 'user.0', name )</code> it would assume we wanted to create an array instead of an object.</p>
 </div>
 
 <p>Initially, <code>user</code> will be <code>undefined</code>, but once someone signs in, <code>user</code> will be an object. Since <code>undefined</code> is falsy and objects are always truthy, we can use <code>user</code> instead of <code>signedIn</code>.</p>

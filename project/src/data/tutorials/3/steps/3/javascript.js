@@ -1,9 +1,9 @@
-var view = new Ractive({
+var ractive = new Ractive({
   el: output,
   template: template
 });
 
-listener = view.on({
+listener = ractive.on({
   activate: function () {
     alert( 'Activating!' );
   },

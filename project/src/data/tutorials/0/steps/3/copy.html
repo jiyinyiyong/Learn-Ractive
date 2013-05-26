@@ -1,6 +1,6 @@
 <h2>Dynamic attributes</h2>
 
-<p>So far, we've only updated text content within a view. But we can use the same <a href='http://mustache.github.io/'>mustache syntax</a> to update element <em>attributes</em>.</p>
+<p>So far, we've only updated text content within a ractive. But we can use the same <a href='http://mustache.github.io/'>mustache syntax</a> to update element <em>attributes</em>.</p>
 
 <p>Let's add a style attribute to our <code>&lt;p&gt;</code> element:</p>
 
@@ -13,7 +13,7 @@
 <p>Now we just need to add some data:</p>
 
 <pre class='prettyprint lang-js'>
-var view = new Ractive({
+var ractive = new Ractive({
   el: output,
   template: template,
   data: {
@@ -31,7 +31,7 @@ var view = new Ractive({
 <p>And, of course, we can update this attribute. Try running this in the console:</p>
 
 <pre class='prettyprint lang-js'>
-view.set({
+ractive.set({
   color: 'red',
   size: 3,
   font: 'Comic Sans MS'

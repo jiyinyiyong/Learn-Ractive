@@ -1,8 +1,5 @@
-var view = new Ractive({
+// Click in this box and hit Shift-Enter to execute this code
+var ractive = new Ractive({
   el: output,
   template: template
 });
-
-/* [hint] ---- //
-Click in this box and hit Shift-Enter to execute this code
-// --- [/hint] */

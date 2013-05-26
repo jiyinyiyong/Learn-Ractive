@@ -6,38 +6,23 @@ var xmen = [
   { name: 'Wolverine',    realname: 'Howlett, James',   power: 'Regeneration',  info: 'http://www.superherodb.com/Wolverine/10-161/' }
 ];
 
-var view = new Ractive({
+var ractive = new Ractive({
   el: output,
   template: template,
-  data: { superheroes: xmen },
-  modifiers: {
-    plus: function ( a, b ) {
-      return a + b;
-    },
-    sort: function ( array ) {
+  data: {
+    superheroes: xmen,
+    sort: function ( array, column ) {
       array = array.slice(); // clone, so we don't modify the underlying data
       
       return array.sort( function ( a, b ) {
-        return a[ sortColumn ] < b[ sortColumn ] ? -1 : 1;
+        return a[ column ] < b[ column ] ? -1 : 1;
       });
-    }
+    },
+    sortColumn: 'name'
   }
 });
 
-var sort, sortColumn;
-
-sort = function () {
-  view.update( 'superheroes' );
-
-  $( 'th.sorted' ).removeClass( 'sorted' );
-  $( 'th[data-column="' + sortColumn + '"]' ).addClass( 'sorted' ); 
-};
-
-// sort by name initially
-sortColumn = 'name';
-sort();
-
-view.on( 'sort', function ( event, el ) {
-  sortColumn = el.getAttribute( 'data-column' );
-  sort();
+ractive.on( 'sort', function ( event, el ) {
+  var column = el.getAttribute( 'data-column' );
+  this.set( 'sortColumn', column );
 });

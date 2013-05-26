@@ -14,7 +14,7 @@ define( [ 'text', 'Ractive' ], function ( text, Ractive ) {
 			filename = name + ( ( name.substr( -5 ) !== '.html' ) ? '.html' : '' );
 
 			text.get( req.toUrl( filename ), function ( template ) {
-				var result = Ractive.compile( template );
+				var result = Ractive.parse( template );
 
 				if ( config.isBuild ) {
 					buildMap[ name ] = result;
@@ -26,7 +26,7 @@ define( [ 'text', 'Ractive' ], function ( text, Ractive ) {
 
 		write: function ( pluginName, name, write ) {
 			if ( buildMap[ name ] === undefined ) {
-				throw 'Could not compile template ' + name;
+				throw 'Could not parse template ' + name;
 			}
 
 			write( 'define("' + pluginName + '!' + name + '",function(){return ' + JSON.stringify( buildMap[ name ] ) + ';})' );

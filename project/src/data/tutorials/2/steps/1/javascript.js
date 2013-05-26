@@ -1,10 +1,9 @@
-var view = new Ractive({
+var ractive = new Ractive({
   el: output,
   template: template,
-  data: { num: 0.5 },
-  modifiers: {
-  	multiply: function ( num ) {
-      return num * 100;
-  	}
+  data: {
+    item: 'pint of milk',
+    price: 0.49,
+    quantity: 5
   }
 });

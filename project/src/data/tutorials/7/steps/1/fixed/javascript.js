@@ -31,7 +31,7 @@ var Slideshow = Ractive.extend({
   }
 });
 
-var view = new Slideshow({
+var slideshow = new Slideshow({
   el: output,
   images: [
     { src: 'files/gifs/css.gif', caption: 'Trying to fix someone else\'s CSS' },

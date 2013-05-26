@@ -1,11 +1,11 @@
-var view = new Ractive({
+var ractive = new Ractive({
   el: output,
   template: template
 });
 
 var selected;
 
-view.on( 'select', function ( event, el ) {
+ractive.on( 'select', function ( event, el ) {
   var gif, caption;
 
   gif = el.src.replace( 'jpg', 'gif' );

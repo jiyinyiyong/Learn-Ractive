@@ -1,4 +1,4 @@
-var view, xmen;
+var ractive, xmen;
 
 // define our superheroes
 xmen = [
@@ -8,7 +8,7 @@ xmen = [
   { name: 'Wolverine',    realname: 'Howlett, James',   power: 'Regeneration',     info: 'http://www.superherodb.com/Wolverine/10-161/' }
 ];
 
-view = new Ractive({
+ractive = new Ractive({
   el: output,
   template: template,
   data: { superheroes: xmen }
