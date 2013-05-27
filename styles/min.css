@@ -281,7 +281,7 @@
 
 @media -sass-debug-info{filename{}line{font-family:\00003348}}
 .divvy-inner.copy-block, .divvy-inner.output-block {
-  font-family: 'Baskerville';
+  font-family: 'Baskerville', 'Garamond', 'Georgia';
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
@@ -681,13 +681,10 @@
     #output .label.permanent {
       opacity: 1; }
 @media -sass-debug-info{filename{}line{font-family:\00003824}}
-  #output .foreign-label {
-    display: inline;
-    padding: 0.3em;
-    background-color: #f9f9f9;
-    border-radius: 0.2em; }
+  #output .label-bg {
+    fill: green; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003833}}
+@media -sass-debug-info{filename{}line{font-family:\00003830}}
 .button {
   background-color: #999;
   border: 1px solid #888;
@@ -702,22 +699,22 @@
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none; }
-@media -sass-debug-info{filename{}line{font-family:\00003844}}
+@media -sass-debug-info{filename{}line{font-family:\00003841}}
   .button:hover {
     background-color: #666;
     border: 1px solid #555;
     text-decoration: none; }
-@media -sass-debug-info{filename{}line{font-family:\00003850}}
+@media -sass-debug-info{filename{}line{font-family:\00003847}}
   .button.disabled {
     background-color: #ddd;
     border: 1px solid #ccc;
     cursor: default; }
-@media -sass-debug-info{filename{}line{font-family:\00003855}}
+@media -sass-debug-info{filename{}line{font-family:\00003852}}
     .button.disabled:hover {
       background-color: #ddd;
       border: 1px solid #ccc; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003862}}
+@media -sass-debug-info{filename{}line{font-family:\00003859}}
 .button-container-left, .button-container-right {
   width: 50%;
   margin: 1em 0 0 0;
@@ -726,15 +723,15 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003869}}
+@media -sass-debug-info{filename{}line{font-family:\00003866}}
 .button-container-left {
   padding: 0 0.2em 0 0; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003873}}
+@media -sass-debug-info{filename{}line{font-family:\00003870}}
 .button-container-right {
   padding: 0 0 0 0.2em; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003877}}
+@media -sass-debug-info{filename{}line{font-family:\00003874}}
 .block-button {
   display: block;
   text-align: center;
@@ -746,7 +743,7 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003897}}
+@media -sass-debug-info{filename{}line{font-family:\00003894}}
 code, pre {
   font-family: monospace;
   font-size: 0.8em;
@@ -755,7 +752,7 @@ code, pre {
   background-color: #f9fcf6;
   color: #444; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003907}}
+@media -sass-debug-info{filename{}line{font-family:\00003904}}
 pre {
   white-space: pre;
   display: block;
@@ -764,137 +761,137 @@ pre {
   margin: 0 0 1em 0;
   line-height: 1.5; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003916}}
+@media -sass-debug-info{filename{}line{font-family:\00003913}}
 code {
   font-weight: normal;
   padding: 0.15em 0.3em;
   position: relative; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003923}}
+@media -sass-debug-info{filename{}line{font-family:\00003920}}
 .prettyprinted {
   color: #aaa; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003928}}
+@media -sass-debug-info{filename{}line{font-family:\00003925}}
 .prettyprint .pln {
   color: #444444; }
-@media -sass-debug-info{filename{}line{font-family:\00003929}}
+@media -sass-debug-info{filename{}line{font-family:\00003926}}
 .prettyprint .pun {
   color: #888; }
-@media -sass-debug-info{filename{}line{font-family:\00003930}}
+@media -sass-debug-info{filename{}line{font-family:\00003927}}
 .prettyprint .str {
   color: #729d34; }
-@media -sass-debug-info{filename{}line{font-family:\00003931}}
+@media -sass-debug-info{filename{}line{font-family:\00003928}}
 .prettyprint .kwd {
   color: #000064; }
-@media -sass-debug-info{filename{}line{font-family:\00003932}}
+@media -sass-debug-info{filename{}line{font-family:\00003929}}
 .prettyprint .typ {
   color: #000064; }
-@media -sass-debug-info{filename{}line{font-family:\00003933}}
+@media -sass-debug-info{filename{}line{font-family:\00003930}}
 .prettyprint .tag {
   color: #329632; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003936}}
+@media -sass-debug-info{filename{}line{font-family:\00003933}}
 .cm-s-ractive {
   font-size: 0.8em;
   line-height: 1.5 !important; }
-@media -sass-debug-info{filename{}line{font-family:\00003939}}
+@media -sass-debug-info{filename{}line{font-family:\00003936}}
   .cm-s-ractive div.CodeMirror-selected {
     background: #b36539 !important; }
-@media -sass-debug-info{filename{}line{font-family:\00003940}}
+@media -sass-debug-info{filename{}line{font-family:\00003937}}
   .cm-s-ractive .CodeMirror-gutters {
     background: #fcfcfc;
     border-right: 1px solid #eee; }
-@media -sass-debug-info{filename{}line{font-family:\00003941}}
+@media -sass-debug-info{filename{}line{font-family:\00003938}}
   .cm-s-ractive .CodeMirror-linenumber {
     color: #d0d0d0; }
-@media -sass-debug-info{filename{}line{font-family:\00003942}}
+@media -sass-debug-info{filename{}line{font-family:\00003939}}
   .cm-s-ractive .CodeMirror-cursor {
     border-left: 1px solid black !important; }
-@media -sass-debug-info{filename{}line{font-family:\00003943}}
+@media -sass-debug-info{filename{}line{font-family:\00003940}}
   .cm-s-ractive .CodeMirror-lines {
     padding: 10px 0; }
-@media -sass-debug-info{filename{}line{font-family:\00003945}}
+@media -sass-debug-info{filename{}line{font-family:\00003942}}
   .cm-s-ractive span.cm-comment {
     color: #888888; }
-@media -sass-debug-info{filename{}line{font-family:\00003946}}
+@media -sass-debug-info{filename{}line{font-family:\00003943}}
   .cm-s-ractive span.cm-atom {
     color: #845dc4; }
-@media -sass-debug-info{filename{}line{font-family:\00003947}}
+@media -sass-debug-info{filename{}line{font-family:\00003944}}
   .cm-s-ractive span.cm-number, .cm-s-ractive span.cm-attribute {
     color: #ff80e1; }
-@media -sass-debug-info{filename{}line{font-family:\00003948}}
+@media -sass-debug-info{filename{}line{font-family:\00003945}}
   .cm-s-ractive span.cm-keyword {
     color: #000064; }
-@media -sass-debug-info{filename{}line{font-family:\00003949}}
+@media -sass-debug-info{filename{}line{font-family:\00003946}}
   .cm-s-ractive span.cm-string {
     color: #729d34; }
-@media -sass-debug-info{filename{}line{font-family:\00003950}}
+@media -sass-debug-info{filename{}line{font-family:\00003947}}
   .cm-s-ractive span.cm-meta {
     color: #ff9d00; }
-@media -sass-debug-info{filename{}line{font-family:\00003951}}
+@media -sass-debug-info{filename{}line{font-family:\00003948}}
   .cm-s-ractive span.cm-variable, .cm-s-ractive span.cm-variable-2 {
     color: #444444; }
-@media -sass-debug-info{filename{}line{font-family:\00003952}}
+@media -sass-debug-info{filename{}line{font-family:\00003949}}
   .cm-s-ractive span.cm-variable-3, .cm-s-ractive span.cm-def {
     color: #444444; }
-@media -sass-debug-info{filename{}line{font-family:\00003953}}
+@media -sass-debug-info{filename{}line{font-family:\00003950}}
   .cm-s-ractive span.cm-tag {
     color: #329632; }
-@media -sass-debug-info{filename{}line{font-family:\00003954}}
+@media -sass-debug-info{filename{}line{font-family:\00003951}}
   .cm-s-ractive span.cm-error {
     color: #9d1e15; }
-@media -sass-debug-info{filename{}line{font-family:\00003955}}
+@media -sass-debug-info{filename{}line{font-family:\00003952}}
   .cm-s-ractive span.cm-bracket {
     color: #d8d8d8; }
-@media -sass-debug-info{filename{}line{font-family:\00003956}}
+@media -sass-debug-info{filename{}line{font-family:\00003953}}
   .cm-s-ractive span.cm-builtin, .cm-s-ractive span.cm-special {
     color: #ff9e59; }
-@media -sass-debug-info{filename{}line{font-family:\00003957}}
+@media -sass-debug-info{filename{}line{font-family:\00003954}}
   .cm-s-ractive span.cm-link {
     color: #845dc4; }
-@media -sass-debug-info{filename{}line{font-family:\00003959}}
+@media -sass-debug-info{filename{}line{font-family:\00003956}}
   .cm-s-ractive.CodeMirror-focused {
     background: #f9f9f9; }
-@media -sass-debug-info{filename{}line{font-family:\00003961}}
+@media -sass-debug-info{filename{}line{font-family:\00003958}}
     .cm-s-ractive.CodeMirror-focused .CodeMirror-gutters {
       background: #f6f6f6;
       border-right: 1px solid #eee; }
 
 /* BASICS */
-@media -sass-debug-info{filename{}line{font-family:\00003966}}
+@media -sass-debug-info{filename{}line{font-family:\00003963}}
 .CodeMirror {
   /* Set height, width, borders, and global font properties here */
   font-family: monospace;
   height: 100%; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003971}}
+@media -sass-debug-info{filename{}line{font-family:\00003968}}
 .CodeMirror-scroll {
   /* Set scrolling behaviour here */
   overflow: auto; }
 
 /* PADDING */
-@media -sass-debug-info{filename{}line{font-family:\00003978}}
+@media -sass-debug-info{filename{}line{font-family:\00003975}}
 .CodeMirror-lines {
   padding: 4px 0;
   /* Vertical padding around content */ }
 
-@media -sass-debug-info{filename{}line{font-family:\00003981}}
+@media -sass-debug-info{filename{}line{font-family:\00003978}}
 .CodeMirror pre {
   padding: 0 4px;
   /* Horizontal padding of content */ }
 
-@media -sass-debug-info{filename{}line{font-family:\00003985}}
+@media -sass-debug-info{filename{}line{font-family:\00003982}}
 .CodeMirror-scrollbar-filler {
   background-color: white;
   /* The little square between H and V scrollbars */ }
 
 /* GUTTER */
-@media -sass-debug-info{filename{}line{font-family:\00003991}}
+@media -sass-debug-info{filename{}line{font-family:\00003988}}
 .CodeMirror-gutters {
   border-right: 1px solid #ddd;
   background-color: #f7f7f7; }
 
-@media -sass-debug-info{filename{}line{font-family:\00003996}}
+@media -sass-debug-info{filename{}line{font-family:\00003993}}
 .CodeMirror-linenumber {
   padding: 0 3px 0 5px;
   min-width: 20px;
@@ -902,17 +899,17 @@ code {
   color: #999; }
 
 /* CURSOR */
-@media -sass-debug-info{filename{}line{font-family:\000031005}}
+@media -sass-debug-info{filename{}line{font-family:\000031002}}
 .CodeMirror div.CodeMirror-cursor {
   border-left: 1px solid black;
   z-index: 3; }
 
 /* Shown when moving in bi-directional text */
-@media -sass-debug-info{filename{}line{font-family:\000031010}}
+@media -sass-debug-info{filename{}line{font-family:\000031007}}
 .CodeMirror div.CodeMirror-secondarycursor {
   border-left: 1px solid silver; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031013}}
+@media -sass-debug-info{filename{}line{font-family:\000031010}}
 .CodeMirror.cm-keymap-fat-cursor div.CodeMirror-cursor {
   width: auto;
   border: 0;
@@ -920,146 +917,146 @@ code {
   z-index: 1; }
 
 /* Can style cursor different in overwrite (non-insert) mode */
-@media -sass-debug-info{filename{}line{font-family:\000031022}}
+@media -sass-debug-info{filename{}line{font-family:\000031019}}
 .cm-tab {
   display: inline-block; }
 
 /* DEFAULT THEME */
-@media -sass-debug-info{filename{}line{font-family:\000031026}}
+@media -sass-debug-info{filename{}line{font-family:\000031023}}
 .cm-s-default .cm-keyword {
   color: #708; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031027}}
+@media -sass-debug-info{filename{}line{font-family:\000031024}}
 .cm-s-default .cm-atom {
   color: #219; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031028}}
+@media -sass-debug-info{filename{}line{font-family:\000031025}}
 .cm-s-default .cm-number {
   color: #164; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031029}}
+@media -sass-debug-info{filename{}line{font-family:\000031026}}
 .cm-s-default .cm-def {
   color: #00f; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031030}}
+@media -sass-debug-info{filename{}line{font-family:\000031027}}
 .cm-s-default .cm-variable {
   color: black; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031031}}
+@media -sass-debug-info{filename{}line{font-family:\000031028}}
 .cm-s-default .cm-variable-2 {
   color: #05a; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031032}}
+@media -sass-debug-info{filename{}line{font-family:\000031029}}
 .cm-s-default .cm-variable-3 {
   color: #085; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031033}}
+@media -sass-debug-info{filename{}line{font-family:\000031030}}
 .cm-s-default .cm-property {
   color: black; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031034}}
+@media -sass-debug-info{filename{}line{font-family:\000031031}}
 .cm-s-default .cm-operator {
   color: black; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031035}}
+@media -sass-debug-info{filename{}line{font-family:\000031032}}
 .cm-s-default .cm-comment {
   color: #a50; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031036}}
+@media -sass-debug-info{filename{}line{font-family:\000031033}}
 .cm-s-default .cm-string {
   color: #a11; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031037}}
+@media -sass-debug-info{filename{}line{font-family:\000031034}}
 .cm-s-default .cm-string-2 {
   color: #f50; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031038}}
+@media -sass-debug-info{filename{}line{font-family:\000031035}}
 .cm-s-default .cm-meta {
   color: #555; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031039}}
+@media -sass-debug-info{filename{}line{font-family:\000031036}}
 .cm-s-default .cm-error {
   color: #f00; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031040}}
+@media -sass-debug-info{filename{}line{font-family:\000031037}}
 .cm-s-default .cm-qualifier {
   color: #555; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031041}}
+@media -sass-debug-info{filename{}line{font-family:\000031038}}
 .cm-s-default .cm-builtin {
   color: #30a; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031042}}
+@media -sass-debug-info{filename{}line{font-family:\000031039}}
 .cm-s-default .cm-bracket {
   color: #997; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031043}}
+@media -sass-debug-info{filename{}line{font-family:\000031040}}
 .cm-s-default .cm-tag {
   color: #170; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031044}}
+@media -sass-debug-info{filename{}line{font-family:\000031041}}
 .cm-s-default .cm-attribute {
   color: #00c; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031045}}
+@media -sass-debug-info{filename{}line{font-family:\000031042}}
 .cm-s-default .cm-header {
   color: blue; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031046}}
+@media -sass-debug-info{filename{}line{font-family:\000031043}}
 .cm-s-default .cm-quote {
   color: #090; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031047}}
+@media -sass-debug-info{filename{}line{font-family:\000031044}}
 .cm-s-default .cm-hr {
   color: #999; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031048}}
+@media -sass-debug-info{filename{}line{font-family:\000031045}}
 .cm-s-default .cm-link {
   color: #00c; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031050}}
+@media -sass-debug-info{filename{}line{font-family:\000031047}}
 .cm-negative {
   color: #d44; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031051}}
+@media -sass-debug-info{filename{}line{font-family:\000031048}}
 .cm-positive {
   color: #292; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031052}}
+@media -sass-debug-info{filename{}line{font-family:\000031049}}
 .cm-header, .cm-strong {
   font-weight: bold; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031053}}
+@media -sass-debug-info{filename{}line{font-family:\000031050}}
 .cm-em {
   font-style: italic; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031054}}
+@media -sass-debug-info{filename{}line{font-family:\000031051}}
 .cm-link {
   text-decoration: underline; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031056}}
+@media -sass-debug-info{filename{}line{font-family:\000031053}}
 .cm-invalidchar {
   color: #f00; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031058}}
+@media -sass-debug-info{filename{}line{font-family:\000031055}}
 div.CodeMirror span.CodeMirror-matchingbracket {
   color: #0f0; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031059}}
+@media -sass-debug-info{filename{}line{font-family:\000031056}}
 div.CodeMirror span.CodeMirror-nonmatchingbracket {
   color: #f22; }
 
 /* STOP */
 /* The rest of this file contains styles related to the mechanics of
    the editor. You probably shouldn't touch them. */
-@media -sass-debug-info{filename{}line{font-family:\000031066}}
+@media -sass-debug-info{filename{}line{font-family:\000031063}}
 .CodeMirror {
   line-height: 1;
   position: relative;
   overflow: hidden;
   color: black; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031074}}
+@media -sass-debug-info{filename{}line{font-family:\000031071}}
 .CodeMirror-scroll {
   /* 30px is the magic margin used to hide the element's real scrollbars */
   /* See overflow: hidden in .CodeMirror */
@@ -1072,40 +1069,40 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   /* Prevent dragging from highlighting the element */
   position: relative; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031083}}
+@media -sass-debug-info{filename{}line{font-family:\000031080}}
 .CodeMirror-sizer {
   position: relative; }
 
 /* The fake, visible scrollbars. Used to force redraw during scrolling
    before actuall scrolling happens, thus preventing shaking and
    flickering artifacts. */
-@media -sass-debug-info{filename{}line{font-family:\000031090}}
+@media -sass-debug-info{filename{}line{font-family:\000031087}}
 .CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler {
   position: absolute;
   z-index: 6;
   display: none; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031095}}
+@media -sass-debug-info{filename{}line{font-family:\000031092}}
 .CodeMirror-vscrollbar {
   right: 0;
   top: 0;
   overflow-x: hidden;
   overflow-y: scroll; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031100}}
+@media -sass-debug-info{filename{}line{font-family:\000031097}}
 .CodeMirror-hscrollbar {
   bottom: 0;
   left: 0;
   overflow-y: hidden;
   overflow-x: scroll; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031105}}
+@media -sass-debug-info{filename{}line{font-family:\000031102}}
 .CodeMirror-scrollbar-filler {
   right: 0;
   bottom: 0;
   z-index: 6; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031110}}
+@media -sass-debug-info{filename{}line{font-family:\000031107}}
 .CodeMirror-gutters {
   position: absolute;
   left: 0;
@@ -1114,7 +1111,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   padding-bottom: 30px;
   z-index: 3; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031116}}
+@media -sass-debug-info{filename{}line{font-family:\000031113}}
 .CodeMirror-gutter {
   height: 100%;
   padding-bottom: 30px;
@@ -1124,17 +1121,17 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   *zoom: 1;
   *display: inline; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031125}}
+@media -sass-debug-info{filename{}line{font-family:\000031122}}
 .CodeMirror-gutter-elt {
   position: absolute;
   cursor: default;
   z-index: 4; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031131}}
+@media -sass-debug-info{filename{}line{font-family:\000031128}}
 .CodeMirror-lines {
   cursor: text; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031134}}
+@media -sass-debug-info{filename{}line{font-family:\000031131}}
 .CodeMirror pre {
   /* Reset some styles that the rest of the page might have set */
   -moz-border-radius: 0;
@@ -1153,13 +1150,13 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   position: relative;
   overflow: visible; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031150}}
+@media -sass-debug-info{filename{}line{font-family:\000031147}}
 .CodeMirror-wrap pre {
   word-wrap: break-word;
   white-space: pre-wrap;
   word-break: normal; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031155}}
+@media -sass-debug-info{filename{}line{font-family:\000031152}}
 .CodeMirror-linebackground {
   position: absolute;
   left: 0;
@@ -1168,21 +1165,21 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   bottom: 0;
   z-index: 0; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031161}}
+@media -sass-debug-info{filename{}line{font-family:\000031158}}
 .CodeMirror-linewidget {
   position: relative;
   z-index: 2;
   overflow: auto; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031167}}
+@media -sass-debug-info{filename{}line{font-family:\000031164}}
 .CodeMirror-widget {
   display: inline-block; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031171}}
+@media -sass-debug-info{filename{}line{font-family:\000031168}}
 .CodeMirror-wrap .CodeMirror-scroll {
   overflow-x: hidden; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031175}}
+@media -sass-debug-info{filename{}line{font-family:\000031172}}
 .CodeMirror-measure {
   position: absolute;
   width: 100%;
@@ -1190,45 +1187,45 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   overflow: hidden;
   visibility: hidden; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031181}}
+@media -sass-debug-info{filename{}line{font-family:\000031178}}
 .CodeMirror-measure pre {
   position: static; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031183}}
+@media -sass-debug-info{filename{}line{font-family:\000031180}}
 .CodeMirror div.CodeMirror-cursor {
   position: absolute;
   visibility: hidden;
   border-right: none;
   width: 0; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031189}}
+@media -sass-debug-info{filename{}line{font-family:\000031186}}
 .CodeMirror-focused div.CodeMirror-cursor {
   visibility: visible; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031193}}
+@media -sass-debug-info{filename{}line{font-family:\000031190}}
 .CodeMirror-selected {
   background: #d9d9d9; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031194}}
+@media -sass-debug-info{filename{}line{font-family:\000031191}}
 .CodeMirror-focused .CodeMirror-selected {
   background: #d7d4f0; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031196}}
+@media -sass-debug-info{filename{}line{font-family:\000031193}}
 .cm-searching {
   background: #ffa;
   background: rgba(255, 255, 0, 0.4); }
 
 /* IE7 hack to prevent it from returning funny offsetTops on the spans */
-@media -sass-debug-info{filename{}line{font-family:\000031202}}
+@media -sass-debug-info{filename{}line{font-family:\000031199}}
 .CodeMirror span {
   *vertical-align: text-bottom; }
 
 @media print {
   /* Hide the cursor when printing */
-@media -sass-debug-info{filename{}line{font-family:\000031206}}
+@media -sass-debug-info{filename{}line{font-family:\000031203}}
   .CodeMirror div.CodeMirror-cursor {
     visibility: hidden; } }
-@media -sass-debug-info{filename{}line{font-family:\000031213}}
+@media -sass-debug-info{filename{}line{font-family:\000031210}}
 #container {
   position: absolute;
   width: 100%;
@@ -1238,13 +1235,13 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031222}}
+@media -sass-debug-info{filename{}line{font-family:\000031219}}
 #content {
   position: relative;
   width: 100%;
   height: 100%; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031229}}
+@media -sass-debug-info{filename{}line{font-family:\000031226}}
 .window {
   position: absolute;
   width: 100%;
@@ -1263,7 +1260,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   src: url("../files/fonts/PoiretOne.eot");
   src: url("../files/fonts/PoiretOne.eot?#iefix") format("embedded-opentype"), url("../files/fonts/PoiretOne.woff") format("woff"), url("../files/fonts/PoiretOne.ttf") format("truetype"), url("../files/fonts/PoiretOne.svg#webfont") format("svg"); }
 
-@media -sass-debug-info{filename{}line{font-family:\000031254}}
+@media -sass-debug-info{filename{}line{font-family:\000031251}}
 #header {
   position: absolute;
   top: 0;
@@ -1274,64 +1271,64 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
-@media -sass-debug-info{filename{}line{font-family:\000031263}}
+@media -sass-debug-info{filename{}line{font-family:\000031260}}
   #header h1, #header h2 {
     margin: 0;
     float: left; }
-@media -sass-debug-info{filename{}line{font-family:\000031268}}
+@media -sass-debug-info{filename{}line{font-family:\000031265}}
   #header h2 {
     margin-top: 0.35em; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031273}}
+@media -sass-debug-info{filename{}line{font-family:\000031270}}
 .tutorial-buttons {
   float: left;
   margin: 0.7em 1em 0 3em; }
-@media -sass-debug-info{filename{}line{font-family:\000031277}}
+@media -sass-debug-info{filename{}line{font-family:\000031274}}
   .tutorial-buttons strong {
     font-family: 'Voltaire';
     position: relative;
     top: 0.1em; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031285}}
+@media -sass-debug-info{filename{}line{font-family:\000031282}}
 html, body {
   margin: 0;
   width: 100%;
   height: 100%;
   position: relative; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031292}}
+@media -sass-debug-info{filename{}line{font-family:\000031289}}
 body {
-  font-family: 'Baskerville';
+  font-family: 'Baskerville', 'Garamond', 'Georgia';
   font-size: 16px;
   color: #333;
   min-width: 48em; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031299}}
+@media -sass-debug-info{filename{}line{font-family:\000031296}}
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Voltaire';
   margin: 1.5em 0 0.5em 0;
   line-height: 1.2; }
-@media -sass-debug-info{filename{}line{font-family:\000031304}}
+@media -sass-debug-info{filename{}line{font-family:\000031301}}
   h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {
     margin-top: 0.5em; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031309}}
+@media -sass-debug-info{filename{}line{font-family:\000031306}}
 p {
   margin: 0.5em 0;
   line-height: 1.5; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031314}}
+@media -sass-debug-info{filename{}line{font-family:\000031311}}
 a {
   color: #729d34;
   text-decoration: none; }
-@media -sass-debug-info{filename{}line{font-family:\000031318}}
+@media -sass-debug-info{filename{}line{font-family:\000031315}}
   a:hover {
     text-decoration: underline; }
-@media -sass-debug-info{filename{}line{font-family:\000031322}}
+@media -sass-debug-info{filename{}line{font-family:\000031319}}
   a:visited {
     color: #729d34; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031327}}
+@media -sass-debug-info{filename{}line{font-family:\000031324}}
 .hint {
   background-color: #f4f4f4;
   border-radius: 0.2em;
@@ -1340,7 +1337,7 @@ a {
   margin: 1em 0;
   color: #666; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031336}}
+@media -sass-debug-info{filename{}line{font-family:\000031333}}
 kbd {
   font-size: 0.8em;
   font-family: 'Helvetica Neue', 'Arial';
@@ -1353,15 +1350,15 @@ kbd {
   padding: 0.2em 0.4em;
   border-radius: 0.2em; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031349}}
+@media -sass-debug-info{filename{}line{font-family:\000031346}}
 .logo, strong {
   font-family: 'Voltaire'; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031354}}
+@media -sass-debug-info{filename{}line{font-family:\000031351}}
 .separator {
   position: absolute;
   z-index: 2; }
-@media -sass-debug-info{filename{}line{font-family:\000031358}}
+@media -sass-debug-info{filename{}line{font-family:\000031355}}
   .separator:before {
     position: absolute;
     content: ' ';
@@ -1373,13 +1370,13 @@ kbd {
     left: -2px;
     top: -2px; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031371}}
+@media -sass-debug-info{filename{}line{font-family:\000031368}}
 .horizontal.separator {
   width: 100%;
   height: 0;
   cursor: ns-resize; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031377}}
+@media -sass-debug-info{filename{}line{font-family:\000031374}}
 .vertical.separator {
   width: 0;
   height: 100%;

@@ -46,7 +46,8 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 			slugify,
 			hashPattern,
 			parseHash,
-			reset;
+			reset,
+			divvyState;
 
 		slugify = function ( str ) {
 			if ( !str ) {
@@ -96,8 +97,6 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 			}
 		};
 
-		
-
 		mainView = new Main({
 			el: 'container',
 			data: {
@@ -105,7 +104,13 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 			}
 		});
 
+		mainView.divvy.restore();
+
 		mainView.divvy.on( 'resize', function ( changed ) {
+			var state;
+
+			this.save();
+
 			if ( !changed[ 'output-block' ] ) {
 				return;
 			}
