@@ -1,1 +1,0 @@
-ractive.goto( 3 );

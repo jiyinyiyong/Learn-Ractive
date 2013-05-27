@@ -1,7 +1,0 @@
-SVG
-Precompilation (inc custom delimiters and other options - sanitizing, whitespace... RequireJS plugin)
-Data binding
-
-
-
-Events
