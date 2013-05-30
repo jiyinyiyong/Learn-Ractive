@@ -1235,13 +1235,17 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031219}}
+@media -sass-debug-info{filename{}line{font-family:\000031218}}
+.loading {
+  text-align: center; }
+
+@media -sass-debug-info{filename{}line{font-family:\000031223}}
 #content {
   position: relative;
   width: 100%;
   height: 100%; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031226}}
+@media -sass-debug-info{filename{}line{font-family:\000031230}}
 .window {
   position: absolute;
   width: 100%;
@@ -1260,7 +1264,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   src: url("../files/fonts/PoiretOne.eot");
   src: url("../files/fonts/PoiretOne.eot?#iefix") format("embedded-opentype"), url("../files/fonts/PoiretOne.woff") format("woff"), url("../files/fonts/PoiretOne.ttf") format("truetype"), url("../files/fonts/PoiretOne.svg#webfont") format("svg"); }
 
-@media -sass-debug-info{filename{}line{font-family:\000031251}}
+@media -sass-debug-info{filename{}line{font-family:\000031255}}
 #header {
   position: absolute;
   top: 0;
@@ -1271,64 +1275,64 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
-@media -sass-debug-info{filename{}line{font-family:\000031260}}
+@media -sass-debug-info{filename{}line{font-family:\000031264}}
   #header h1, #header h2 {
     margin: 0;
     float: left; }
-@media -sass-debug-info{filename{}line{font-family:\000031265}}
+@media -sass-debug-info{filename{}line{font-family:\000031269}}
   #header h2 {
     margin-top: 0.35em; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031270}}
+@media -sass-debug-info{filename{}line{font-family:\000031274}}
 .tutorial-buttons {
   float: left;
   margin: 0.7em 1em 0 3em; }
-@media -sass-debug-info{filename{}line{font-family:\000031274}}
+@media -sass-debug-info{filename{}line{font-family:\000031278}}
   .tutorial-buttons strong {
     font-family: 'Voltaire';
     position: relative;
     top: 0.1em; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031282}}
+@media -sass-debug-info{filename{}line{font-family:\000031286}}
 html, body {
   margin: 0;
   width: 100%;
   height: 100%;
   position: relative; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031289}}
+@media -sass-debug-info{filename{}line{font-family:\000031293}}
 body {
   font-family: 'Baskerville', 'Garamond', 'Georgia';
   font-size: 16px;
   color: #333;
   min-width: 48em; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031296}}
+@media -sass-debug-info{filename{}line{font-family:\000031300}}
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Voltaire';
   margin: 1.5em 0 0.5em 0;
   line-height: 1.2; }
-@media -sass-debug-info{filename{}line{font-family:\000031301}}
+@media -sass-debug-info{filename{}line{font-family:\000031305}}
   h1:first-child, h2:first-child, h3:first-child, h4:first-child, h5:first-child, h6:first-child {
     margin-top: 0.5em; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031306}}
+@media -sass-debug-info{filename{}line{font-family:\000031310}}
 p {
   margin: 0.5em 0;
   line-height: 1.5; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031311}}
+@media -sass-debug-info{filename{}line{font-family:\000031315}}
 a {
   color: #729d34;
   text-decoration: none; }
-@media -sass-debug-info{filename{}line{font-family:\000031315}}
+@media -sass-debug-info{filename{}line{font-family:\000031319}}
   a:hover {
     text-decoration: underline; }
-@media -sass-debug-info{filename{}line{font-family:\000031319}}
+@media -sass-debug-info{filename{}line{font-family:\000031323}}
   a:visited {
     color: #729d34; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031324}}
+@media -sass-debug-info{filename{}line{font-family:\000031328}}
 .hint {
   background-color: #f4f4f4;
   border-radius: 0.2em;
@@ -1337,7 +1341,7 @@ a {
   margin: 1em 0;
   color: #666; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031333}}
+@media -sass-debug-info{filename{}line{font-family:\000031337}}
 kbd {
   font-size: 0.8em;
   font-family: 'Helvetica Neue', 'Arial';
@@ -1350,15 +1354,15 @@ kbd {
   padding: 0.2em 0.4em;
   border-radius: 0.2em; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031346}}
+@media -sass-debug-info{filename{}line{font-family:\000031350}}
 .logo, strong {
   font-family: 'Voltaire'; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031351}}
+@media -sass-debug-info{filename{}line{font-family:\000031355}}
 .separator {
   position: absolute;
   z-index: 2; }
-@media -sass-debug-info{filename{}line{font-family:\000031355}}
+@media -sass-debug-info{filename{}line{font-family:\000031359}}
   .separator:before {
     position: absolute;
     content: ' ';
@@ -1370,13 +1374,13 @@ kbd {
     left: -2px;
     top: -2px; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031368}}
+@media -sass-debug-info{filename{}line{font-family:\000031372}}
 .horizontal.separator {
   width: 100%;
   height: 0;
   cursor: ns-resize; }
 
-@media -sass-debug-info{filename{}line{font-family:\000031374}}
+@media -sass-debug-info{filename{}line{font-family:\000031378}}
 .vertical.separator {
   width: 0;
   height: 100%;
