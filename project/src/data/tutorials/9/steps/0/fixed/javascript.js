@@ -30,15 +30,15 @@ var TodoList = Ractive.extend({
 
     // proxy event handlers
     this.on({
-      remove: function ( event, el ) {
+      remove: function ( el, event ) {
         var index = el.parentNode.getAttribute( 'data-index' );
         this.removeItem( index );
       },
-      newTodo: function ( event, el ) {
+      newTodo: function ( el, event ) {
         this.addItem( el.value );
         el.value = '';
       },
-      edit: function ( event, el ) {
+      edit: function ( el, event ) {
         var li, index, input, submit;
 
         // first, find the index of the todo we're editing

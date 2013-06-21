@@ -5,7 +5,7 @@ var ractive = new Ractive({
 
 var selected;
 
-ractive.on( 'select', function ( event, el ) {
+ractive.on( 'select', function ( el, event ) {
   var gif, caption;
 
   gif = el.src.replace( 'jpg', 'gif' );

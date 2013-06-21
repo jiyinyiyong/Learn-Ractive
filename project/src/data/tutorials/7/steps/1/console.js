@@ -1,1 +1,1 @@
-ractive.goto( 3 );
+slideshow.goto( 3 );

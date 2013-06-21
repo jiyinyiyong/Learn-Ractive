@@ -22,7 +22,7 @@
 <p>That way, we can retrieve the column ID within our handler, and sort the list accordingly:</p>
 
 <pre class='prettyprint lang-js'>
-ractive.on( 'sort', function ( event, el ) {
+ractive.on( 'sort', function ( el, event ) {
   var sortColumn = el.getAttribute( 'data-column' );
   alert( 'Sorting by ' + sortColumn );
 });

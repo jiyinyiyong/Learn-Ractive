@@ -9,10 +9,16 @@ var xmen = [
 var ractive = new Ractive({
   el: output,
   template: template,
-  data: { superheroes: xmen }
+  data: {
+    superheroes: xmen,
+    sort: function ( array, sortColumn ) {
+      // add sorting logic here
+      return array;
+    }
+  }
 });
 
-ractive.on( 'sort', function ( event, el ) {
+ractive.on( 'sort', function ( el, event ) {
   var sortColumn = el.getAttribute( 'data-column' );
   alert( 'Sorting by ' + sortColumn );
 });

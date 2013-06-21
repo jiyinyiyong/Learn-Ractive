@@ -54,7 +54,7 @@
 }
 
 .divvy-inner.copy-block, .divvy-inner.output-block {
-	font-family: 'Baskerville';
+	font-family: 'Baskerville', 'Garamond', 'Georgia';
 	@include border-box;
 
 	.content {

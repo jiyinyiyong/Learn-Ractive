@@ -3,6 +3,6 @@ var ractive = new Ractive({
   template: template
 });
 
-ractive.on( 'activate', function ( event, el ) {
+ractive.on( 'activate', function ( el, event ) {
   alert( 'Activating!' );
 });

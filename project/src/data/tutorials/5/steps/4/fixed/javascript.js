@@ -22,7 +22,7 @@ var ractive = new Ractive({
   }
 });
 
-ractive.on( 'sort', function ( event, el ) {
+ractive.on( 'sort', function ( el, event ) {
   var column = el.getAttribute( 'data-column' );
   this.set( 'sortColumn', column );
 });
