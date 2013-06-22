@@ -1,4 +1,17 @@
 <div class='graphic'>
+  <div class='header'>
+    {{#fullscreenEnabled}}
+      <button proxy-tap='toggleFullscreen'>Toggle fullscreen</button>
+    {{/fullscreenEnabled}}
+
+    <h3>Neuron cell diagram</h3>
+    <p>adapted from <a href='http://en.wikipedia.org/wiki/File:Complete_neuron_cell_diagram_en.svg'>Wikipedia diagram by LadyofHats</a></p>
+  </div>
+
+  <!--
+    This SVG originally came from http://en.wikipedia.org/wiki/File:Complete_neuron_cell_diagram_en.svg
+    It was modified in Adobe Illustrator, and then by hand
+  -->
   <svg viewBox="{{#viewBox}}{{x}} {{y}} {{width}} {{height}}{{/viewBox}}">
 
     <defs>
@@ -1743,7 +1756,7 @@
   		<g id="labels">
   			
         <!-- Rough ER -->
-        <g id='rough_er-label' class='label'>
+        <g class='label {{( info === "rough_er" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='rough_er'>
           <line x1="350" y1="170" x2="280" y2="240" class='outline'/>
           <line x1="350" y1="170" x2="280" y2="240"/>
 
@@ -1754,47 +1767,47 @@
           </g>
         </g>
 
-        <!-- Polyribosomes -->
-        <g id='polyribosomes-label' class='label'>
-          <line class='no-arrow outline' x1="200" y1="150" x2="184" y2="232"/>
-          <ellipse class='outline' cx="185" cy="235" rx="5" ry="4"/>
-
-          <line class='no-arrow' x1="200" y1="150" x2="184" y2="232"/>
-          <ellipse cx="185" cy="235" rx="5" ry="4"/>
-
-          <g transform='translate(120, 130)'>
-            <rect class='label-bg' x='-9' y='-12' width='165' height='39' rx='5' ry='5'/>
-            <text>Polyribosomes</text>
-          </g>
-        </g>
-
         <!-- Ribosomes -->
-        <g id='ribosomes-label' class='label'>
-          <line class='no-arrow outline' x1="133" y1="210" x2="182" y2="249"/>
-          <ellipse class='outline' cx="186.462" cy="252.188" rx="5.201" ry="4.928"/>
+        <g class='label {{( info === "ribosomes" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='ribosomes'>
+          <line class='no-arrow outline' x1="233" y1="150" x2="228" y2="242"/>
+          <ellipse class='outline' cx="228" cy="248" rx="7" ry="7"/>
 
-          <line class='no-arrow' x1="133" y1="210" x2="182" y2="249"/>
-          <ellipse cx="186.462" cy="252.188" rx="5.201" ry="4.928"/>
+          <line class='no-arrow' x1="233" y1="150" x2="228" y2="242"/>
+          <ellipse cx="228" cy="248" rx="7" ry="7"/>
 
-          <g transform='translate(50, 190)'>
+          <g transform='translate(160, 130)'>
             <rect class='label-bg' x='-9' y='-12' width='135' height='39' rx='5' ry='5'/>
             <text>Ribosomes</text>
           </g>
         </g>
 
-        <!-- Golgi apparatus -->
-        <g id='golgi-label' class='label'>
-          <line x1="118.092" y1="245.039" x2="171.962" y2="286.908" class='outline'/>
-          <line x1="118.092" y1="245.039" x2="171.962" y2="286.908"/>
+        <!-- Polyribosomes -->
+        <g class='label {{( info === "polyribosomes" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='polyribosomes'>
+          <line class='no-arrow outline' x1="200" y1="200" x2="184" y2="227"/>
+          <ellipse class='outline' cx="185" cy="235" rx="8" ry="8"/>
 
-          <g transform='translate(5, 250)'>
+          <line class='no-arrow' x1="200" y1="200" x2="184" y2="227"/>
+          <ellipse cx="185" cy="235" rx="8" ry="8"/>
+
+          <g transform='translate(50, 190)'>
             <rect class='label-bg' x='-9' y='-12' width='175' height='39' rx='5' ry='5'/>
+            <text>Polyribosomes</text>
+          </g>
+        </g>
+
+        <!-- Golgi apparatus -->
+        <g class='label {{( info === "golgi" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='golgi'>
+          <line x1="118" y1="245" x2="160" y2="292" class='outline'/>
+          <line x1="118" y1="245" x2="160" y2="292"/>
+
+          <g transform='translate(11, 255)'>
+            <rect class='label-bg' x='-9' y='-12' width='180' height='39' rx='5' ry='5'/>
             <text>Golgi apparatus</text>
           </g>
         </g>
 
         <!-- Nucleus -->
-        <g id='nucleus-label' class='label'>
+        <g class='label {{( info === "nucleus" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='nucleus'>
           <line x1="86" y1="320" x2="207" y2="311" class='outline'/>
           <line x1="86" y1="320" x2="207" y2="311"/>
 
@@ -1805,7 +1818,7 @@
         </g>
 
         <!-- Nucleolus -->
-        <g id='nucleolus-label' class='label'>
+        <g class='label {{( info === "nucleolus" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='nucleolus'>
           <line x1="85" y1="390" x2="230" y2="333" class='outline'/>
           <line x1="85" y1="390" x2="230" y2="333"/>
 
@@ -1816,7 +1829,7 @@
         </g>
 
         <!-- Membrane -->
-        <g id='membrane-label' class='label'>
+        <g class='label {{( info === "membrane" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='membrane'>
           <line x1="60" y1="450" x2="145" y2="410" class='outline'/>
           <line x1="60" y1="450" x2="145" y2="410"/>
 
@@ -1827,7 +1840,7 @@
         </g>
 
         <!-- Microtubule -->
-        <g id='microtubule-label' class='label'>
+        <g class='label {{( info === "microtubules" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='microtubules'>
           <polyline points="190,430 210,490 220,440" class='outline'/>
           <polyline points="190,430 210,490 220,440"/>
 
@@ -1838,18 +1851,18 @@
         </g>
         
         <!-- Mitochondrion -->
-        <g id='mitochondrion-label' class='label'>
+        <g class='label {{( info === "mitochondrion" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='mitochondrion'>
   				<line x1="400" y1="390" x2="320" y2="360" class='outline'/>
           <line x1="400" y1="390" x2="320" y2="360"/>
 
           <g transform="translate(380,370)">
-            <rect class='label-bg' x='-9' y='-12' width='160' height='39' rx='5' ry='5'/>
+            <rect class='label-bg' x='-9' y='-12' width='170' height='39' rx='5' ry='5'/>
             <text>Mitochondrion</text>
           </g>
   			</g>
 
   			<!-- Smooth ER -->
-        <g id='smooth_er-label' class='label'>
+        <g class='label {{( info === "smooth_er" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='smooth_er'>
   				<line x1="400" y1="464" x2="285" y2="405" class='outline'/>
           <line x1="400" y1="464" x2="285" y2="405"/>
 
@@ -2068,7 +2081,7 @@
   			<g>
   				
           <!-- Myelin sheath -->
-          <g class='label {{( info === "myelin-sheath" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='myelin-sheath'>
+          <g class='label {{( info === "schwann_cell" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='schwann_cell'>
   					<polyline points="710,361 709,220 560,282" class='outline'/>
             <polyline points="710,361 709,220 560,282"/>
             
@@ -2081,7 +2094,7 @@
   				</g>
 
   				<!-- Nucleus -->
-          <g class='label {{( info === "nucleus" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='nucleus'>
+          <g class='label {{( info === "schwann_cell" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='schwann_cell'>
   					<line x1="610" y1="365" x2="660" y2="370" class='outline'/>
             <line x1="610" y1="365" x2="660" y2="370"/>
 
@@ -2104,7 +2117,7 @@
   				</g>
 
   				<!-- Microtubule -->
-          <g class='label {{( info === "microtubule" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='microtubule'>
+          <g class='label {{( info === "microtubules" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='microtubules'>
   					<line x1="645" y1="499" x2="610" y2="480" class='outline'/>
             <line x1="645" y1="499" x2="610" y2="480"/>
 
@@ -2328,7 +2341,7 @@
   			<!-- labels -->
   			<g>
   				<!-- Microtubules & neurofibrils -->
-          <g class='label {{( info === "microtubules-neurofibrils" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='microtubules-neurofibrils'>
+          <g class='label {{( info === "microtubules" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='microtubules'>
             <line x1="330" y1="80" x2="461" y2="73" class='outline'/>
             <line x1="330" y1="80" x2="461" y2="73"/>
 
@@ -2362,7 +2375,7 @@
   				</g>
 
   				<!-- Synaptic vesicles -->
-          <g class='label {{( info === "synaptic-vesicles" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='synaptic-vesicles'>
+          <g class='label {{( info === "synaptic_vesicles" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='synaptic_vesicles'>
   					<line x1="590" y1="85" x2="492" y2="123" class='outline'/>
             <line x1="590" y1="85" x2="492" y2="123"/>
 
@@ -2373,7 +2386,7 @@
   				</g>
 
   				<!-- Synaptic cleft -->
-          <g class='label {{( info === "synaptic-cleft" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='synaptic-cleft'>
+          <g class='label {{( info === "synaptic_cleft" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='synaptic_cleft'>
   					<line x1="563" y1="160" x2="456" y2="155" class='outline'/>
             <line x1="563" y1="160" x2="456" y2="155"/>
 
@@ -2492,7 +2505,7 @@
   	<g id="default-labels" class='{{( showLabels ? "visible" : "hidden" )}}'>
   		
       <!-- Dendrites -->
-      <g id='dendrites-label' class='label {{( info === "dendrites" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='dendrites'>
+      <g class='label {{( info === "dendrites" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='dendrites'>
   			<polyline points="465,554 530,535 470,505"/>
   			<polyline points="142,105 150,40 190,67"/>
 
@@ -2508,7 +2521,7 @@
   		</g>
 
   		<!-- Axon hillock -->
-      <g id='axon-hillock-label' class='label {{( info === "axon-hillock" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='axon-hillock'>
+      <g class='label {{( info === "axon_hillock" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='axon_hillock'>
   			<path d="M453.05,294.498c-0.524,0.039-0.926,0.478-0.926,0.996c0,0.025,0.001,0.05,0.003,0.075c0,0,0.512,6.884,0.633,8.513
   				c-21.237,0.563-32.001,17.244-32.108,17.416l-0.627,0.998c0,0,3.999,1.678,6.838,2.867h-8.364
   				c-7.395,0-11.851,19.855-12.821,24.666h-7.179c-0.552,0-1,0.447-1,1c0,0.555,0.448,1,1,1h8.828l0.154-0.812
@@ -2522,7 +2535,7 @@
   		</g>
 
   		<!-- Axodendritic synapse -->
-      <g id='axodendritic-synapse-label' class='label {{( info === "synapse" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='synapse'>
+      <g class='label {{( info === "synapse" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='synapse'>
   			
   			<polyline points="145,500 124,550 210,547"/>
 
@@ -2534,7 +2547,7 @@
   		</g>
 
   		<!-- Axosomatic synapse -->
-      <g id='axosomatic-synapse-label' class='label {{( info === "synapse" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='synapse'>
+      <g class='label {{( info === "synapse" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='synapse'>
   			<line x1='400' y1='200' x2='345' y2='215'/>
 
         <g transform='translate(346, 153)'>
@@ -2545,7 +2558,7 @@
   		</g>
 
   		<!-- Axoaxonic synapse -->
-      <g id='axoaxonic-synapse-label' class='label {{( info === "synapse" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='synapse'>
+      <g class='label {{( info === "synapse" ? "selected" : "" )}}' proxy-tap='moreInfo' data-hotspot='synapse'>
   			<line x1="760" y1="55" x2="750" y2="95"/>
 
         <g transform='translate(680, 30)'>
@@ -2568,6 +2581,6 @@
   </svg>
 
   <div class='detail'>
-    <p>{{{( detail[ info ] )}}}</p>
+    <p>{{{( detail[ info ] || 'Tap on the labels for more info' )}}}</p>
   </div>
 </div>

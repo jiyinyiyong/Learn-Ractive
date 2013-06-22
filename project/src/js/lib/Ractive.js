@@ -126,7 +126,7 @@
 
 }( document ));
 
-/*! Ractive - v0.3.0 - 2013-06-21
+/*! Ractive - v0.3.0 - 2013-06-22
 * Faster, easier, better interactive web development
 
 * http://rich-harris.github.com/Ractive/
@@ -427,6 +427,9 @@ proto.bind = function ( adaptor ) {
 		bound[ bound.length ] = adaptor;
 		adaptor.init( this );
 	}
+};
+proto.cancelFullscreen = function () {
+	Ractive.cancelFullscreen( this.el );
 };
 proto.fire = function ( eventName ) {
 	var args, i, len, subscribers = this._subs[ eventName ];
@@ -947,6 +950,9 @@ proto.render = function ( options ) {
 		options.complete.call( this );
 	}
 };
+proto.requestFullscreen = function () {
+	Ractive.requestFullscreen( this.el );
+};
 (function ( proto ) {
 
 	var set, attemptKeypathResolution;
@@ -1136,6 +1142,13 @@ proto.teardown = function ( complete ) {
 	transitionManager.ready = true;
 	if ( complete && !transitionManager.active ) {
 		complete.call( this );
+	}
+};
+proto.toggleFullscreen = function () {
+	if ( Ractive.isFullscreen( this.el ) ) {
+		this.cancelFullscreen();
+	} else {
+		this.requestFullscreen();
 	}
 };
 proto.unbind = function ( adaptor ) {
@@ -2086,6 +2099,66 @@ Ractive = function ( options ) {
 
 
 }());
+(function ( Ractive ) {
+
+	var requestFullscreen, cancelFullscreen, fullscreenElement, testDiv;
+
+	if ( !doc ) {
+		return;
+	}
+
+	Ractive.fullscreenEnabled = doc.fullscreenEnabled || doc.mozFullScreenEnabled || doc.webkitFullscreenEnabled;
+
+	if ( !Ractive.fullscreenEnabled ) {
+		Ractive.requestFullscreen = Ractive.cancelFullscreen = noop;
+		return;
+	}
+
+	testDiv = document.createElement( 'div' );
+
+	// get prefixed name of requestFullscreen method
+	if ( testDiv.requestFullscreen ) {
+		requestFullscreen = 'requestFullscreen';
+	} else if ( testDiv.mozRequestFullScreen ) {
+		requestFullscreen = 'mozRequestFullScreen';
+	} else if ( testDiv.webkitRequestFullscreen ) {
+		requestFullscreen = 'webkitRequestFullscreen';
+	}
+
+	Ractive.requestFullscreen = function ( el ) {
+		if ( el[ requestFullscreen ] ) {
+			el[ requestFullscreen ]();
+		}
+	};
+
+	// get prefixed name of cancelFullscreen method
+	if ( doc.cancelFullscreen ) {
+		cancelFullscreen = 'cancelFullscreen';
+	} else if ( doc.mozCancelFullScreen ) {
+		cancelFullscreen = 'mozCancelFullScreen';
+	} else if ( doc.webkitCancelFullScreen ) {
+		cancelFullscreen = 'webkitCancelFullScreen';
+	}
+
+	Ractive.cancelFullscreen = function () {
+		console.log( cancelFullscreen );
+		doc[ cancelFullscreen ]();
+	};
+
+	// get prefixed name of fullscreenElement property
+	if ( doc.fullscreenElement !== undefined ) {
+		fullscreenElement = 'fullscreenElement';
+	} else if ( document.mozFullScreenElement !== undefined ) {
+		fullscreenElement = 'mozFullScreenElement';
+	} else if ( document.webkitFullscreenElement !== undefined ) {
+		fullscreenElement = 'webkitFullscreenElement';
+	}
+
+	Ractive.isFullscreen = function ( el ) {
+		return el === doc[ fullscreenElement ];
+	};
+
+}( Ractive ));
 Animation = function ( options ) {
 	var key;
 

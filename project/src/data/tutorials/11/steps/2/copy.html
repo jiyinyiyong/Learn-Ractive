@@ -1,0 +1,9 @@
+<p>Ractive can potentially be used to turn static illustrations into interactive pieces, like this neuron cell diagram, based on the <a href='http://en.wikipedia.org/wiki/File:Complete_neuron_cell_diagram_en.svg'>original from Wikipedia</a>.</p>
+
+<p>In this case, the diagram was modified using Adobe Illustrator (to separate the closeups into their own groups, and add text-based labels rather than path-based ones), then hand-edited to add the interactivity.</p>
+
+<p>Right now, it's a laborious process, as Illustrator and <a href='http://inkscape.org/'>Inkscape</a> create SVG that can be difficult to edit by hand. But it's totally possible.</p>
+
+<div class='hint'>
+	<p>We're using a method we haven't seen before - <code>ractive.toggleFullscreen()</code>. This (along with <code>requestFullscreen</code> and <code>cancelFullscreen</code>) is a convenience method that allows you to use the <a href='https://developer.mozilla.org/en-US/docs/Web/Guide/DOM/Using_full_screen_mode'>fullscreen API</a> without worrying about vendor prefixes. See the <a href='https://github.com/Rich-Harris/Ractive/wiki'>docs</a> for more info.</p>
+</div>
