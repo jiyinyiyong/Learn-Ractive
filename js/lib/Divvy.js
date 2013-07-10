@@ -794,8 +794,8 @@ var Divvy;
 
 }());
 
-if ( typeof global.module !== "undefined" && global.module.exports ) { global.module.exports = Divvy; }
-else if ( typeof global.define !== "undefined" && global.define.amd ) { global.define( function () { return Divvy; }); }
+if ( typeof module !== "undefined" && module.exports ) { module.exports = Divvy; }
+else if ( typeof define !== "undefined" && define.amd ) { define( function () { return Divvy; }); }
 else { global.Divvy = Divvy; }
 
 }( this ));

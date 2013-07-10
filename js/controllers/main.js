@@ -1,12 +1,46 @@
-/*global window, define, CodeMirror, document */
+/*global window, define, CodeMirror, document, prettyPrint */
 
 define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 	
 	'use strict';
 
-	var eval2 = eval, teardownQueue, onResizeHandlers, prop; // changes to global context. Bet you didn't know that! Thanks, http://stackoverflow.com/questions/8694300/how-eval-in-javascript-changes-the-calling-context
+	var eval2, teardown, teardownQueue, onResizeHandlers, prop, timeouts, _setTimeout, _clearTimeout;
+
+	eval2 = eval; // changes to global context. Bet you didn't know that! Thanks, http://stackoverflow.com/questions/8694300/how-eval-in-javascript-changes-the-calling-context
 
 	teardownQueue = [];
+	timeouts = [];
+
+	_setTimeout = window.setTimeout;
+	_clearTimeout = window.clearTimeout;
+
+	window.setTimeout = function ( fn, delay ) {
+		var timeout = _setTimeout.apply( null, arguments );
+		timeouts[ timeouts.length ] = timeout;
+	};
+
+	window.clearTimeout = function ( timeout ) {
+		var index = timeouts.indexOf( timeout );
+		if ( index !== -1 ) {
+			timeouts.splice( index, 1 );
+		}
+
+		_clearTimeout( timeout );
+	};
+
+	teardown = function () {
+		while ( teardownQueue.length ) {
+			teardownQueue.pop().teardown();
+		}
+
+		// neuter any onResize handlers
+		onResizeHandlers = [];
+
+		// clear any timeouts
+		while ( timeouts[0] ) {
+			window.clearTimeout( timeouts[0] );
+		}
+	};
 
 
 	window.Ractive = function () {
@@ -70,12 +104,7 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 		executeJs = function () {
 			var code = editors.javascript.getValue();
 
-			while ( teardownQueue.length ) {
-				teardownQueue.pop().teardown();
-			}
-
-			// neuter any onResize handlers
-			onResizeHandlers = [];
+			teardown();
 
 			window.template = editors.template.getValue();
 			window.output = document.getElementById( 'output' );
@@ -207,16 +236,16 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 				});
 			},
 			nextStepDisabled: function ( disabled ) {
-				mainView.set( 'nextDisabled', disabled ? 'disabled' : '' )
+				mainView.set( 'nextDisabled', disabled ? 'disabled' : '' );
 			},
 			prevStepDisabled: function ( disabled ) {
-				mainView.set( 'prevDisabled', disabled ? 'disabled' : '' )
+				mainView.set( 'prevDisabled', disabled ? 'disabled' : '' );
 			},
 			nextTutorialDisabled: function ( disabled ) {
-				mainView.set( 'nextTutorialDisabled', disabled ? 'disabled' : '' )
+				mainView.set( 'nextTutorialDisabled', disabled ? 'disabled' : '' );
 			},
 			prevTutorialDisabled: function ( disabled ) {
-				mainView.set( 'prevTutorialDisabled', disabled ? 'disabled' : '' )
+				mainView.set( 'prevTutorialDisabled', disabled ? 'disabled' : '' );
 			}
 		});
 
@@ -226,9 +255,7 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 			}
 
 			// teardown any Ractive instances that have been created
-			while ( teardownQueue.length ) {
-				teardownQueue.pop().teardown();
-			}
+			teardown();
 
 			editors.template.setValue( step.template || '' );
 			editors.javascript.setValue( step.javascript || '' );
@@ -236,6 +263,7 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 
 			mainView.set({
 				copy: step.copy,
+				css: step.styles || app.state.get( 'currentTutorial.styles' ),
 				fixDisabled: ( step.fixed ? '' : 'disabled' )
 			});
 
@@ -341,10 +369,6 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 
 				if ( !fixed ) {
 					throw new Error( 'Missing completed code for this step' );
-				}
-
-				while ( teardownQueue.length ) {
-					teardownQueue.pop().teardown();
 				}
 
 				editors.template.setValue( fixed.template || currentStep.template || '' );
