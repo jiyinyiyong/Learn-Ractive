@@ -1,9 +1,9 @@
 <table class='superheroes'>
   <tr>
     <th>#</th>
-    <th class='sortable {{( sortColumn === "name"     ? "sorted" : "" )}}' proxy-tap='sort' data-column='name'>Superhero name</th>
-    <th class='sortable {{( sortColumn === "realname" ? "sorted" : "" )}}' proxy-tap='sort' data-column='realname'>Real name</th>
-    <th class='sortable {{( sortColumn === "power"    ? "sorted" : "" )}}' proxy-tap='sort' data-column='power'>Superpower</th>
+    <th class='sortable {{( sortColumn === "name"     ? "sorted" : "" )}}' proxy-tap='sort:name'>Superhero name</th>
+    <th class='sortable {{( sortColumn === "realname" ? "sorted" : "" )}}' proxy-tap='sort:realname'>Real name</th>
+    <th class='sortable {{( sortColumn === "power"    ? "sorted" : "" )}}' proxy-tap='sort:power'>Superpower</th>
   </tr>
 
   {{#( sort( superheroes, sortColumn ) ) :num}}

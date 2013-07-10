@@ -1,10 +1,12 @@
-/*global window, define, CodeMirror, document */
+/*global window, define, CodeMirror, document, prettyPrint */
 
 define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 	
 	'use strict';
 
-	var eval2 = eval, teardown, teardownQueue, onResizeHandlers, prop, timeouts, _setTimeout, _clearTimeout; // changes to global context. Bet you didn't know that! Thanks, http://stackoverflow.com/questions/8694300/how-eval-in-javascript-changes-the-calling-context
+	var eval2, teardown, teardownQueue, onResizeHandlers, prop, timeouts, _setTimeout, _clearTimeout;
+
+	eval2 = eval; // changes to global context. Bet you didn't know that! Thanks, http://stackoverflow.com/questions/8694300/how-eval-in-javascript-changes-the-calling-context
 
 	teardownQueue = [];
 	timeouts = [];
@@ -234,16 +236,16 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 				});
 			},
 			nextStepDisabled: function ( disabled ) {
-				mainView.set( 'nextDisabled', disabled ? 'disabled' : '' )
+				mainView.set( 'nextDisabled', disabled ? 'disabled' : '' );
 			},
 			prevStepDisabled: function ( disabled ) {
-				mainView.set( 'prevDisabled', disabled ? 'disabled' : '' )
+				mainView.set( 'prevDisabled', disabled ? 'disabled' : '' );
 			},
 			nextTutorialDisabled: function ( disabled ) {
-				mainView.set( 'nextTutorialDisabled', disabled ? 'disabled' : '' )
+				mainView.set( 'nextTutorialDisabled', disabled ? 'disabled' : '' );
 			},
 			prevTutorialDisabled: function ( disabled ) {
-				mainView.set( 'prevTutorialDisabled', disabled ? 'disabled' : '' )
+				mainView.set( 'prevTutorialDisabled', disabled ? 'disabled' : '' );
 			}
 		});
 

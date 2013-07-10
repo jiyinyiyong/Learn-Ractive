@@ -12,28 +12,18 @@
 
 <body>
 	<div id='container'>
-		<span class='loading'>loading...</span>
+		<div id='header'>
+			<h1>Learn Ractive.js <small class='loading'>is loading...</small></h1>
+		</div>
+
+		<noscript>
+			<span>Please <a href='http://www.enable-javascript.com/'>enable JavaScript!</a></span>
+		</noscript>
 	</div>
 
-	<!-- Ractive -->
-	<script src='js/lib/Ractive.js'></script>
+	
 
-	<!-- Codemirror -->
-	<script src='js/lib/codemirror/codemirror.js'></script>
-	<script src='js/lib/codemirror/javascript/javascript.js'></script>
-	<script src='js/lib/codemirror/css/css.js'></script>
-	<script src='js/lib/codemirror/xml/xml.js'></script>
-	<script src='js/lib/codemirror/htmlmixed/htmlmixed.js'></script>
-
-	<!-- Prettify -->
-	<script src='js/lib/prettify.js'></script>
-
-
-
-	<script src='js/require.js'></script>
+	<script src='js/bundle.js'></script>
 	<script src='js/main.js'></script>
-
-	<!-- jQuery (used in a couple of the tutorials) -->
-	<script src='js/lib/jQuery.js'></script>
 </body>
 </html>

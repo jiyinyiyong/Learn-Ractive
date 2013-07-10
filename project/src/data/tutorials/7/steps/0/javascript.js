@@ -4,8 +4,8 @@ var ractive = new Ractive({
   data: {
     // placeholder image data
     image: {
-      src: 'files/gifs/css.gif',
-      caption: 'Trying to fix someone else\'s CSS'
+      src: 'files/gifs/problem.gif',
+      caption: 'Trying to work out a problem after the 5th hour'
     }
   }
 });

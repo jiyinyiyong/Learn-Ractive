@@ -73,19 +73,13 @@ module.exports = function(grunt) {
 		requirejs: {
 			compile: {
 				options: {
-					baseUrl: 'build/js/',
+					baseUrl: 'generated/js/',
 					out: 'build/js/main.js',
 					name: 'almond',
 					include: 'main',
-					mainConfigFile: 'build/js/main.js',
+					mainConfigFile: 'generated/js/main.js',
 					wrap: true,
-					optimize: 'uglify2',
-					uglify2: {
-						compress: {
-							dead_code: true,
-							conditionals: true // e.g. rewrite `if ( <%= production %> ) { doX(); } else { doY() }` as `doX()`
-						}
-					}
+					optimize: 'uglify'
 				}
 			}
 		},
@@ -140,6 +134,10 @@ module.exports = function(grunt) {
 					dest: 'generated/js'
 				}]
 			},
+			bundle: {
+				src: 'tmp/bundle.js',
+				dest: 'build/js/bundle.js'
+			}
 		},
 
 		// Compress any CSS in the root folder
@@ -162,6 +160,10 @@ module.exports = function(grunt) {
 				cwd: 'build/',
 				src: '*.js',
 				dest: 'build/'}]
+			},
+			buildBundle: {
+				src: 'tmp/bundle.js',
+				dest: 'tmp/bundle.js'
 			}
 		},
 		
@@ -169,13 +171,24 @@ module.exports = function(grunt) {
 		dir2json: {
 			dev: {
 				root: 'project/src/data/',
-				dest: 'generated/js/data.js',
-				options: { space: '\t', amd: true }
+				dest: 'generated/data.json',
+				options: { space: '\t' }
 			},
 			build: {
 				root: 'project/src/data/',
-				dest: 'build/js/data.js',
-				options: { amd: true }
+				dest: 'build/data.json'
+			}
+		},
+
+
+		concat: {
+			devBundle: {
+				src: [ 'project/src/js/bundle/**/*.js', 'project/src/js/require.js' ],
+				dest: 'generated/js/bundle.js'
+			},
+			buildBundle: {
+				src: [ 'project/src/js/bundle/**/*.js' ],
+				dest: 'tmp/bundle.js'
 			}
 		}
 
@@ -191,6 +204,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-copy');
+	grunt.loadNpmTasks('grunt-contrib-concat');
 
 	grunt.loadNpmTasks('grunt-dir2json');
 	
@@ -202,7 +216,8 @@ module.exports = function(grunt) {
 		'copy:jsdev',
 		'copy:filesdev',
 		'sass:dev',
-		'dir2json:dev'
+		'dir2json:dev',
+		'concat:devBundle'
 	]);
 
 	// default task - generate dev build and watch for changes
@@ -211,19 +226,28 @@ module.exports = function(grunt) {
 		'watch'
 	]);
 
+	grunt.registerTask( 'bundle', [
+		'concat:buildBundle',
+		'uglify:buildBundle'
+	]);
+
 	// build task - link, compile, flatten, optimise, copy
 	grunt.registerTask( 'build', [
 		// clear out previous build
+		'clean:generated',
 		'clean:build',
-		'clean:tmp',
 
-		//Lint js files!
-		'jshint',
+		// generate files which we need to minify in a moment
+		'generate',
+
+		//Lint js files! TODO
+		//'jshint',
 
 		// copy files from project/files to build/files and from project root to build root
 		'copy:root',
-		'copy:js',
+		//'copy:js',
 		'copy:files',
+		'copy:bundle',
 
 		// build our min.css, without debugging info
 		'sass:build',
@@ -236,43 +260,6 @@ module.exports = function(grunt) {
 		'cssmin:build',
 		'uglify:build',
 
-	]);
-
-	// launch sequence
-	grunt.registerTask( 'deploy', [
-		// clear the tmp folder
-		'clean:tmp',
-
-		// connect to S3, establish version number
-		'createS3Instance',
-		'downloadFromS3:manifest',
-		'verifyManifest',
-
-		// build project
-		'build',
-
-		// upload files
-		'lockProject',
-		'uploadToS3:manifest',
-		'uploadToS3:version',
-		'uploadToS3:root',
-		'lockProject:unlock',
-
-		// point browser at newly deployed project
-		'shell:open'
-	]);
-
-	grunt.registerTask( 'deploy:simulate', [
-		// clear the tmp folder
-		'clean:tmp',
-
-		// connect to S3, establish version number
-		'createS3Instance',
-		'downloadFromS3:manifest',
-		'verifyManifest',
-
-		// build project
-		'build'
 	]);
 
 };

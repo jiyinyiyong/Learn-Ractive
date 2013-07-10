@@ -1,7 +1,13 @@
 var item = "<li data-index='{{i}}' class='{{( done ? \"done\" : \"pending\" )}}'>" +
-              "<input type='checkbox' checked='{{done}}'>" +
-              "<span proxy-tap='edit'>{{description}}</span>" +
-              "<a class='button' proxy-tap='remove'>x</a>" +
+             "<input type='checkbox' checked='{{done}}'>" +
+             "<span proxy-tap='edit'>" +
+               "{{description}}" +
+
+               "{{#.editing}}" +
+                 "<input id='editTodo' class='edit' value='{{description}}' proxy-blur='stop_editing'>" +
+               "{{/.editing}}" +
+             "</span>" +
+             "<a class='button' proxy-tap='remove'>x</a>" +
            "</li>";
 
 var TodoList = Ractive.extend({
@@ -30,19 +36,20 @@ var TodoList = Ractive.extend({
 
     // proxy event handlers
     this.on({
-      remove: function ( el, event ) {
-        var index = el.parentNode.getAttribute( 'data-index' );
+      remove: function ( event ) {
+        var index = event.node.parentNode.getAttribute( 'data-index' );
         this.removeItem( index );
       },
-      newTodo: function ( el, event ) {
-        this.addItem( el.value );
-        el.value = '';
+      newTodo: function ( event ) {
+        this.addItem( event.node.value );
+        event.node.value = '';
       },
-      edit: function ( el, event ) {
-        var li, index, input, submit;
+      edit: function ( event ) {
+        var node, li, index, input, submit;
 
         // first, find the index of the todo we're editing
-        li = el.parentNode;
+        node = event.node;
+        li = node.parentNode;
         index = li.getAttribute( 'data-index' );
 
         // create an input and fill it with the current description
@@ -57,7 +64,7 @@ var TodoList = Ractive.extend({
           input.removeEventListener( 'blur', submit );
           input.removeEventListener( 'change', submit );
 
-          el.removeChild( input );
+          node.removeChild( input );
           self.set( 'items.' + index + '.description', input.value );
         };
 
@@ -65,7 +72,7 @@ var TodoList = Ractive.extend({
         input.addEventListener( 'change', submit );
 
         // add the input, and select all the text in it
-        el.appendChild( input );
+        node.appendChild( input );
         input.select();
       }
     });

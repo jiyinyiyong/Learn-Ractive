@@ -5,11 +5,12 @@ var ractive = new Ractive({
 
 var selected;
 
-ractive.on( 'select', function ( el, event ) {
-  var gif, caption;
+ractive.on( 'select', function ( event ) {
+  var node, gif, caption;
 
-  gif = el.src.replace( 'jpg', 'gif' );
-  caption = el.getAttribute( 'data-caption' );
+  node = event.node;
+  gif = node.src.replace( 'jpg', 'gif' );
+  caption = node.getAttribute( 'data-caption' );
 
   this.set({
     gif: gif,
@@ -17,14 +18,14 @@ ractive.on( 'select', function ( el, event ) {
   });
 
   // deselect previous selection
-  if ( el !== selected && selected && selected.classList ) {
+  if ( node !== selected && selected && selected.classList ) {
   	selected.classList.remove( 'selected' );
   }
 
   // select new selection (unless you're in IE
   // in which case no classList for you. Sucka)
-  if ( el.classList ) {
-    el.classList.add( 'selected' );
-    selected = el;
+  if ( node.classList ) {
+    node.classList.add( 'selected' );
+    selected = node;
   }
 });

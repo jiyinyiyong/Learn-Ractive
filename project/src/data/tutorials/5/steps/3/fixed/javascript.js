@@ -12,7 +12,6 @@ var ractive = new Ractive({
   data: { superheroes: xmen }
 });
 
-ractive.on( 'sort', function ( el, event ) {
-  var sortColumn = el.getAttribute( 'data-column' );
-  alert( 'Sorting by ' + sortColumn );
+ractive.on( 'sort', function ( event, column ) {
+  alert( 'Sorting by ' + column );
 });

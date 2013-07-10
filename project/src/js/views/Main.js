@@ -1,4 +1,4 @@
-/*global define */
+/*global define, document */
 
 define( [ 'Ractive', 'Divvy', 'rv!templates/main' ], function ( Ractive, Divvy, main ) {
 	

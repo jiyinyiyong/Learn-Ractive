@@ -1,4 +1,4 @@
 ractive.set( 'image', {
-  src: 'files/gifs/problem.gif',
-  caption: 'Trying to work out a problem after the 5th hour'
+  src: 'files/gifs/css.gif',
+  caption: 'Trying to fix someone else\'s CSS'
 });

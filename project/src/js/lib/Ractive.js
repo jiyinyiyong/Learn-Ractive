@@ -1,132 +1,4 @@
-(function ( doc ) {
-
-	// Shims for older browsers
-
-	if ( !Date.now ) {
-		Date.now = function () { return +new Date(); };
-	}
-
-	if ( !doc.createElementNS ) {
-		doc.createElementNS = function ( ns, type ) {
-			if ( ns !== null && ns !== 'http://www.w3.org/1999/xhtml' ) {
-				throw 'This browser does not support namespaces other than http://www.w3.org/1999/xhtml';
-			}
-
-			return doc.createElement( type );
-		};
-	}
-
-	if ( !String.prototype.trim ) {
-		String.prototype.trim = function () {
-			return this.replace(/^\s+/, '').replace(/\s+$/, '');
-		};
-	}
-
-	// https://gist.github.com/jonathantneal/3748027
-	if ( !window.addEventListener ) {
-		(function ( WindowPrototype, DocumentPrototype, ElementPrototype, addEventListener, removeEventListener, dispatchEvent, registry ) {
-			WindowPrototype[addEventListener] = DocumentPrototype[addEventListener] = ElementPrototype[addEventListener] = function (type, listener) {
-				var target = this;
-
-				registry.unshift([target, type, listener, function (event) {
-					event.currentTarget = target;
-					event.preventDefault = function () { event.returnValue = false; };
-					event.stopPropagation = function () { event.cancelBubble = true; };
-					event.target = event.srcElement || target;
-
-					listener.call(target, event);
-				}]);
-
-				this.attachEvent("on" + type, registry[0][3]);
-			};
-
-			WindowPrototype[removeEventListener] = DocumentPrototype[removeEventListener] = ElementPrototype[removeEventListener] = function (type, listener) {
-				var index, register;
-
-				for ( index = 0, register; register = registry[index]; ++index ) {
-					if ( register[0] === this && register[1] === type && register[2] === listener ) {
-						return this.detachEvent("on" + type, registry.splice(index, 1)[0][3]);
-					}
-				}
-			};
-
-			WindowPrototype[dispatchEvent] = DocumentPrototype[dispatchEvent] = ElementPrototype[dispatchEvent] = function (eventObject) {
-				return this.fireEvent("on" + eventObject.type, eventObject);
-			};
-		}( Window.prototype, HTMLDocument.prototype, Element.prototype, "addEventListener", "removeEventListener", "dispatchEvent", [] ));
-	}
-
-
-	// Array extras
-	if ( !Array.prototype.indexOf ) {
-		Array.prototype.indexOf = function ( needle, i ) {
-			var len;
-
-			if ( i === undefined ) {
-				i = 0;
-			}
-
-			if ( i < 0 ) {
-				i+= this.length;
-			}
-
-			if ( i < 0 ) {
-				i = 0;
-			}
-
-			for ( len = this.length; i<len; i++ ) {
-				if ( this.hasOwnProperty( i ) && this[i] === needle ) {
-					return i;
-				}
-			}
-
-			return -1;
-		};
-	}
-
-	if ( !Array.prototype.forEach ) {
-		Array.prototype.forEach = function ( callback, context ) {
-			var i, len;
-
-			for ( i=0, len=this.length; i<len; i+=1 ) {
-				if ( this.hasOwnProperty( i ) ) {
-					callback.call( context, this[i], i, this );
-				}
-			}
-		};
-	}
-
-	if ( !Array.prototype.map ) {
-		Array.prototype.map = function ( mapper, context ) {
-			var i, len, mapped = [];
-
-			for ( i=0, len=this.length; i<len; i+=1 ) {
-				if ( this.hasOwnProperty( i ) ) {
-					mapped[i] = mapper.call( context, this[i], i, this );
-				}
-			}
-
-			return mapped;
-		};
-	}
-
-	if ( !Array.prototype.map ) {
-		Array.prototype.map = function ( filter, context ) {
-			var i, len, filtered = [];
-
-			for ( i=0, len=this.length; i<len; i+=1 ) {
-				if ( this.hasOwnProperty( i ) && filter.call( context, this[i], i, this ) ) {
-					filtered[ filtered.length ] = this[i];
-				}
-			}
-
-			return filtered;
-		};
-	}
-
-}( document ));
-
-/*! Ractive - v0.3.0 - 2013-06-22
+/*! Ractive - v0.3.0 - 2013-06-27
 * Faster, easier, better interactive web development
 
 * http://rich-harris.github.com/Ractive/
@@ -153,7 +25,7 @@ easing,
 extend,
 interpolate,
 interpolators,
-transitions,
+transitions = {},
 
 
 // internal utils
@@ -249,7 +121,7 @@ INFIX_OPERATOR    = 36,
 
 INVOCATION        = 40,
 
-UNSET             = {},
+UNSET             = { unset: true },
 
 
 // namespaces
@@ -325,6 +197,92 @@ try {
 		return {}; // hope you're not modifying the Object prototype
 	};
 }
+
+
+
+var hyphenate = function ( str ) {
+	return str.replace( /[A-Z]/g, function ( match ) {
+		return '-' + match.toLowerCase();
+	});
+};
+
+// determine some facts about our environment
+var cssTransitionsEnabled, transition, transitionend;
+
+(function () {
+
+	var testDiv;
+
+	if ( !doc ) {
+		return;
+	}
+
+	testDiv = doc.createElement( 'div' );
+
+	if ( testDiv.style.transition !== undefined ) {
+		transition = 'transition';
+		transitionend = 'transitionend';
+		cssTransitionsEnabled = true;
+	} else if ( testDiv.style.webkitTransition !== undefined ) {
+		transition = 'webkitTransition';
+		transitionend = 'webkitTransitionEnd';
+		cssTransitionsEnabled = true;
+	} else {
+		cssTransitionsEnabled = false;
+	}
+
+}());
+(function ( proto ) {
+
+	var add = function ( root, keypath, d ) {
+		var value;
+
+		if ( typeof keypath !== 'string' || !isNumeric( d ) ) {
+			if ( root.debug ) {
+				throw new Error( 'Bad arguments' );
+			}
+			return;
+		}
+
+		value = root.get( keypath );
+
+		if ( value === undefined ) {
+			value = 0;
+		}
+
+		if ( !isNumeric( value ) ) {
+			if ( root.debug ) {
+				throw new Error( 'Cannot add to a non-numeric value' );
+			}
+			return;
+		}
+
+		root.set( keypath, value + d );
+	};
+
+	proto.add = function ( keypath, d ) {
+		add( this, keypath, ( d === undefined ? 1 : d ) );
+	};
+
+	proto.subtract = function ( keypath, d ) {
+		add( this, keypath, ( d === undefined ? -1 : -d ) );
+	};
+
+	proto.toggle = function ( keypath ) {
+		var value;
+
+		if ( typeof keypath !== 'string' ) {
+			if ( this.debug ) {
+				throw new Error( 'Bad arguments' );
+			}
+			return;
+		}
+
+		value = this.get( keypath );
+		this.set( keypath, !value );
+	};
+
+}( proto ));
 (function ( proto ) {
 
 	var animate;
@@ -445,9 +403,10 @@ proto.fire = function ( eventName ) {
 	}
 };
 // TODO use dontNormalise
+// TODO refactor this shitball
 
 proto.get = function ( keypath, dontNormalise ) {
-	var cache, cacheMap, keys, normalised, key, parentKeypath, parentValue, value;
+	var cache, cacheMap, keys, normalised, key, parentKeypath, parentValue, value, ignoreUndefined;
 
 	if ( !keypath ) {
 		return this.data;
@@ -456,8 +415,14 @@ proto.get = function ( keypath, dontNormalise ) {
 	cache = this._cache;
 
 	if ( isArray( keypath ) ) {
+		if ( !keypath.length ) {
+			return this.data;
+		}
+
 		keys = keypath.slice(); // clone
 		normalised = keys.join( '.' );
+
+		ignoreUndefined = true; // because this should be a branch, sod the cache
 	}
 
 	else {
@@ -472,7 +437,11 @@ proto.get = function ( keypath, dontNormalise ) {
 
 	// we may have a cache hit now that it's been normalised
 	if ( cache.hasOwnProperty( normalised ) && cache[ normalised ] !== UNSET ) {
-		return cache[ normalised ];
+		if ( cache[ normalised ] === undefined && ignoreUndefined ) {
+			// continue
+		} else {
+			return cache[ normalised ];
+		}
 	}
 
 	// is this an uncached evaluator value?
@@ -512,7 +481,7 @@ proto.get = function ( keypath, dontNormalise ) {
 
 	// Update cache
 	cache[ normalised ] = value;
-	
+
 	return value;
 };
 var teardown,
@@ -571,25 +540,10 @@ registerDependant = function ( dependant ) {
 	keypath = dependant.keypath;
 	priority = dependant.priority;
 
-	if ( !root._deps[ priority ] ) {
-		root._deps[ priority ] = {};
-	}
-
-	depsByKeypath = root._deps[ priority ];
-
-	if ( !depsByKeypath[ keypath ] ) {
-		depsByKeypath[ keypath ] = [];
-	}
-
-	deps = depsByKeypath[ keypath ];
+	depsByKeypath = root._deps[ priority ] || ( root._deps[ priority ] = {} );
+	deps = depsByKeypath[ keypath ] || ( depsByKeypath[ keypath ] = [] );
 
 	deps[ deps.length ] = dependant;
-
-	// if this is an evaluator keypath, let the evaluator know about the dependant
-	if ( root._evaluators[ keypath ] ) {
-		root._evaluators[ keypath ].deps += 1;
-	}
-
 
 	// update dependants map
 	keys = splitKeypath( keypath );
@@ -598,13 +552,9 @@ registerDependant = function ( dependant ) {
 		keys.pop();
 		parentKeypath = keys.join( '.' );
 	
-		if ( !root._depsMap[ parentKeypath ] ) {
-			root._depsMap[ parentKeypath ] = [];
-		}
+		map = root._depsMap[ parentKeypath ] || ( root._depsMap[ parentKeypath ] = [] );
 
-		map = root._depsMap[ parentKeypath ];
-
-		if ( !map.hasOwnProperty( keypath ) ) {
+		if ( map[ keypath ] === undefined ) {
 			map[ keypath ] = 0;
 			map[ map.length ] = keypath;
 		}
@@ -626,17 +576,6 @@ unregisterDependant = function ( dependant ) {
 	deps = root._deps[ priority ][ keypath ];
 	deps.splice( deps.indexOf( dependant ), 1 );
 
-	// if this is an evaluator keypath, let the evaluator know about the dependant
-	if ( evaluator = root._evaluators[ keypath ] ) {
-		evaluator.deps -= 1;
-
-		if ( !evaluator.deps ) {
-			// we have an evaluator we don't need anymore
-			evaluator.teardown();
-		}
-	}
-
-	
 	// update dependants map
 	keys = splitKeypath( keypath );
 	
@@ -651,6 +590,7 @@ unregisterDependant = function ( dependant ) {
 		if ( !map[ keypath ] ) {
 			// remove from parent deps map
 			map.splice( map.indexOf( keypath ), 1 );
+			map[ keypath ] = undefined;
 		}
 
 		keypath = parentKeypath;
@@ -702,16 +642,16 @@ var notifyDependantsByPriority = function ( root, keypath, priority, onlyDirect 
 };
 
 var notifyMultipleDependants = function ( root, keypaths, onlyDirect ) {
-	var depsByKeypath, i, j, len;
+	var  i, j, len;
 
 	len = keypaths.length;
 
 	for ( i=0; i<root._deps.length; i+=1 ) {
-		depsByKeypath = root._deps[i];
-
-		j = len;
-		while ( j-- ) {
-			notifyDependantsByPriority( root, keypaths[j], i, onlyDirect );
+		if ( root._deps[i] ) {
+			j = len;
+			while ( j-- ) {
+				notifyDependantsByPriority( root, keypaths[j], i, onlyDirect );
+			}
 		}
 	}
 };
@@ -783,7 +723,7 @@ proto.link = function ( keypath ) {
 };
 (function ( proto ) {
 
-	var observe, updateObserver;
+	var observe, Observer, updateObserver;
 
 	proto.observe = function ( keypath, callback, options ) {
 
@@ -812,38 +752,11 @@ proto.link = function ( keypath ) {
 	};
 
 	observe = function ( root, keypath, callback, options ) {
-		var observer, lastValue, context;
+		var observer;
 
-		options = options || {};
-		context = options.context || root;
+		observer = new Observer( root, keypath, callback, options );
 
-		observer = {
-			update: function () {
-				var value;
-
-				// TODO create, and use, an internal get method instead - we can skip checks
-				value = root.get( keypath, true );
-
-				if ( !isEqual( value, lastValue ) ) {
-					// wrap the callback in a try-catch block, and only throw error in
-					// debug mode
-					try {
-						callback.call( context, value, lastValue );
-					} catch ( err ) {
-						if ( root.debug ) {
-							throw err;
-						}
-					}
-					lastValue = value;
-				}
-			},
-
-			keypath: keypath,
-			root: root,
-			priority: 0
-		};
-
-		if ( options.init !== false ) {
+		if ( !options || options.init !== false ) {
 			observer.update();
 		}
 
@@ -854,6 +767,38 @@ proto.link = function ( keypath ) {
 				unregisterDependant( observer );
 			}
 		};
+	};
+
+	Observer = function ( root, keypath, callback, options ) {
+		this.root = root;
+		this.keypath = keypath;
+		this.callback = callback;
+		this.priority = 0; // observers get top priority
+
+		// default to root as context, but allow it to be overridden
+		this.context = ( options && options.context ? options.context : root );
+	};
+
+	Observer.prototype = {
+		update: function () {
+			var value;
+
+			// TODO create, and use, an internal get method instead - we can skip checks
+			value = this.root.get( this.keypath, true );
+
+			if ( !isEqual( value, this.value ) ) {
+				// wrap the callback in a try-catch block, and only throw error in
+				// debug mode
+				try {
+					this.callback.call( this.context, value, this.value );
+				} catch ( err ) {
+					if ( root.debug ) {
+						throw err;
+					}
+				}
+				this.value = value;
+			}
+		}
 	};
 
 }( proto ));
@@ -930,7 +875,7 @@ proto.render = function ( options ) {
 		el.innerHTML = '';
 	}
 
-	this._transitionManager = transitionManager = makeTransitionManager( options.complete );
+	this._transitionManager = transitionManager = makeTransitionManager( this, options.complete );
 
 	// Render our *root fragment*
 	this.fragment = new DomFragment({
@@ -958,7 +903,7 @@ proto.requestFullscreen = function () {
 	var set, attemptKeypathResolution;
 
 	proto.set = function ( keypath, value, complete ) {
-		var notificationQueue, upstreamQueue, k, normalised, keys, previous, transitionManager;
+		var notificationQueue, upstreamQueue, k, normalised, keys, previous, previousTransitionManager, transitionManager;
 
 		upstreamQueue = [ '' ]; // empty string will always be an upstream keypath
 		notificationQueue = [];
@@ -968,7 +913,8 @@ proto.requestFullscreen = function () {
 		}
 
 		// manage transitions
-		this._transitionManager = transitionManager = makeTransitionManager( complete );
+		previousTransitionManager = this._transitionManager;
+		this._transitionManager = transitionManager = makeTransitionManager( this, complete );
 
 		// setting multiple values in one go
 		if ( isObject( keypath ) ) {
@@ -992,7 +938,7 @@ proto.requestFullscreen = function () {
 		}
 
 		// if anything has changed, attempt to resolve any unresolved keypaths...
-		if ( notificationQueue.length ) {
+		if ( notificationQueue.length && this._pendingResolution.length ) {
 			attemptKeypathResolution( this );
 		}
 
@@ -1011,7 +957,7 @@ proto.requestFullscreen = function () {
 		processDeferredUpdates( this );
 
 		// transition manager has finished its work
-		this._transitionManager = null;
+		this._transitionManager = previousTransitionManager;
 		transitionManager.ready = true;
 		if ( complete && !transitionManager.active ) {
 			complete.call( this );
@@ -1114,11 +1060,12 @@ proto.requestFullscreen = function () {
 // Teardown. This goes through the root fragment and all its children, removing observers
 // and generally cleaning up after itself
 proto.teardown = function ( complete ) {
-	var keypath, transitionManager;
+	var keypath, transitionManager, previousTransitionManager;
 
 	this.fire( 'teardown' );
 
-	this._transitionManager = transitionManager = makeTransitionManager( complete );
+	previousTransitionManager = this._transitionManager;
+	this._transitionManager = transitionManager = makeTransitionManager( this, complete );
 
 	this.fragment.teardown( true );
 
@@ -1138,7 +1085,7 @@ proto.teardown = function ( complete ) {
 	}
 
 	// transition manager has finished its work
-	this._transitionManager = null;
+	this._transitionManager = previousTransitionManager;
 	transitionManager.ready = true;
 	if ( complete && !transitionManager.active ) {
 		complete.call( this );
@@ -1162,14 +1109,15 @@ proto.unbind = function ( adaptor ) {
 	}
 };
 proto.update = function ( keypath, complete ) {
-	var transitionManager;
+	var transitionManager, previousTransitionManager;
 
 	if ( typeof keypath === 'function' ) {
 		complete = keypath;
 	}
 
 	// manage transitions
-	this._transitionManager = transitionManager = makeTransitionManager( complete );
+	previousTransitionManager = this._transitionManager;
+	this._transitionManager = transitionManager = makeTransitionManager( this, complete );
 
 	clearCache( this, keypath || '' );
 	notifyDependants( this, keypath || '' );
@@ -1177,7 +1125,7 @@ proto.update = function ( keypath, complete ) {
 	processDeferredUpdates( this );
 
 	// transition manager has finished its work
-	this._transitionManager = null;
+	this._transitionManager = previousTransitionManager;
 	transitionManager.ready = true;
 	if ( complete && !transitionManager.active ) {
 		complete.call( this );
@@ -1271,33 +1219,104 @@ adaptors.backbone = function ( model, path ) {
 	};
 };
 adaptors.statesman = function ( model, path ) {
-	var settingModel, settingView, setModel, setView;
+	var settingModel, settingView, setModel, setView, pathMatcher, pathLength, prefix;
 
-	path = ( path ? path + '.' : '' );
+	if ( path ) {
+		path += '.';
+		pathMatcher = new RegExp( '^' + path.replace( /\./g, '\\.' ) );
+		pathLength = path.length;
+
+		prefix = function ( attrs ) {
+			var attr, result;
+
+			if ( !attrs ) {
+				return;
+			}
+
+			result = {};
+
+			for ( attr in attrs ) {
+				if ( attrs.hasOwnProperty( attr ) ) {
+					result[ path + attr ] = attrs[ attr ];
+				}
+			}
+
+			return result;
+		};
+	}
+
 
 	return {
 		init: function ( view ) {
-			setView = function ( keypath, value ) {
-				if ( !settingModel ) {
-					settingView = true;
-					view.set( keypath, value );
-					settingView = false;
+			
+			var data;
+
+			// if no path specified...
+			if ( !path ) {
+				setView = function ( keypath, value ) {
+					if ( !settingModel ) {
+						settingView = true;
+						if ( typeof keypath === 'object' ) {
+							view.set( keypath );
+						} else {
+							view.set( keypath, value );
+						}
+						settingView = false;
+					}
+				};
+
+				if ( view.twoway ) {
+					setModel = function ( keypath, value ) {
+						if ( !settingView ) {
+							settingModel = true;
+							model.set( keypath, value );
+							settingModel = false;
+						}
+					};
 				}
-			};
+			}
 
-			setModel = function ( keypath, value ) {
-				if ( !settingView ) {
-					settingModel = true;
-					model.set( keypath, value );
-					settingModel = false;
+			else {
+				setView = function ( keypath, value ) {
+					var data;
+
+					if ( !settingModel ) {
+						settingView = true;
+						if ( typeof keypath === 'object' ) {
+							data = prefix( keypath );
+							view.set( data );
+						} else {
+							view.set( path + keypath, value );
+						}
+						settingView = false;
+					}
+				};
+
+				if ( view.twoway ) {
+					setModel = function ( keypath, value ) {
+						if ( !settingView ) {
+							if ( pathMatcher.test( keypath ) ) {
+								settingModel = true;
+								model.set( keypath.substring( pathLength ), value );
+								settingModel = false;
+							}
+						}
+					};
 				}
-			};
+			}
 
-			model.on( 'set', setView );
-			view.on( 'set', setModel );
-
+			model.on( 'change', setView );
+	
+			if ( view.twoway ) {
+				view.on( 'set', setModel );
+			}
+			
 			// initialise
-			view.set( model.get() );
+			data = ( path ? prefix( model.get() ) : model.get() );
+
+			if ( data ) {
+				view.set( path ? prefix( model.get() ) : model.get() );
+			}
 		},
 
 		teardown: function ( view ) {
@@ -1338,7 +1357,7 @@ easing = {
 		return ( 0.5 * ( Math.pow( ( pos - 2 ), 3 ) + 2 ) );
 	}
 };
-eventDefinitions.tap = function ( el, fire ) {
+eventDefinitions.tap = function ( node, fire ) {
 	var mousedown, touchstart, distanceThreshold, timeThreshold;
 
 	distanceThreshold = 5; // maximum pixels pointer can move before cancel
@@ -1352,7 +1371,11 @@ eventDefinitions.tap = function ( el, fire ) {
 		currentTarget = this;
 
 		up = function ( event ) {
-			fire( currentTarget, event );
+			fire({
+				node: currentTarget,
+				original: event
+			});
+
 			cancel();
 		};
 
@@ -1373,7 +1396,7 @@ eventDefinitions.tap = function ( el, fire ) {
 		setTimeout( cancel, timeThreshold );
 	};
 
-	el.addEventListener( 'mousedown', mousedown );
+	node.addEventListener( 'mousedown', mousedown );
 
 
 	touchstart = function ( event ) {
@@ -1400,7 +1423,11 @@ eventDefinitions.tap = function ( el, fire ) {
 			}
 
 			event.preventDefault();  // prevent compatibility mouse event
-			fire( currentTarget, event );
+			fire({
+				node: currentTarget,
+				original: event
+			});
+			
 			cancel();
 		};
 
@@ -1430,13 +1457,13 @@ eventDefinitions.tap = function ( el, fire ) {
 		setTimeout( cancel, timeThreshold );
 	};
 
-	el.addEventListener( 'touchstart', touchstart );
+	node.addEventListener( 'touchstart', touchstart );
 
 
 	return {
 		teardown: function () {
-			el.removeEventListener( 'mousedown', mousedown );
-			el.removeEventListener( 'touchstart', touchstart );
+			node.removeEventListener( 'mousedown', mousedown );
+			node.removeEventListener( 'touchstart', touchstart );
 		}
 	};
 };
@@ -1481,7 +1508,7 @@ eventDefinitions.tap = function ( el, fire ) {
 
 		// parse template and any partials that need it
 		conditionallyParseTemplate( Child );
-		extractInlinePartials( Child );
+		extractInlinePartials( Child, childProps );
 		conditionallyParsePartials( Child );
 		
 		Child.extend = Parent.extend;
@@ -1489,7 +1516,7 @@ eventDefinitions.tap = function ( el, fire ) {
 		return Child;
 	};
 
-	extendable = [ 'data', 'partials', 'transitions' ];
+	extendable = [ 'data', 'partials', 'transitions', 'eventDefinitions' ];
 	inheritable = [ 'el', 'template', 'complete', 'modifyArrays', 'twoway', 'lazy', 'append', 'preserveWhitespace', 'sanitize' ];
 	blacklist = extendable.concat( inheritable );
 
@@ -1584,7 +1611,7 @@ eventDefinitions.tap = function ( el, fire ) {
 		}
 	};
 
-	extractInlinePartials = function ( Child ) {
+	extractInlinePartials = function ( Child, childProps ) {
 		// does our template contain inline partials?
 		if ( isObject( Child.template ) ) {
 			if ( !Child.partials ) {
@@ -1800,7 +1827,8 @@ defineProperties( defaultOptions, {
 	data:               { enumerable: true, value: {}    },
 	lazy:               { enumerable: true, value: false },
 	debug:              { enumerable: true, value: false },
-	transitions:        { enumerable: true, value: {}    }
+	transitions:        { enumerable: true, value: {}    },
+	eventDefinitions:   { enumerable: true, value: {}    }
 });
 
 Ractive = function ( options ) {
@@ -1811,7 +1839,7 @@ Ractive = function ( options ) {
 	// -------
 	for ( key in defaultOptions ) {
 		if ( !options.hasOwnProperty( key ) ) {
-			options[ key ] = defaultOptions[ key ];
+			options[ key ] = ( typeof defaultOptions[ key ] === 'object' ? {} : defaultOptions[ key ] );
 		}
 	}
 
@@ -1851,10 +1879,11 @@ Ractive = function ( options ) {
 		_defEvals: { value: [] },
 
 		// Cache proxy event handlers - allows efficient reuse
-		_proxies: { value: {} },
+		_proxies: { value: createFromNull() },
+		_customProxies: { value: createFromNull() },
 
 		// Keep a list of used evaluators, so we don't duplicate them
-		_evaluators: { value: {} },
+		_evaluators: { value: createFromNull() },
 
 		// bindings
 		_bound: { value: [] },
@@ -1886,6 +1915,9 @@ Ractive = function ( options ) {
 
 	// Transition registry
 	this.transitions = options.transitions;
+
+	// Instance-specific event definitions registry
+	this.eventDefinitions = options.eventDefinitions;
 
 	// Set up bindings
 	if ( options.bindings ) {
@@ -1975,130 +2007,189 @@ Ractive = function ( options ) {
 
 (function () {
 
-	var transitionsEnabled, transition, transitionend, testDiv, hyphenate, makeTransition;
+	var getOriginalComputedStyles, setStyle, augment, makeTransition, transform, transformsEnabled, inside, outside;
 
-	if ( !doc ) {
-		return;
-	}
+	getOriginalComputedStyles = function ( computedStyle, properties ) {
+		var original = {}, i;
 
-	testDiv = doc.createElement( 'div' );
+		i = properties.length;
+		while ( i-- ) {
+			original[ properties[i] ] = computedStyle[ properties[i] ];
+		}
 
-	if ( testDiv.style.transition !== undefined ) {
-		transition = 'transition';
-		transitionend = 'transitionend';
-		transitionsEnabled = true;
-	} else if ( testDiv.style.webkitTransition !== undefined ) {
-		transition = 'webkitTransition';
-		transitionend = 'webkitTransitionEnd';
-		transitionsEnabled = true;
-	} else {
-		transitionsEnabled = false;
-	}
-
-
-	hyphenate = function ( str ) {
-		return str.replace( /[A-Z]/g, function ( match ) {
-			return '-' + match.toLowerCase();
-		});
+		return original;
 	};
 
-	
+	setStyle = function ( node, properties, map, params ) {
+		var i = properties.length, prop;
 
-
-	if ( transitionsEnabled ) {
-		makeTransition = function ( options ) {
-			return function ( el, complete ) {
-				var transitionEndHandler, transitionStyle, duration;
-
-				duration = options.duration || 400;
-				easing = hyphenate( options.easing || 'linear' );
-
-				// the existing transition style, to which we'll shortly revert
-				transitionStyle = el.style[ transition ];
-
-				// starting style
-				el.style[ options.property ] = options.from;
-
-				setTimeout( function () {
-					el.style[ transition ] = ( duration / 1000 ) + 's ' + options.property + ' ' + easing;
-
-					transitionEndHandler = function ( event ) {
-						el.removeEventListener( transitionend, transitionEndHandler );
-						el.style.transition = transitionStyle;
-
-						complete();
-					};
-					
-					el.addEventListener( transitionend, transitionEndHandler );
-					el.style[ options.property ] = options.to;
-				}, 0 );
-			};
-		};
-	} else {
-		// TODO!
-		makeTransition = function () {
-			return function ( el, complete ) {
-				complete();
-			};
-		};
-	}
-
-
-	transitions = {
-		fadeIn: makeTransition({
-			property: 'opacity',
-			from: 0.01,
-			to: 1,
-			duration: 300,
-			easing: 'linear'
-		}),
-		fadeOut: makeTransition({
-			property: 'opacity',
-			from: 1,
-			to: 0.01,
-			duration: 300,
-			easing: 'linear'
-		}),
-		staggeredFadeIn: function ( el, complete, params, i, transitionManager ) {
-			var delay, stagger;
-
-			if ( params ) {
-				stagger = params.stagger;
+		while ( i-- ) {
+			prop = properties[i];
+			if ( map && map[ prop ] ) {
+				if ( typeof map[ prop ] === 'function' ) {
+					node.style[ prop ] = map[ prop ]( params );
+				} else {
+					node.style[ prop ] = map[ prop ];
+				}
 			}
 
-			if ( stagger === undefined ) {
-				stagger = 20;
+			else {
+				node.style[ prop ] = 0;
 			}
-
-			delay = i * stagger;
-
-			el.style.opacity = 0;
-			
-			setTimeout( function () {
-				transitions.fadeIn( el, complete );
-			}, delay );
-		},
-		staggeredFadeOut: function ( el, complete, params, i, transitionManager ) {
-			var delay, stagger;
-
-			if ( params ) {
-				stagger = params.stagger;
-			}
-
-			if ( stagger === undefined ) {
-				stagger = 20;
-			}
-
-			delay = i * stagger;
-
-			setTimeout( function () {
-				transitions.fadeOut( el, complete );
-			}, delay );
 		}
 	};
 
+	augment = function ( target, source ) {
+		var key;
+
+		if ( !source ) {
+			return target;
+		}
+
+		for ( key in source ) {
+			if ( source.hasOwnProperty( key ) ) {
+				target[ key ] = source[ key ];
+			}
+		}
+
+		return target;
+	};
+
+	makeTransition = function ( properties, defaults, outside, inside ) {
+		if ( typeof properties === 'string' ) {
+			properties = [ properties ];
+		}
+
+		return function ( node, complete, params, info, isIntro ) {
+			var transitionEndHandler, transitionStyle, computedStyle, originalComputedStyles, startTransition, originalStyle, originalOpacity, targetOpacity, duration, delay, start, end, source, target, positionStyle, visibilityStyle, stylesToRemove;
+
+			params = parseTransitionParams( params );
+			
+			duration = params.duration || defaults.duration;
+			easing = hyphenate( params.easing || defaults.easing );
+			delay = ( params.delay || defaults.delay || 0 ) + ( ( params.stagger || defaults.stagger || 0 ) * info.i );
+
+			start = ( isIntro ? outside : inside );
+			end = ( isIntro ? inside : outside );
+
+			computedStyle = window.getComputedStyle( node );
+			originalStyle = node.getAttribute( 'style' );
+
+			// if this is an intro, we need to transition TO the original styles
+			if ( isIntro ) {
+				// hide, to avoid flashes
+				positionStyle = node.style.position;
+				visibilityStyle = node.style.visibility;
+				node.style.position = 'absolute';
+				node.style.visibility = 'hidden';
+
+				// we need to wait a beat before we can actually get values from computedStyle.
+				// Yeah, I know, WTF browsers
+				setTimeout( function () {
+					var i, prop;
+
+					originalComputedStyles = getOriginalComputedStyles( computedStyle, properties );
+					
+					start = outside;
+					end = augment( originalComputedStyles, inside );
+
+					// starting style
+					node.style.position = positionStyle;
+					node.style.visibility = visibilityStyle;
+					
+					setStyle( node, properties, start, params );
+
+					setTimeout( startTransition, 0 );
+				}, delay );
+			}
+
+			// otherwise we need to transition FROM them
+			else {
+				setTimeout( function () {
+					var i, prop;
+
+					originalComputedStyles = getOriginalComputedStyles( computedStyle, properties );
+
+					start = augment( originalComputedStyles, inside );
+					end = outside;
+
+					// ending style
+					setStyle( node, properties, start, params );
+
+					setTimeout( startTransition, 0 );
+				}, delay );
+			}
+
+			startTransition = function () {
+				var i, prop;
+
+				node.style[ transition + 'Duration' ] = ( duration / 1000 ) + 's';
+				node.style[ transition + 'Properties' ] = properties.map( hyphenate ).join( ',' );
+				node.style[ transition + 'TimingFunction' ] = easing;
+
+				transitionEndHandler = function ( event ) {
+					node.removeEventListener( transitionend, transitionEndHandler );
+
+					if ( isIntro ) {
+						node.setAttribute( 'style', originalStyle );
+					}
+
+					complete();
+				};
+				
+				node.addEventListener( transitionend, transitionEndHandler );
+
+				setStyle( node, properties, end, params );
+			};
+		};
+	};
+
+	transitions.slide = makeTransition([
+		'height',
+		'borderTopWidth',
+		'borderBottomWidth',
+		'paddingTop',
+		'paddingBottom',
+		'overflowY'
+	], { duration: 400, easing: 'easeInOut' }, { overflowY: 'hidden' }, { overflowY: 'hidden' });
+
+	transitions.fade = makeTransition( 'opacity', {
+		duration: 300,
+		easing: 'linear'
+	});
+
+	/*// get prefixed transform property name
+	(function ( propertyNames ) {
+		var i = propertyNames.length, testDiv = document.createElement( 'div' );
+		while ( i-- ) {
+			if ( testDiv.style[ propertyNames[i] ] !== undefined ) {
+				transform = propertyNames[i];
+				transformsEnabled = true;
+				break;
+			}
+		}
+	}([ 'OTransform', 'msTransform', 'MozTransform', 'webkitTransform', 'transform' ]));*/
+
+	transitions.fly = makeTransition([ 'opacity', 'left', 'position' ], {
+		duration: 400, easing: 'easeOut'
+	}, { position: 'relative', left: '-500px' }, { position: 'relative', left: 0 });
 
 }());
+var parseTransitionParams = function ( params ) {
+	if ( params === 'fast' ) {
+		return { duration: 200 };
+	}
+
+	if ( params === 'slow' ) {
+		return { duration: 600 };
+	}
+
+	if ( isNumeric( params ) ) {
+		return { duration: +params };
+	}
+
+	return params || {};
+};
 (function ( Ractive ) {
 
 	var requestFullscreen, cancelFullscreen, fullscreenElement, testDiv;
@@ -2141,7 +2232,6 @@ Ractive = function ( options ) {
 	}
 
 	Ractive.cancelFullscreen = function () {
-		console.log( cancelFullscreen );
 		doc[ cancelFullscreen ]();
 	};
 
@@ -2414,9 +2504,11 @@ animationCollection = {
 		};
 
 		processRoot = function ( root ) {
-			root._transitionManager = makeTransitionManager( noop );
+			var previousTransitionManager = root._transitionManager;
+
+			root._transitionManager = makeTransitionManager( root, noop );
 			processKeypaths( root, keypathsByGuid[ root._guid ] );
-			root._transitionManager = null;
+			root._transitionManager = previousTransitionManager;
 		};
 
 		processKeypaths = function ( root, keypaths ) {
@@ -2429,34 +2521,11 @@ animationCollection = {
 		processKeypath = function ( root, keypath ) {
 			var depsByKeypath, deps, keys, upstreamQueue, smartUpdateQueue, dumbUpdateQueue, i, j, item;
 
-			upstreamQueue = [];
-			
-
 			// We don't do root.set(), because we don't want to update DOM sections
 			// using the normal method - we want to do a smart update whereby elements
 			// are removed from the right place. But we do need to clear the cache
 			clearCache( root, keypath );
-
-
-			// First, notify direct dependants of upstream keypaths...
-			keys = splitKeypath( keypath );
-			while ( keys.length ) {
-				keys.pop();
-				upstreamQueue[ upstreamQueue.length ] = keys.join( '.' );
-			}
-
-			// ...and length property!
-			upstreamQueue[ upstreamQueue.length ] = keypath + '.length';
-
-			notifyMultipleDependants( root, upstreamQueue, true );
 			
-
-			// we probably need to reassign a whole bunch of dependants
-			// (e.g. 'items.4' becomes 'items.3' if we're shifting)
-			//reassignDependants( root, keypath, array, methodName, args );
-
-
-
 			// find dependants. If any are DOM sections, we do a smart update
 			// rather than a ractive.set() blunderbuss
 			smartUpdateQueue = [];
@@ -2489,6 +2558,20 @@ animationCollection = {
 
 			// we may have some deferred attributes to process
 			processDeferredUpdates( root );
+
+			// Finally, notify direct dependants of upstream keypaths...
+			upstreamQueue = [];
+
+			keys = splitKeypath( keypath );
+			while ( keys.length ) {
+				keys.pop();
+				upstreamQueue[ upstreamQueue.length ] = keys.join( '.' );
+			}
+
+			// ...and length property!
+			upstreamQueue[ upstreamQueue.length ] = keypath + '.length';
+
+			notifyMultipleDependants( root, upstreamQueue, true );
 		};
 
 		// TODO can we get rid of this whole queueing nonsense?
@@ -2502,6 +2585,7 @@ animationCollection = {
 				// references need to get processed before mustaches
 				if ( dependant.type === REFERENCE ) {
 					dependant.update();
+					//dumbUpdateQueue[ dumbUpdateQueue.length ] = dependant;
 				}
 
 				// is this a DOM section?
@@ -2509,7 +2593,7 @@ animationCollection = {
 					smartUpdateQueue[ smartUpdateQueue.length ] = dependant;
 
 				} else {
-					dumbUpdateQueue = dependant;
+					dumbUpdateQueue[ dumbUpdateQueue.length ] = dependant;
 				}
 			}
 		};
@@ -2598,8 +2682,6 @@ animationCollection = {
 		this.values = [];
 		this.refs = [];
 
-		this.deps = 0; // keep track of how many dependants this has
-
 		i = args.length;
 		while ( i-- ) {
 			arg = args[i];
@@ -2659,6 +2741,7 @@ animationCollection = {
 			return this;
 		},
 
+		// TODO should evaluators ever get torn down?
 		teardown: function () {
 			while ( this.refs.length ) {
 				this.refs.pop().teardown();
@@ -2666,6 +2749,24 @@ animationCollection = {
 
 			clearCache( this.root, this.keypath );
 			this.root._evaluators[ this.keypath ] = null;
+		},
+
+		// This method forces the evaluator to sync with the current model
+		// in the case of a smart update
+		refresh: function () {
+			if ( !this.selfUpdating ) {
+				this.deferred = true;
+			}
+
+			var i = this.refs.length;
+			while ( i-- ) {
+				this.refs[i].update();
+			}
+
+			if ( this.deferred ) {
+				this.update();
+				this.deferred = false;
+			}
 		}
 	};
 
@@ -2736,8 +2837,8 @@ var ExpressionResolver;
 
 		this.root = mustache.root;
 		this.mustache = mustache;
-		this.numRefs = 0;
 		this.args = [];
+		this.scouts = [];
 
 		expression = mustache.descriptor.x;
 		indexRefs = mustache.parentFragment.indexRefs;
@@ -2756,12 +2857,11 @@ var ExpressionResolver;
 			
 			// is this an index ref?
 			if ( indexRefs && indexRefs[ ref ] !== undefined ) {
-				this.resolveRef( i, true, indexRefs[ ref ].index );
+				this.resolveRef( i, true, indexRefs[ ref ] );
 			}
 
 			else {
-				this.numRefs += 1;
-				new ReferenceScout( this, ref, mustache.contextStack, i );
+				this.scouts[ this.scouts.length ] = new ReferenceScout( this, ref, mustache.contextStack, i );
 			}
 		}
 	};
@@ -2772,6 +2872,12 @@ var ExpressionResolver;
 			this.createEvaluator();
 
 			this.mustache.resolve( this.keypath );
+		},
+
+		teardown: function () {
+			while ( this.scouts.length ) {
+				this.scouts.pop().teardown();
+			}
 		},
 
 		resolveRef: function ( argNum, isIndexRef, value ) {
@@ -2791,6 +2897,13 @@ var ExpressionResolver;
 			if ( !this.root._evaluators[ this.keypath ] ) {
 				this.root._evaluators[ this.keypath ] = new Evaluator( this.root, this.keypath, this.str, this.args, this.mustache.priority );
 			}
+
+			else {
+				// we need to trigger a refresh of the evaluator, since it
+				// will have become de-synced from the model if we're in a
+				// reassignment cycle
+				this.root._evaluators[ this.keypath ].refresh();
+			}
 		}
 	};
 
@@ -2798,7 +2911,7 @@ var ExpressionResolver;
 	ReferenceScout = function ( resolver, ref, contextStack, argNum ) {
 		var keypath, root;
 
-		root = resolver.root;
+		root = this.root = resolver.root;
 
 		keypath = resolveRef( root, ref, contextStack );
 		if ( keypath ) {
@@ -2815,7 +2928,16 @@ var ExpressionResolver;
 
 	ReferenceScout.prototype = {
 		resolve: function ( keypath ) {
+			this.keypath = keypath;
 			this.resolver.resolveRef( this.argNum, false, keypath );
+		},
+
+		teardown: function () {
+			// if we haven't found a keypath yet, we can
+			// stop the search now
+			if ( !this.keypath ) {
+				teardown( this );
+			}
 		}
 	};
 
@@ -2833,6 +2955,53 @@ var ExpressionResolver;
 	};
 
 }());
+var executeTransition = function ( descriptor, root, owner, contextStack, complete, isIntro ) {
+	var transitionName, transitionParams, fragment, transitionManager, transition;
+
+	if ( typeof descriptor === 'string' ) {
+		transitionName = descriptor;
+	} else {
+		transitionName = descriptor.n;
+
+		if ( descriptor.a ) {
+			transitionParams = descriptor.a;
+		} else if ( descriptor.d ) {
+			fragment = new TextFragment({
+				descriptor:   descriptor.d,
+				root:         root,
+				owner:        owner,
+				contextStack: parentFragment.contextStack
+			});
+
+			transitionParams = fragment.toJson();
+			fragment.teardown();
+		}
+	}
+
+	transition = root.transitions[ transitionName ] || Ractive.transitions[ transitionName ];
+
+	if ( transition ) {
+		transitionManager = root._transitionManager;
+
+		if ( transitionManager ) {
+			transitionManager.push();
+		}
+
+		transition.call( root, owner.node, function () {
+			if ( transitionManager ) {
+				transitionManager.pop();
+			}
+
+			if ( complete ) {
+				complete();
+			}
+		}, transitionParams, transitionManager.info, isIntro );
+	}
+
+	else if ( complete ) {
+		complete();
+	}
+};
 var getPartialDescriptor;
 
 (function () {
@@ -2940,10 +3109,7 @@ initFragment = function ( fragment, options ) {
 			fragment.indexRefs = {};
 		}
 
-		fragment.indexRefs[ options.indexRef ] = {
-			index: options.index,
-			keypath: options.owner.keypath
-		};
+		fragment.indexRefs[ options.indexRef ] = options.index;
 	}
 
 	// Time to create this fragment's child items;
@@ -2989,7 +3155,8 @@ initMustache = function ( mustache, options ) {
 		if ( parentFragment.indexRefs && parentFragment.indexRefs[ options.descriptor.r ] !== undefined ) {
 			indexRef = parentFragment.indexRefs[ options.descriptor.r ];
 
-			mustache.refIndex = indexRef.index;
+			mustache.indexRef = options.descriptor.r;
+			mustache.refIndex = indexRef;
 			mustache.render( mustache.refIndex );
 		}
 
@@ -3011,7 +3178,7 @@ initMustache = function ( mustache, options ) {
 
 	// if it's an expression, we have a bit more work to do
 	if ( options.descriptor.x ) {
-		new ExpressionResolver( mustache );
+		mustache.expressionResolver = new ExpressionResolver( mustache );
 	}
 
 };
@@ -3035,62 +3202,60 @@ resolveMustache = function ( keypath ) {
 
 	registerDependant( this );
 	this.update();
-};
-updateSection = function ( section, value ) {
-	var fragmentOptions, valueIsArray, emptyArray, i, itemsToRemove;
 
-	fragmentOptions = {
-		descriptor: section.descriptor.f,
-		root:       section.root,
-		parentNode: section.parentNode,
-		owner:      section
+	if ( this.expressionResolver ) {
+		this.expressionResolver = null;
+	}
+};
+(function () {
+
+	var updateInvertedSection, updateListSection, updateContextSection, updateConditionalSection;
+
+	updateSection = function ( section, value ) {
+		var fragmentOptions;
+
+		fragmentOptions = {
+			descriptor: section.descriptor.f,
+			root:       section.root,
+			parentNode: section.parentNode,
+			owner:      section
+		};
+
+		// if section is inverted, only check for truthiness/falsiness
+		if ( section.descriptor.n ) {
+			updateConditionalSection( section, value, true, fragmentOptions );
+			return;
+		}
+
+		// otherwise we need to work out what sort of section we're dealing with
+
+		// if value is an array, iterate through
+		if ( isArray( value ) ) {
+			updateListSection( section, value, fragmentOptions );
+		}
+
+
+		// if value is a hash...
+		else if ( isObject( value ) ) {
+			updateContextSection( section, fragmentOptions );
+		}
+
+
+		// otherwise render if value is truthy, unrender if falsy
+		else {
+			updateConditionalSection( section, value, false, fragmentOptions );
+		}
 	};
 
-	valueIsArray = isArray( value );
-
-	// treat empty arrays as false values
-	if ( valueIsArray && value.length === 0 ) {
-		emptyArray = true;
-	}
-
-
-
-	// if section is inverted, only check for truthiness/falsiness
-	if ( section.descriptor.n ) {
-		if ( value && !emptyArray ) {
-			if ( section.length ) {
-				section.teardownFragments( true );
-				section.length = 0;
-			}
-		}
-
-		else {
-			if ( !section.length ) {
-				// no change to context stack in this situation
-				fragmentOptions.contextStack = section.contextStack;
-				fragmentOptions.index = 0;
-
-				section.fragments[0] = section.createFragment( fragmentOptions );
-				section.length = 1;
-				return;
-			}
-		}
-
-		return;
-	}
-
-
-	// otherwise we need to work out what sort of section we're dealing with
-
-	// if value is an array, iterate through
-	if ( valueIsArray ) {
+	updateListSection = function ( section, value, fragmentOptions ) {
+		var i, fragmentsToRemove;
 
 		// if the array is shorter than it was previously, remove items
 		if ( value.length < section.length ) {
-			itemsToRemove = section.fragments.splice( value.length, section.length - value.length );
+			fragmentsToRemove = section.fragments.splice( value.length, section.length - value.length );
 
-			while ( itemsToRemove.length ) {
-				itemsToRemove.pop().teardown( true );
+			while ( fragmentsToRemove.length ) {
+				fragmentsToRemove.pop().teardown( true );
 			}
 		}
 
@@ -3114,11 +3279,9 @@ updateSection = function ( section, value ) {
 		}
 
 		section.length = value.length;
-	}
+	};
 
-
-	// if value is a hash...
-	else if ( isObject( value ) ) {
+	updateContextSection = function ( section, fragmentOptions ) {
 		// ...then if it isn't rendered, render it, adding section.keypath to the context stack
 		// (if it is already rendered, then any children dependent on the context stack
 		// will update themselves without any prompting)
@@ -3130,13 +3293,20 @@ updateSection = function ( section, value ) {
 			section.fragments[0] = section.createFragment( fragmentOptions );
 			section.length = 1;
 		}
-	}
+	};
 
+	updateConditionalSection = function ( section, value, inverted, fragmentOptions ) {
+		var doRender, emptyArray, fragmentsToRemove;
 
-	// otherwise render if value is truthy, unrender if falsy
-	else {
+		emptyArray = ( isArray( value ) && value.length === 0 );
 
-		if ( value && !emptyArray ) {
+		if ( inverted ) {
+			doRender = emptyArray || !value;
+		} else {
+			doRender = value && !emptyArray;
+		}
+
+		if ( doRender ) {
 			if ( !section.length ) {
 				// no change to context stack
 				fragmentOptions.contextStack = section.contextStack;
@@ -3145,16 +3315,23 @@ updateSection = function ( section, value ) {
 				section.fragments[0] = section.createFragment( fragmentOptions );
 				section.length = 1;
 			}
-		}
 
-		else {
-			if ( section.length ) {
-				section.teardownFragments( true );
-				section.length = 0;
+			if ( section.length > 1 ) {
+				fragmentsToRemove = section.fragments.splice( 1 );
+				
+				while ( fragmentsToRemove.length ) {
+					fragmentsToRemove.pop().teardown( true );
+				}
 			}
 		}
-	}
-};
+
+		else if ( section.length ) {
+			section.teardownFragments( true );
+			section.length = 0;
+		}
+	};
+
+}());
 (function () {
 
 	var insertHtml, propertyNames,
@@ -3268,7 +3445,13 @@ updateSection = function ( section, value ) {
 				return this.items[ index + 1 ].firstNode();
 			}
 
-			return null;
+			// if this is the root fragment, and there are no more items,
+			// it means we're at the end
+			if ( this.owner === this.root ) {
+				return null;
+			}
+
+			return this.owner.findNextNode( this );
 		}
 	};
 
@@ -3294,6 +3477,10 @@ updateSection = function ( section, value ) {
 	};
 
 	Partial.prototype = {
+		findNextNode: function () {
+			return this.parentFragment.findNextNode( this );
+		},
+
 		teardown: function ( detach ) {
 			this.fragment.teardown( detach );
 		}
@@ -3330,6 +3517,8 @@ updateSection = function ( section, value ) {
 			descriptor,
 			namespace,
 			eventName,
+			eventNames,
+			i,
 			attr,
 			attrName,
 			lcName,
@@ -3401,7 +3590,12 @@ updateSection = function ( section, value ) {
 		if ( descriptor.v ) {
 			for ( eventName in descriptor.v ) {
 				if ( descriptor.v.hasOwnProperty( eventName ) ) {
-					this.addEventProxy( eventName, descriptor.v[ eventName ], parentFragment.contextStack );
+					eventNames = eventName.split( '-' );
+					i = eventNames.length;
+
+					while ( i-- ) {
+						this.addEventProxy( eventNames[i], descriptor.v[ eventName ], parentFragment.contextStack );
+					}
 				}
 			}
 		}
@@ -3414,45 +3608,26 @@ updateSection = function ( section, value ) {
 		for ( attrName in descriptor.a ) {
 			if ( descriptor.a.hasOwnProperty( attrName ) ) {
 				attrValue = descriptor.a[ attrName ];
+				
+				attr = new Attribute({
+					element:      this,
+					name:         attrName,
+					value:        ( attrValue === undefined ? null : attrValue ),
+					root:         root,
+					parentNode:   this.node,
+					contextStack: parentFragment.contextStack
+				});
 
-				// are we dealing with transitions?
-				lcName = attrName.toLowerCase();
-				if ( lcName === 'intro' || lcName === 'outro' || lcName === 'intro-params' || lcName === 'outro-params' ) {
-					lcName = lcName.replace( '-params', 'Params' );
+				this.attributes[ this.attributes.length ] = attr;
 
-					if ( typeof	attrValue === 'string' ) {
-						this[ lcName ] = attrValue;
-					} else {
-						this[ lcName ] = new TextFragment({
-							descriptor: attrValue,
-							root: root,
-							owner: this,
-							contextStack: parentFragment.contextStack
-						});
-					}
+				if ( attr.isBindable ) {
+					bindable.push( attr );
 				}
 
-				else {
-					attr = new Attribute({
-						element:      this,
-						name:         attrName,
-						value:        ( attrValue === undefined ? null : attrValue ),
-						root:         root,
-						parentNode:   this.node,
-						contextStack: parentFragment.contextStack
-					});
-
-					this.attributes[ this.attributes.length ] = attr;
-
-					if ( attr.isBindable ) {
-						bindable.push( attr );
-					}
-
-					if ( attr.isTwowayNameAttr ) {
-						twowayNameAttr = attr;
-					} else {
-						attr.update();
-					}
+				if ( attr.isTwowayNameAttr ) {
+					twowayNameAttr = attr;
+				} else {
+					attr.update();
 				}
 			}
 		}
@@ -3469,117 +3644,134 @@ updateSection = function ( section, value ) {
 		docFrag.appendChild( this.node );
 
 		// trigger intro transition
-		if ( this.intro ) {
-			transitionName = this.intro.toString();
-			intro = root.transitions[ transitionName ] || Ractive.transitions[ transitionName ];
-
-			if ( intro ) {
-				transitionManager = root._transitionManager;
-
-				if ( transitionManager ) {
-					transitionManager.push();
-				}
-
-				if ( this.introParams ) {
-					transitionParams = this.introParams.toString();
-
-					try {
-						transitionParams = JSON.parse( transitionParams );
-					} catch ( err ) {
-						// nothing, just treat it as a string
-					}
-				}
-
-				intro.call( root, this.node, ( transitionManager ? transitionManager.pop : noop ), transitionParams, transitionManager.info, true );
-			}
+		if ( descriptor.t1 ) {
+			executeTransition( descriptor.t1, root, this, parentFragment.contextStack, null, true );
 		}
 	};
 
 	Element.prototype = {
-		addEventProxy: function ( eventName, proxy, contextStack ) {
-			var self = this, root = this.root, proxyName, reuseable, definition, listener, fragment, handler;
+		addEventProxy: function ( triggerEventName, proxyDescriptor, contextStack ) {
+			var self = this, root = this.root, proxyName, proxyArgs, dynamicArgs, reuseable, definition, listener, fragment, handler, comboKey;
 
-			if ( typeof proxy === 'string' ) {
-				proxyName = proxy;
-				reuseable = true;
+			// Note the current context - this can be useful with event handlers
+			if ( !this.node._ractive ) {
+				defineProperty( this.node, '_ractive', { value: {
+					keypath: ( contextStack.length ? contextStack[ contextStack.length - 1 ] : '' ),
+					index: this.parentFragment.indexRefs
+				} });
+			}
+
+			if ( typeof proxyDescriptor === 'string' ) {
+				proxyName = proxyDescriptor;
 			} else {
-				proxyName = new TextFragment({
-					descriptor:   proxy,
+				proxyName = proxyDescriptor.n;
+			}
+
+			// This key uniquely identifies this trigger+proxy name combo on this element
+			comboKey = triggerEventName + '=' + proxyName;
+			
+			if ( proxyDescriptor.a ) {
+				proxyArgs = proxyDescriptor.a;
+			}
+
+			else if ( proxyDescriptor.d ) {
+				dynamicArgs = true;
+
+				proxyArgs = new TextFragment({
+					descriptor:   proxyDescriptor.d,
 					root:         this.root,
 					owner:        this,
 					contextStack: contextStack
 				});
+
+				if ( !this.proxyFrags ) {
+					this.proxyFrags = [];
+				}
+				this.proxyFrags[ this.proxyFrags.length ] = proxyArgs;
+			}
+
+			if ( proxyArgs !== undefined ) {
+				// store arguments on the element, so we can reuse the same handler
+				// with multiple elements
+				if ( this.node._ractive[ comboKey ] ) {
+					throw new Error( 'You cannot have two proxy events with the same trigger event (' + comboKey + ')' );
+				}
+
+				this.node._ractive[ comboKey ] = {
+					dynamic: dynamicArgs,
+					payload: proxyArgs
+				};
 			}
 
 			// Is this a custom event?
-			if ( definition = Ractive.eventDefinitions[ eventName ] ) {
-				if ( reuseable ) {
-					// If the proxy is a string (e.g. <a proxy-click='select'>{{item}}</a>) then
-					// we can reuse the handler. This eliminates the need for event delegation
-					if ( !root._proxies[ proxy ] ) {
-						root._proxies[ proxy ] = function () {
-							if ( arguments.length ) {
-								Array.prototype.unshift.call( arguments, proxyName );
-								root.fire.apply( root, arguments );
-							} else {
-								root.fire( proxyName );
-							}
-						};
-					}
+			if ( definition = ( root.eventDefinitions[ triggerEventName ] || Ractive.eventDefinitions[ triggerEventName ] ) ) {
+				// If the proxy is a string (e.g. <a proxy-click='select'>{{item}}</a>) then
+				// we can reuse the handler. This eliminates the need for event delegation
+				if ( !root._customProxies[ comboKey ] ) {
+					root._customProxies[ comboKey ] = function ( proxyEvent ) {
+						var args, payload;
 
-					handler = root._proxies[ proxy ];
-				}
-
-				else {
-					// If it's not a string - in other words, it could change - we can't
-					// reuse the handler. We have to recompute the proxy event name
-					// each time the event fires
-					handler = function () {
-						if ( arguments.length ) {
-							Array.prototype.unshift.call( arguments, proxyName.toString() );
-							root.fire.apply( root, arguments );
-						} else {
-							root.fire( proxyName.toString() );
+						if ( !proxyEvent.node ) {
+							throw new Error( 'Proxy event definitions must fire events with a `node` property' );
 						}
+
+						proxyEvent.keypath = proxyEvent.node._ractive.keypath;
+						proxyEvent.context = root.get( proxyEvent.keypath );
+						proxyEvent.index = proxyEvent.node._ractive.index;
+
+						if ( proxyEvent.node._ractive[ comboKey ] ) {
+							args = proxyEvent.node._ractive[ comboKey ];
+							payload = args.dynamic ? args.payload.toJson() : args.payload;
+						}
+
+						root.fire( proxyName, proxyEvent, payload );
 					};
 				}
+
+				handler = root._customProxies[ comboKey ];
 
 				// Use custom event. Apply definition to this node
 				listener = definition( this.node, handler );
 				this.customEventListeners[ this.customEventListeners.length ] = listener;
+
+				return;
 			}
 
 			// If not, we just need to check it is a valid event for this element
-			else {
-				
-				// warn about invalid event handlers, if we're in debug mode
-				if ( this.node[ 'on' + eventName ] !== undefined && root.debug ) {
-					if ( console && console.warn ) {
-						console.warn( 'Invalid event handler (' + eventName + ')' );
-					}
+			// warn about invalid event handlers, if we're in debug mode
+			if ( this.node[ 'on' + triggerEventName ] !== undefined && root.debug ) {
+				if ( console && console.warn ) {
+					console.warn( 'Invalid event handler (' + triggerEventName + ')' );
 				}
-
-				if ( reuseable ) {
-					if ( !root._proxies[ proxy ] ) {
-						root._proxies[ proxy ] = function ( event) {
-							root.fire( proxyName, this, event );
-						};
-					}
-
-					handler = root._proxies[ proxy ];
-				} else {
-					handler = function ( event ) {
-						root.fire( proxyName.toString(), this, event );
-					};
-				}
-
-				this.eventListeners[ this.eventListeners.length ] = {
-					n: eventName,
-					h: handler
-				};
-
-				this.node.addEventListener( eventName, handler );
 			}
+
+			if ( !root._proxies[ comboKey ] ) {
+				root._proxies[ comboKey ] = function ( event ) {
+					var args, payload, proxyEvent = {
+						node: this,
+						original: event,
+						keypath: this._ractive.keypath,
+						context: root.get( this._ractive.keypath ),
+						index: this._ractive.index
+					};
+
+					if ( this._ractive && this._ractive[ comboKey ] ) {
+						args = this._ractive[ comboKey ];
+						payload = args.dynamic ? args.payload.toJson() : args.payload;
+					}
+
+					root.fire( proxyName, proxyEvent, payload );
+				};
+			}
+
+			handler = root._proxies[ comboKey ];
+
+			this.eventListeners[ this.eventListeners.length ] = {
+				n: triggerEventName,
+				h: handler
+			};
+
+			this.node.addEventListener( triggerEventName, handler );
 		},
 
 		teardown: function ( detach ) {
@@ -3604,46 +3796,36 @@ updateSection = function ( section, value ) {
 				self.customEventListeners.pop().teardown();
 			}
 
-			if ( this.outro ) {
+			if ( this.proxyFrags ) {
+				while ( this.proxyFrags.length ) {
+					this.proxyFrags.pop().teardown();
+				}
+			}
+
+			// TODO tidy up
+			if ( this.descriptor.t2 ) {
 				// TODO don't outro elements that have already been detached from the DOM
 
-				transitionName = this.outro.toString();
-				outro = this.root.transitions[ transitionName ] || Ractive.transitions[ transitionName ];
-
-				if ( outro ) {
-					transitionManager = this.root._transitionManager;
-					
-					if ( transitionManager ) {
-						transitionManager.push();
+				var complete = function () {
+					if ( detach ) {
+						self.parentNode.removeChild( self.node );
 					}
+				};
 
-					if ( this.outroParams ) {
-						transitionParams = this.outroParams.toString();
+				executeTransition( this.descriptor.t2, this.root, this, this.parentFragment.contextStack, complete, false );
+			}
 
-						try {
-							transitionParams = JSON.parse( transitionParams );
-						} catch ( err ) {
-							// nothing, just treat it as a string
-						}
-					}
-
-					outro.call( this.root, this.node, function () {
-						if ( detach ) {
-							self.parentNode.removeChild( self.node );
-						}
-
-						if ( transitionManager ) {
-							transitionManager.pop();
-						}
-					}, transitionParams, transitionManager.info );
-				}
-			} else if ( detach ) {
+			else if ( detach ) {
 				self.parentNode.removeChild( self.node );
 			}
 		},
 
 		firstNode: function () {
 			return this.node;
+		},
+
+		findNextNode: function ( fragment ) {
+			return null;
 		},
 
 		bubble: function () {
@@ -4164,6 +4346,7 @@ updateSection = function ( section, value ) {
 		this.initialising = true;
 		initMustache( this, options );
 		docFrag.appendChild( this.docFrag );
+
 		this.initialising = false;
 	};
 
@@ -4206,7 +4389,7 @@ updateSection = function ( section, value ) {
 			// append list item to context stack
 			start = this.length;
 			end = start + args.length;
-			
+
 			for ( i=start; i<end; i+=1 ) {
 				fragmentOptions.contextStack = this.contextStack.concat( this.keypath + '.' + i );
 				fragmentOptions.index = i;
@@ -4329,7 +4512,6 @@ updateSection = function ( section, value ) {
 				// we need to insert the contents of our document fragment into the correct place
 				this.parentNode.insertBefore( this.docFrag, this.parentFragment.findNextNode( this ) );
 			}
-			
 		},
 
 		createFragment: function ( options ) {
@@ -4368,7 +4550,7 @@ updateSection = function ( section, value ) {
 		var i, j, item, context;
 
 		if ( fragment.indexRefs && fragment.indexRefs[ indexRef ] !== undefined ) {
-			fragment.indexRefs[ indexRef ].index = newIndex;
+			fragment.indexRefs[ indexRef ] = newIndex;
 		}
 
 		// fix context stack
@@ -4418,6 +4600,22 @@ updateSection = function ( section, value ) {
 			}
 		}
 
+		// reassign proxy argument fragments TODO and intro/outro param fragments
+		if ( element.proxyFrags ) {
+			i = element.proxyFrags.length;
+			while ( i-- ) {
+				reassignFragment( element.proxyFrags[i], indexRef, oldIndex, newIndex, by, oldKeypath, newKeypath );
+			}
+		}
+
+		if ( element.node._ractive ) {
+			if ( element.node._ractive.keypath.substr( 0, oldKeypath.length ) === oldKeypath ) {
+				element.node._ractive.keypath = element.node._ractive.keypath.replace( oldKeypath, newKeypath );
+			}
+
+			element.node._ractive.index[ indexRef ] = newIndex;
+		}
+
 		// reassign children
 		if ( element.fragment ) {
 			reassignFragment( element.fragment, indexRef, oldIndex, newIndex, by, oldKeypath, newKeypath );
@@ -4429,12 +4627,19 @@ updateSection = function ( section, value ) {
 
 		// expression mustache?
 		if ( mustache.descriptor.x ) {
-			unregisterDependant( mustache );
-			new ExpressionResolver( mustache );
+			if ( mustache.keypath ) {
+				unregisterDependant( mustache );
+			}
+			
+			if ( mustache.expressionResolver ) {
+				mustache.expressionResolver.teardown();
+			}
+
+			mustache.expressionResolver = new ExpressionResolver( mustache );
 		}
 
 		// normal keypath mustache?
-		else if ( mustache.keypath ) {
+		if ( mustache.keypath ) {
 			if ( mustache.keypath.substr( 0, oldKeypath.length ) === oldKeypath ) {
 				unregisterDependant( mustache );
 
@@ -4444,7 +4649,7 @@ updateSection = function ( section, value ) {
 		}
 
 		// index ref mustache?
-		else if ( mustache.refIndex ) {
+		else if ( mustache.indexRef === indexRef ) {
 			mustache.refIndex = newIndex;
 			mustache.render( newIndex );
 		}
@@ -4516,6 +4721,20 @@ updateSection = function ( section, value ) {
 
 		toString: function () {
 			return this.items.join( '' );
+		},
+
+		toJson: function () {
+			var str, json;
+
+			str = this.toString();
+
+			try {
+				json = JSON.parse( str );
+			} catch ( err ) {
+				json = str;
+			}
+
+			return json;
 		}
 	};
 
@@ -4612,7 +4831,7 @@ updateSection = function ( section, value ) {
 	};
 
 }());
-var makeTransitionManager = function ( callback ) {
+var makeTransitionManager = function ( root, callback ) {
 	var transitionManager;
 
 	transitionManager = {
@@ -4625,7 +4844,7 @@ var makeTransitionManager = function ( callback ) {
 		pop: function () {
 			transitionManager.active -= 1;
 			if ( callback && !transitionManager.active && transitionManager.ready ) {
-				callback();
+				callback.call( root );
 			}
 		}
 	};
@@ -5198,10 +5417,10 @@ var getFragmentStubFromTokens;
 
 	// element
 	(function () {
-		var voidElementNames, allElementNames, mapToLowerCase, svgCamelCaseElements, svgCamelCaseElementsMap, svgCamelCaseAttributes, svgCamelCaseAttributesMap, closedByParentClose, siblingsByTagName, sanitize, onlyAttrs, onlyProxies;
+		var voidElementNames, allElementNames, mapToLowerCase, svgCamelCaseElements, svgCamelCaseElementsMap, svgCamelCaseAttributes, svgCamelCaseAttributesMap, closedByParentClose, siblingsByTagName, sanitize, onlyAttrs, onlyProxies, filterAttrs, proxyPattern;
 
 		Element = function ( firstToken, parser, priority, preserveWhitespace ) {
-			var closed, next, i, len, attrs, proxies, attr, getFrag, item;
+			var closed, next, i, len, attrs, filtered, proxies, attr, getFrag, processProxy, item;
 
 			this.lcTag = firstToken.name.toLowerCase();
 			this.priority = priority = priority || 0;
@@ -5216,8 +5435,10 @@ var getFragmentStubFromTokens;
 			preserveWhitespace = ( preserveWhitespace || this.lcTag === 'pre' );
 
 			if ( firstToken.attrs ) {
-				attrs = firstToken.attrs.filter( onlyAttrs );
-				proxies = firstToken.attrs.filter( onlyProxies );
+				filtered = filterAttrs( firstToken.attrs );
+				
+				attrs = filtered.attrs;
+				proxies = filtered.proxies;
 
 				// remove event attributes (e.g. onclick='doSomething()') if we're sanitizing
 				if ( parser.options.sanitize && parser.options.sanitize.eventAttributes ) {
@@ -5233,12 +5454,77 @@ var getFragmentStubFromTokens;
 					};
 				};
 
+				processProxy = function ( proxy ) {
+					var processed, domEventName, match, tokens, proxyName, proxyArgs, colonIndex, throwError;
+
+					throwError = function () {
+						throw new Error( 'Illegal proxy event' );
+					};
+
+					if ( !proxy.name || !proxy.value ) {
+						throwError();
+					}
+
+					processed = { domEventName: proxy.name };
+
+					tokens = proxy.value;
+
+					// proxy event names must start with a string (no mustaches)
+					if ( tokens[0].type !== TEXT ) {
+						throwError();
+					}
+
+					colonIndex = tokens[0].value.indexOf( ':' );
+					
+					// if no arguments are specified...
+					if ( colonIndex === -1 ) {
+						
+						// ...the proxy name must be string-only (no mustaches)
+						if ( tokens.length > 1 ) {
+							throwError();
+						}
+
+						processed.name = tokens[0].value;
+					}
+
+					else {
+						processed.name = tokens[0].value.substr( 0, colonIndex );
+						tokens[0].value = tokens[0].value.substring( colonIndex + 1 );
+
+						if ( !tokens[0].value ) {
+							tokens.shift();
+						}
+
+						// can we parse it yet?
+						if ( tokens.length === 1 && tokens[0].type === TEXT ) {
+							try {
+								processed.args = JSON.parse( tokens[0].value );
+							} catch ( err ) {
+								processed.args = tokens[0].value;
+							}
+						}
+
+						processed.dynamicArgs = getFragmentStubFromTokens( tokens, priority + 1 );
+					}
+
+					return processed;
+				};
+
 				if ( attrs.length ) {
 					this.attributes = attrs.map( getFrag );
 				}
 
 				if ( proxies.length ) {
-					this.proxies = proxies.map( getFrag );
+					this.proxies = proxies.map( processProxy );
+				}
+
+				// TODO rename this helper function
+				if ( filtered.intro ) {
+					this.intro = processProxy( filtered.intro );
+				}
+
+				if ( filtered.outro ) {
+					this.outro = processProxy( filtered.outro );
 				}
 			}
 
@@ -5315,7 +5601,7 @@ var getFragmentStubFromTokens;
 
 		Element.prototype = {
 			toJson: function ( noStringify ) {
-				var json, name, value, str, itemStr, proxy, i, len;
+				var json, name, value, str, itemStr, proxy, match, i, len;
 
 				json = {
 					t: ELEMENT,
@@ -5328,6 +5614,10 @@ var getFragmentStubFromTokens;
 					len = this.attributes.length;
 					for ( i=0; i<len; i+=1 ) {
 						name = this.attributes[i].name;
+
+						if ( json.a[ name ] ) {
+							throw new Error( 'You cannot have multiple elements with the same name' );
+						}
 
 						// empty attributes (e.g. autoplay, checked)
 						if( this.attributes[i].value === undefined ) {
@@ -5349,10 +5639,54 @@ var getFragmentStubFromTokens;
 
 					len = this.proxies.length;
 					for ( i=0; i<len; i+=1 ) {
-						name = this.proxies[i].name;
-						value = jsonify( this.proxies[i].value.items, noStringify );
+						proxy = this.proxies[i];
 
-						json.v[ name ] = value;
+						// TODO rename domEventName, since transitions use the same mechanism
+						if ( proxy.args ) {
+							json.v[ proxy.domEventName ] = {
+								n: proxy.name,
+								a: proxy.args
+							};
+						} else if ( proxy.dynamicArgs ) {
+							json.v[ proxy.domEventName ] = {
+								n: proxy.name,
+								d: jsonify( proxy.dynamicArgs.items, noStringify )
+							};
+						} else {
+							json.v[ proxy.domEventName ] = proxy.name;
+						}
+					}
+				}
+
+				if ( this.intro ) {
+					if ( this.intro.args ) {
+						json.t1 = {
+							n: this.intro.name,
+							a: this.intro.args
+						};
+					} else if ( this.intro.dynamicArgs ) {
+						json.t1 = {
+							n: this.intro.name,
+							d: jsonify( this.intro.dynamicArgs.items, noStringify )
+						};
+					} else {
+						json.t1 = this.intro.name;
+					}
+				}
+
+				if ( this.outro ) {
+					if ( this.outro.args ) {
+						json.t2 = {
+							n: this.outro.name,
+							a: this.outro.args
+						};
+					} else if ( this.outro.dynamicArgs ) {
+						json.t2 = {
+							n: this.outro.name,
+							d: jsonify( this.outro.dynamicArgs.items, noStringify )
+						};
+					} else {
+						json.t2 = this.outro.name;
 					}
 				}
 
@@ -5502,6 +5836,52 @@ var getFragmentStubFromTokens;
 			}
 			return false;
 		};
+
+		filterAttrs = function ( items ) {
+			var attrs, proxies, filtered, i, len, item;
+
+			filtered = {};
+			attrs = [];
+			proxies = [];
+
+			len = items.length;
+			for ( i=0; i<len; i+=1 ) {
+				item = items[i];
+
+				// Transition?
+				if ( item.name === 'intro' ) {
+					if ( filtered.intro ) {
+						throw new Error( 'An element can only have one intro transition' );
+					}
+
+					filtered.intro = item;
+				} else if ( item.name === 'outro' ) {
+					if ( filtered.outro ) {
+						throw new Error( 'An element can only have one outro transition' );
+					}
+
+					filtered.outro = item;
+				}
+
+				// Proxy?
+				else if ( item.name.substr( 0, 6 ) === 'proxy-' ) {
+					item.name = item.name.substring( 6 );
+					proxies[ proxies.length ] = item;
+				}
+
+				// Attribute?
+				else {
+					attrs[ attrs.length ] = item;
+				}
+			}
+
+			filtered.attrs = attrs;
+			filtered.proxies = proxies;
+
+			return filtered;
+		};
+
+		proxyPattern = /^([a-zA-Z_$][a-zA-Z_$0-9]*)(?::(.+))?$/;
 	}());
 
 
@@ -7064,13 +7444,16 @@ var getToken;
 // * t - Type code (e.g. 1 is text, 2 is interpolator...)
 // * f - Fragment. Contains a descriptor's children
 // * e - Element name
-// * a - map of element Attributes
+// * a - map of element Attributes, or proxy event/transition Arguments
+// * d - Dynamic proxy event/transition arguments
 // * n - indicates an iNverted section
 // * p - Priority. Higher priority items are updated before lower ones on model changes
 // * i - Index reference, e.g. 'num' in {{#section:num}}content{{/section}}
 // * v - eVent proxies (i.e. when user e.g. clicks on a node, fire proxy event)
 // * c - Conditionals (e.g. ['yes', 'no'] in {{condition ? yes : no}})
 // * x - eXpressions
+// * t1 - intro Transition
+// * t2 - outro Transition
 
 var parse;
 

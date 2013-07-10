@@ -1,20 +1,23 @@
 /*global define, window, document */
 
-define([ 'domReady', 'Statesman', 'data', 'controllers/main' ], function ( domReady, Statesman, data, main ) {
+define([ 'domReady', 'Statesman', 'controllers/main' ], function ( domReady, Statesman, main ) {
 
 	'use strict';
 	
-	var app;
+	var app, dataPromise;
 
-	app = {
-		data: data,
-		state: new Statesman()
-	};
+	app = { state: new Statesman() };
+
+	dataPromise = $.getJSON( 'data.json' );
+
 
 	domReady( function () {
 		app.el = document.getElementById( 'container' );
 
-		main( app );
+		dataPromise.then( function ( data ) {
+			app.data = data;
+			main( app );
+		});
 	});
 
 

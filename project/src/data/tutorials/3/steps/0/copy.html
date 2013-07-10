@@ -11,10 +11,9 @@
 <p>...and subscribe to it like this:</p>
 
 <pre class='prettyprint lang-js'>
-ractive.on( 'activate', function ( el, event ) {
+ractive.on( 'activate', function ( event ) {
   // `this` is the ractive
-  // `el` is the element the event was triggered on
-  // `event` is the underlying DOM event
+  // `event` contains information about the proxy event
   alert( 'Activating!' );
 });
 </pre>

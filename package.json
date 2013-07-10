@@ -1,22 +1,22 @@
 {
-	"name": "learn-ractive",
-	"created": "Tue May 07 2013 18:43:23 GMT+0100 (BST)",
-	"version": "0.1.0",
-	"description": "Tutorials for Ractive.js",
-	"author": {
-		"name": "Rich Harris"
-	},
-	"devDependencies": {
-		"grunt": "~0.4.0",
-		"grunt-contrib-jshint": "~0.1.1",
-		"grunt-contrib-uglify": "~0.1.1",
-		"grunt-contrib-watch": "~0.2.0",
-		"grunt-contrib-sass": "~0.2.2",
-		"grunt-contrib-cssmin": "~0.4.1",
-		"grunt-contrib-clean": "~0.4.0",
-		"grunt-contrib-uglify": "~0.1.2",
-		"grunt-contrib-requirejs": "~0.4.0",
-		"grunt-contrib-copy": "~0.4.0",
-		"grunt-dir2json": "~0.1.0"
-	}
+  "name": "learn-ractive",
+  "created": "Tue May 07 2013 18:43:23 GMT+0100 (BST)",
+  "version": "0.1.0",
+  "description": "Tutorials for Ractive.js",
+  "author": {
+    "name": "Rich Harris"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib-jshint": "~0.1.1",
+    "grunt-contrib-uglify": "~0.1.2",
+    "grunt-contrib-watch": "~0.2.0",
+    "grunt-contrib-sass": "~0.2.2",
+    "grunt-contrib-cssmin": "~0.4.1",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-requirejs": "~0.4.0",
+    "grunt-contrib-copy": "~0.4.0",
+    "grunt-dir2json": "~0.1.0",
+    "grunt-contrib-concat": "~0.3.0"
+  }
 }

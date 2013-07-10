@@ -60,13 +60,12 @@ ractive.on({
     });
   },
 
-  moreInfo: function ( el, event ) {
-    var hotspotId = el.getAttribute( 'data-hotspot' );
-    this.set( 'info', hotspotId );
+  moreInfo: function ( event, info ) {
+    this.set( 'info', info );
   },
 
-  showCloseUp: function ( el, event ) {
-    this.set( 'closeup', el.getAttribute( 'data-closeup' ) );
+  showCloseUp: function ( event, closeup ) {
+    this.set( 'closeup', closeup );
   },
 
   toggleFullscreen: function () {

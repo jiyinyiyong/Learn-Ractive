@@ -5,16 +5,18 @@
 <p>Well, we can. Add this above the rest of the JavaScript:</p>
 
 <pre class='prettyprint lang-js'>
-var item = "&lt;li data-index='{{i}}' class='{{( done ? \"done\" : \"pending\" )}}'&gt;" +
-              "&lt;input type='checkbox' checked='{{done}}'&gt;" +
-              "&lt;span proxy-tap='edit'&gt;{{description}}&lt;/span&gt;" +
-              "&lt;a class='button' proxy-tap='remove'&gt;x&lt;/a&gt;" +
+var item = "&lt;li data-index='{{i}}' class='{{( done ? "done" : "pending" )}}'&gt;" +
+             "&lt;input type='checkbox' checked='{{done}}'&gt;" +
+             "&lt;span proxy-tap='edit'&gt;" +
+               "{{description}}" +
+
+               "{{#.editing}}" +
+                 "&lt;input id='editTodo' class='edit' value='{{description}}' proxy-blur='stop_editing'&gt;" +
+               "{{/.editing}}" +
+             "&lt;/span&gt;" +
+             "&lt;a class='button' proxy-tap='remove'&gt;x&lt;/a&gt;" +
            "&lt;/li&gt;";
 </pre>
-
-<div class='hint'>
-	<p>If the multiline string offends your aesthetic sensibilities, just imagine you were loading it from a template file or preparsing it instead. We'll cover preparsing in a future tutorial.</p>
-</div>
 
 <p>Then, in the main template we replace all that with a partial, which looks like a regular mustache but with a <code>&gt;</code> character:</p>
 
