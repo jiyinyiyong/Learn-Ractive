@@ -4,7 +4,7 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 	
 	'use strict';
 
-	var eval2, teardown, teardownQueue, onResizeHandlers, prop, timeouts, _setTimeout, _clearTimeout;
+	var eval2, teardown, teardownQueue, onResizeHandlers, prop, timeouts, _setTimeout, _clearTimeout, report, reportQueue;
 
 	eval2 = eval; // changes to global context. Bet you didn't know that! Thanks, http://stackoverflow.com/questions/8694300/how-eval-in-javascript-changes-the-calling-context
 
@@ -64,6 +64,23 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 		onResizeHandlers[ onResizeHandlers.length ] = handler;
 	};
 
+	reportQueue = [];
+	report = function ( category, action, label, value ) {
+		reportQueue[ reportQueue.length ] = {
+			hitType: 'event',
+			eventCategory: category,
+			eventAction: action,
+			eventLabel: label,
+			eventValue: value
+		};
+
+		if ( ga ) {
+			while ( reportQueue.length ) {
+				ga( 'send', reportQueue.shift() );
+			}
+		}
+	};
+
 	return function ( app ) {
 		var mainView,
 			editors,
@@ -101,7 +118,7 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 		});
 
 
-		executeJs = function () {
+		executeJs = function ( noReport ) {
 			var code = editors.javascript.getValue();
 
 			teardown();
@@ -111,7 +128,15 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 
 			try {
 				eval2( code );
+
+				if ( noReport !== true ) {
+					report( 'javascript', 'execute', null, app.state.get( 'tutorialStepCode' ) );
+				}
+
 			} catch ( err ) {
+				
+				report( 'javascript', 'error', err.message || err, app.state.get( 'tutorialStepCode' ) );
+
 				throw err; // TODO - feedback to user
 			}
 		};
@@ -121,7 +146,13 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 
 			try {
 				eval2( code );
+
+				report( 'console', 'execute', null, app.state.get( 'tutorialStepCode' ) );
+
 			} catch ( err ) {
+				
+				report( 'console', 'error', err.message || err, app.state.get( 'tutorialStepCode' ) );
+
 				throw err; // TODO - feedback to user
 			}
 		};
@@ -218,8 +249,48 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 			nextStepDisabled: '${stepIndex} >= ( ${currentTutorial}.steps.length - 1 )',
 			prevStepDisabled: '${stepIndex} === 0',
 			nextTutorialDisabled: '${tutorialIndex} >= ( ${tutorials}.length - 1 )',
-			prevTutorialDisabled: '${tutorialIndex} === 0'
+			prevTutorialDisabled: '${tutorialIndex} === 0',
+			tutorialStepCode: '( ( ${tutorialIndex} + 1 ) * 100 ) + ${stepIndex} + 1'
 		});
+
+		reset = function ( step, noReport ) {
+			if ( !step ) {
+				return;
+			}
+
+			// teardown any Ractive instances that have been created
+			teardown();
+
+			editors.template.setValue( step.template || '' );
+			editors.javascript.setValue( step.javascript || '' );
+			editors.console.setValue( step.console || '' );
+
+			mainView.set({
+				copy: step.copy,
+				css: step.styles || app.state.get( 'currentTutorial.styles' ),
+				fixDisabled: ( step.fixed ? '' : 'disabled' )
+			});
+
+			if ( step.init ) {
+				executeJs( true );
+			}
+
+			prettyPrint();
+
+			// update hash
+			window.location.hash = '!/' + app.state.get( 'currentTutorial.slug' ) + '/' + ( app.state.get( 'stepIndex' ) + 1 );
+
+			// scroll all blocks back to top - TODO
+			blocks.copy.scrollTop = 0;
+			blocks.output.scrollTop = 0;
+			editors.template.scrollTo( 0, 0 );
+			editors.javascript.scrollTo( 0, 0 );
+			editors.console.scrollTo( 0, 0 );
+
+			if ( !noReport ) {
+				report( 'tutorial', 'reset', null, app.state.get( 'tutorialStepCode' ) );
+			}
+		};
 
 		app.state.observe({
 			stepIndex: function ( index ) {
@@ -246,59 +317,26 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 			},
 			prevTutorialDisabled: function ( disabled ) {
 				mainView.set( 'prevTutorialDisabled', disabled ? 'disabled' : '' );
+			},
+			tutorialStepCode: function ( code ) {
+				report( 'tutorial', 'enter', null, code );
+			},
+			currentStep: function ( step ) {
+				reset( step, true );
+			},
+			tutorialIndex: function ( index ) {
+				mainView.set( 'tutorialNum', index + 1 );
+			},
+			currentTutorial: function ( tutorial ) {
+				if ( !tutorial ) {
+					return;
+				}
+
+				mainView.set({
+					title: tutorial.title,
+					numSteps: tutorial.steps.length
+				});
 			}
-		});
-
-		reset = function ( step ) {
-			if ( !step ) {
-				return;
-			}
-
-			// teardown any Ractive instances that have been created
-			teardown();
-
-			editors.template.setValue( step.template || '' );
-			editors.javascript.setValue( step.javascript || '' );
-			editors.console.setValue( step.console || '' );
-
-			mainView.set({
-				copy: step.copy,
-				css: step.styles || app.state.get( 'currentTutorial.styles' ),
-				fixDisabled: ( step.fixed ? '' : 'disabled' )
-			});
-
-			if ( step.init ) {
-				executeJs();
-			}
-
-			prettyPrint();
-
-			// update hash
-			window.location.hash = '!/' + app.state.get( 'currentTutorial.slug' ) + '/' + ( app.state.get( 'stepIndex' ) + 1 );
-
-			// scroll all blocks back to top - TODO
-			blocks.copy.scrollTop = 0;
-			blocks.output.scrollTop = 0;
-			editors.template.scrollTo( 0, 0 );
-			editors.javascript.scrollTo( 0, 0 );
-			editors.console.scrollTo( 0, 0 );
-		};
-
-		app.state.observe( 'currentStep', reset );
-
-		app.state.observe( 'tutorialIndex', function ( index ) {
-			mainView.set( 'tutorialNum', index + 1 );
-		});
-
-		app.state.observe( 'currentTutorial', function ( tutorial ) {
-			if ( !tutorial ) {
-				return;
-			}
-
-			mainView.set({
-				title: tutorial.title,
-				numSteps: tutorial.steps.length
-			});
 		});
 
 
@@ -375,7 +413,9 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 				editors.javascript.setValue( fixed.javascript || currentStep.javascript || '' );
 				editors.console.setValue( fixed.console || currentStep.console || '' );
 
-				executeJs();
+				report( 'javascript', 'fix', null, app.state.get( 'tutorialStepCode' ) );
+
+				executeJs( true );
 			},
 			reset: function () {
 				reset( app.state.get( 'currentStep' ) );
