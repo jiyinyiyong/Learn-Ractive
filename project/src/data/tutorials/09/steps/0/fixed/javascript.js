@@ -23,7 +23,44 @@ var TodoList = Ractive.extend({
   },
 
   removeItem: function ( index ) {
-  	this.items.splice( index, 1 );
+    this.items.splice( index, 1 );
+  },
+
+  editItem: function ( index ) {
+    var self = this, keydownHandler, blurHandler, input, currentDescription;
+
+    currentDescription = this.get( 'items.' + index + '.description' );
+    this.set( 'items.' + index + '.editing', true );
+
+    input = this.nodes.editTodo;
+    input.select();
+
+    window.addEventListener( 'keypress', keydownHandler = function ( event ) {
+      switch ( event.which ) {
+        case 13: // ENTER
+        input.blur();
+        break;
+
+        case 27: // ESCAPE
+        input.value = currentDescription;
+        self.set( 'items.' + index + '.description', currentDescription );
+        input.blur();
+        break;
+
+        case 9: // TAB
+        event.preventDefault();
+        input.blur();
+        self.editItem( ( index + 1 ) % self.get( 'items' ).length );
+        break;
+      }
+    });
+
+    input.addEventListener( 'blur', blurHandler = function () {
+      window.removeEventListener( 'keydown', keydownHandler );
+      input.removeEventListener( 'blur', blurHandler );
+    });
+    
+    this.set( 'items.' + index + '.editing', true );
   },
 
   init: function ( options ) {
@@ -37,45 +74,44 @@ var TodoList = Ractive.extend({
     // proxy event handlers
     this.on({
       remove: function ( event ) {
-        var index = event.node.parentNode.getAttribute( 'data-index' );
-        this.removeItem( index );
+        this.removeItem( event.index.i );
       },
       newTodo: function ( event ) {
         this.addItem( event.node.value );
         event.node.value = '';
+        setTimeout( function () {
+          event.node.focus();
+        }, 0 );
       },
       edit: function ( event ) {
-        var node, li, index, input, submit;
-
-        // first, find the index of the todo we're editing
-        node = event.node;
-        li = node.parentNode;
-        index = li.getAttribute( 'data-index' );
-
-        // create an input and fill it with the current description
-        input = document.createElement( 'input' );
-        input.className = 'edit';
-        input.value = this.get( 'items.' + index + '.description' );
-
-        // on submit, update the data and remove the input
-        submit = function ( event ) {
-          event.preventDefault();
-
-          input.removeEventListener( 'blur', submit );
-          input.removeEventListener( 'change', submit );
-
-          node.removeChild( input );
-          self.set( 'items.' + index + '.description', input.value );
-        };
-
-        input.addEventListener( 'blur', submit );
-        input.addEventListener( 'change', submit );
-
-        // add the input, and select all the text in it
-        node.appendChild( input );
-        input.select();
+        this.editItem( event.index.i );
+      },
+      stop_editing: function ( event ) {
+        this.set( event.keypath + '.editing', false );
+      },
+      blur: function ( event ) {
+        event.node.blur();
       }
     });
+  },
+
+  // sadly this is necessary for IE - other browsers fire the change event
+  // when you hit enter
+  eventDefinitions: {
+    enter: function ( node, fire ) {
+      var keydownHandler = function ( event ) {
+        var which = event.which || event.keyCode;
+        which === 13 && fire({ node: node, original: event });
+      };
+
+      node.addEventListener( 'keydown', keydownHandler );
+
+      return {
+        teardown: function () {
+          node.removeEventListener( 'keydown', keydownHandler );
+        }
+      };
+    }
   }
 });
 

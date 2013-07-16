@@ -31,6 +31,10 @@ ractive = new Ractive({
 
 // animate to the next city, then to the next one after that, and so on...
 ractive.observe( 'selected', function ( index ) {
+  if ( index === undefined ) {
+    return;
+  }
+
   this.animate( 'selectedCity', cities[ index ], {
     easing: 'easeOut',
     complete: function () {

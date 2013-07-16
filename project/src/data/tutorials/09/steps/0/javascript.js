@@ -23,7 +23,7 @@ var TodoList = Ractive.extend({
     input = this.nodes.editTodo;
     input.select();
 
-    window.addEventListener( 'keydown', keydownHandler = function ( event ) {
+    window.addEventListener( 'keypress', keydownHandler = function ( event ) {
       switch ( event.which ) {
         case 13: // ENTER
         input.blur();
@@ -67,14 +67,39 @@ var TodoList = Ractive.extend({
       newTodo: function ( event ) {
         this.addItem( event.node.value );
         event.node.value = '';
+        setTimeout( function () {
+          event.node.focus();
+        }, 0 );
       },
       edit: function ( event ) {
         this.editItem( event.index.i );
       },
       stop_editing: function ( event ) {
         this.set( event.keypath + '.editing', false );
+      },
+      blur: function ( event ) {
+        event.node.blur();
       }
     });
+  },
+
+  // sadly this is necessary for IE - other browsers fire the change event
+  // when you hit enter
+  eventDefinitions: {
+    enter: function ( node, fire ) {
+      var keydownHandler = function ( event ) {
+        var which = event.which || event.keyCode;
+        which === 13 && fire({ node: node, original: event });
+      };
+
+      node.addEventListener( 'keydown', keydownHandler );
+
+      return {
+        teardown: function () {
+          node.removeEventListener( 'keydown', keydownHandler );
+        }
+      };
+    }
   }
 });
 

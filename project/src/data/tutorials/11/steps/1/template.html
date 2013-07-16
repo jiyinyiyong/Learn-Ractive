@@ -20,39 +20,41 @@
 
   <!-- the chart -->
   <div class='bar-chart'>
-    <svg id='svg'>
+    <div id='svg_wrapper'> <!-- needed to determine size of SVG element in Firefox -->
+      <svg id='svg'>
 
-      <!-- gradient - higher temperatures are redder, lower temperatures are bluer -->
-      <defs>
-        <linearGradient id='gradient' x2='0' y2='100%' gradientUnits='userSpaceOnUse'>
-          <stop offset='0%' stop-color='rgb(255,0,0)' />
-          <stop offset='100%' stop-color='rgb(0,0,255)' />
-        </linearGradient>
-      </defs>
+        <!-- gradient - higher temperatures are redder, lower temperatures are bluer -->
+        <defs>
+          <linearGradient id='gradient' x2='0' y2='100%' gradientUnits='userSpaceOnUse'>
+            <stop offset='0%' stop-color='rgb(255,0,0)' />
+            <stop offset='100%' stop-color='rgb(0,0,255)' />
+          </linearGradient>
+        </defs>
 
-      <!-- horizontal line representing freezing -->
-      <line class='freezing' x1='0' y1='{{( yScale(0) )}}' x2='{{width}}' y2='{{( yScale(0) )}}'/>
+        <!-- horizontal line representing freezing -->
+        <line class='freezing' x1='0' y1='{{( yScale(0) )}}' x2='{{width}}' y2='{{( yScale(0) )}}'/>
 
-      {{#selectedCity}}
-        
-        <!-- the band -->
-        <polygon fill='url(#gradient)' stroke='url(#gradient)' class='temperature-band' points='{{( getBand(months,xScale,yScale) )}}'/>
+        {{#selectedCity}}
+          
+          <!-- the band -->
+          <polygon fill='url(#gradient)' stroke='url(#gradient)' class='temperature-band' points='{{( getBand(months,xScale,yScale) )}}'/>
 
-        {{#months:i}}
-          <!-- point markers for average highs -->
-          <g class='marker' transform='translate({{( xScale(i+0.5) )}},{{( yScale(high) )}})'>
-            <circle r='2'/>
-            <text y='-10'>{{( format(high,degreeType) )}}</text>
-          </g>
+          {{#months:i}}
+            <!-- point markers for average highs -->
+            <g class='marker' transform='translate({{( xScale(i+0.5) )}},{{( yScale(high) )}})'>
+              <circle r='2'/>
+              <text y='-10'>{{( format(high,degreeType) )}}</text>
+            </g>
 
-          <!-- point markers for average lows -->
-          <g class='marker' transform='translate({{( xScale(i+0.5) )}},{{( yScale(low) )}})'>
-            <circle r='2'/>
-            <text y='15'>{{( format(low,degreeType) )}}</text>
-          </g>
-        {{/months}}
-      {{/selectedCity}}
-    </svg>
+            <!-- point markers for average lows -->
+            <g class='marker' transform='translate({{( xScale(i+0.5) )}},{{( yScale(low) )}})'>
+              <circle r='2'/>
+              <text y='15'>{{( format(low,degreeType) )}}</text>
+            </g>
+          {{/months}}
+        {{/selectedCity}}
+      </svg>
+    </div>
 
     <div class='month-labels'>
       {{#monthNames:i}}

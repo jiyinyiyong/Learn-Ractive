@@ -135,7 +135,6 @@ svg {
 	font-family: 'Helvetica Neue', 'Arial';
 	font-size: 1.4em;
 	fill: #333;
-	alignment-baseline: hanging;
 }
 
 .selected text {

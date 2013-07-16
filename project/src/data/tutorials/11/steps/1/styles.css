@@ -1,3 +1,13 @@
+svg {
+	width: 100%;
+	height: 100%;
+}
+
+#svg_wrapper {
+	width: 100%;
+	height: 100%;
+}
+
 .temperatures {
 	position: relative;
 	width: 100%;

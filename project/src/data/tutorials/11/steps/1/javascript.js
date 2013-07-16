@@ -55,14 +55,15 @@ ractive = new Ractive({
 resize = function () {
   var width, height;
 
-  width = ractive.nodes.svg.clientWidth;
-  height = ractive.nodes.svg.clientHeight;
+  width = ractive.nodes.svg_wrapper.clientWidth;
+  height = ractive.nodes.svg_wrapper.clientHeight;
 
-  ractive.set( 'width', width );
-  ractive.get( 'height', height );
-
-  ractive.set( 'xScale', linearScale([ 0, 12 ], [ 0, width ]) );
-  ractive.set( 'yScale', linearScale([ -10, 42 ], [ height - 20, 25 ]) );
+  ractive.set({
+    width: width,
+    height: height,
+    xScale: linearScale([ 0, 12 ], [ 0, width ]),
+    yScale: linearScale([ -10, 42 ], [ height - 20, 25 ])
+  });
 };
 
 // For the purposes of this tutorial, we've got a global
