@@ -1,10 +1,10 @@
 /*global window, define, CodeMirror, document, prettyPrint */
 
-define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
+define( [ 'Ractive', 'views/Main' ], function ( RealRactive, Main ) {
 	
 	'use strict';
 
-	var eval2, teardown, teardownQueue, onResizeHandlers, prop, timeouts, _setTimeout, _clearTimeout, report, reportQueue;
+	var eval2, teardown, teardownQueue, onResizeHandlers, prop, timeouts, _setTimeout, _clearTimeout, report, reportQueue, Ractive;
 
 	eval2 = eval; // changes to global context. Bet you didn't know that! Thanks, http://stackoverflow.com/questions/8694300/how-eval-in-javascript-changes-the-calling-context
 
@@ -15,7 +15,7 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 	_clearTimeout = window.clearTimeout;
 
 	window.setTimeout = function ( fn, delay ) {
-		var timeout = _setTimeout.apply( null, arguments );
+		var timeout = _setTimeout.apply( window, arguments );
 		timeouts[ timeouts.length ] = timeout;
 	};
 
@@ -43,19 +43,19 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 	};
 
 
-	window.Ractive = function () {
+	window.Ractive = Ractive = function () {
 		// we need to override the constructor so we can keep track of
 		// which views need to be torn down during the tutorial
-		Ractive.apply( this, arguments );
-
+		RealRactive.apply( this, arguments );
 		teardownQueue[ teardownQueue.length ] = this;
 	};
 
-	window.Ractive.prototype = Ractive.prototype;
+	window.Ractive.prototype = RealRactive.prototype;
 
-	for ( prop in Ractive ) {
-		if ( Ractive.hasOwnProperty( prop ) ) {
-			window.Ractive[ prop ] = Ractive[ prop ];
+	/// copy static methods and properties from the real Ractive to the fake one
+	for ( prop in RealRactive ) {
+		if ( RealRactive.hasOwnProperty( prop ) ) {
+			window.Ractive[ prop ] = RealRactive[ prop ];
 		}
 	}
 
@@ -136,6 +136,8 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 			} catch ( err ) {
 				
 				report( 'javascript', 'error', err.message || err, app.state.get( 'tutorialStepCode' ) );
+
+				console.error( err );
 
 				throw err; // TODO - feedback to user
 			}
@@ -240,7 +242,11 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 			});
 		}
 
-		window.addEventListener( 'hashchange', parseHash );
+		if ( window.addEventListener ) {
+			window.addEventListener( 'hashchange', parseHash );
+		} else {
+			window.onhashchange = parseHash;
+		}
 		
 
 		app.state.compute({
@@ -260,7 +266,7 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 
 			// teardown any Ractive instances that have been created
 			teardown();
-
+			
 			editors.template.setValue( step.template || '' );
 			editors.javascript.setValue( step.javascript || '' );
 			editors.console.setValue( step.console || '' );
@@ -301,8 +307,6 @@ define( [ 'Ractive', 'views/Main' ], function ( Ractive, Main ) {
 
 				mainView.set({
 					stepNum: index + 1,
-					// prevDisabled: ( isFirst ? 'disabled' : '' ),
-					// nextDisabled: ( isLast ? 'disabled' : '' ),
 					stepOrTutorial: ( isLast ? 'tutorial' : 'step' )
 				});
 			},
