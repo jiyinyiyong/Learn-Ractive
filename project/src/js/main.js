@@ -10,7 +10,7 @@
 			Statesman: 'lib/Statesman',
 			Divvy: 'lib/Divvy'
 		},
-		urlArgs: 'bust=' + Date.now()
+		urlArgs: 'bust=' + new Date().getTime()
 	});
 
 	require([ 'app' ]);
