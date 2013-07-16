@@ -50,6 +50,14 @@
 
 	.info {
 		background-color: #fafafa;
+
+		strong {
+			width: 2.5em;
+			display: inline-block;
+			text-align: center;
+			top: 0.1em;
+			line-height: 1;
+		}
 	}
 }
 
