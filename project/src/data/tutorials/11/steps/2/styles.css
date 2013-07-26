@@ -65,7 +65,6 @@ svg {
 
 .tapcatcher {
 	fill: rgba(255,255,255,0.01);
-	pointer-event: fill;
 }
 
 #hotspots g, ellipse, circle {
@@ -91,13 +90,23 @@ svg {
 .visible {
 	opacity: 1;
 	pointer-events: normal;
+
 	-webkit-transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	-ms-transition: opacity 1s ease-in-out;
+	-o-transition: opacity 1s ease-in-out;
+	transition: opacity 1s ease-in-out;
 }
 
 .hidden {
 	opacity: 0;
 	pointer-events: none;
+	
 	-webkit-transition: opacity 0.2s ease-in-out;
+	-moz-transition: opacity 0.2s ease-in-out;
+	-ms-transition: opacity 0.2s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.2s ease-in-out;
 }
 
 #neuron {
@@ -106,6 +115,10 @@ svg {
 
 .detail {
 	-webkit-transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	-ms-transition: opacity 1s ease-in-out;
+	-o-transition: opacity 1s ease-in-out;
+	transition: opacity 1s ease-in-out;
 }
 
 .detail.visible {
@@ -120,6 +133,11 @@ svg {
 
 .label {
 	-webkit-transition: opacity 0.2s ease-in-out;
+	-moz-transition: opacity 0.2s ease-in-out;
+	-ms-transition: opacity 0.2s ease-in-out;
+	-o-transition: opacity 0.2s ease-in-out;
+	transition: opacity 0.2s ease-in-out;
+
 	cursor: pointer;
 }
 

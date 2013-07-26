@@ -49,9 +49,6 @@ setTimeout( function () {
 }, 1000 );
 
 
-
-var info, closeup;
-
 ractive.on({
   reset: function () {
     this.set({
@@ -96,7 +93,7 @@ ractive.observe({
         } else {
           ractive.set( 'showLabels', true );
         }
-      }
+     }
     });
   }
 });
