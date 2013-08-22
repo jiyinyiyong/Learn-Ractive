@@ -5,9 +5,9 @@
 <p>First, let's add a proxy <code>sort</code> event to each column header, specifying the column header as an event argument:</p>
 
 <pre class='prettyprint lang-html'>
-&lt;th class='sortable' proxy-tap='sort:name'&gt;Superhero name&lt;/th&gt;
-&lt;th class='sortable' proxy-tap='sort:realname'&gt;Real name&lt;/th&gt;
-&lt;th class='sortable' proxy-tap='sort:power'&gt;Superpower&lt;/th&gt;
+&lt;th class='sortable' on-tap='sort:name'&gt;Superhero name&lt;/th&gt;
+&lt;th class='sortable' on-tap='sort:realname'&gt;Real name&lt;/th&gt;
+&lt;th class='sortable' on-tap='sort:power'&gt;Superpower&lt;/th&gt;
 </pre>
 
 <p>That way, when the user taps one of the column headers, the view will fire a <code>sort</code> event.</p>

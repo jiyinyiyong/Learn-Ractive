@@ -3,7 +3,7 @@
 <p>You can pass in parameters to add fine-grained control over transitions:</p>
 
 <pre class='prettyprint lang-html'>
-&lt;div intro='fade:{"duration":2000}' outro='fly' class='large button' proxy-tap='show:2'&gt;Click me!&lt;/div&gt;
+&lt;div intro='fade:{"duration":2000}' outro='fly' class='large button' on-tap='show:2'&gt;Click me!&lt;/div&gt;
 </pre>
 
 <p>The transition function will receive an argument corresponding to these parameters (parsed as JSON, if possible, or left as a string if not). In this case, the default <code>duration</code> property will be overridden, so the <code>fade</code> transition will take 2000 milliseconds (more popularly known as '2 seconds').</p>
@@ -11,7 +11,7 @@
 <p>By convention, if you pass in a number, it will be treated as the duration property:</p>
 
 <pre class='prettyprint lang-html'>
-&lt;div intro='fade:2000' outro='fly' class='large button' proxy-tap='show:2'&gt;Click me!&lt;/div&gt;
+&lt;div intro='fade:2000' outro='fly' class='large button' on-tap='show:2'&gt;Click me!&lt;/div&gt;
 </pre>
 
 <p>In place of a number, you can use <code>fast</code> (200 milliseconds) or <code>slow</code> (600 milliseconds), just like jQuery.</p>

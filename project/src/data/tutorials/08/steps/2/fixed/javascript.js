@@ -5,6 +5,6 @@ var ractive = new Ractive({
   template: template,
   data: {
     colors: colors,
-    color: colors[0]
+    color: colors[1]
   }
 });

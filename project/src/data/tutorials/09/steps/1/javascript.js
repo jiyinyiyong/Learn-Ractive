@@ -1,13 +1,13 @@
-var item = "<li data-index='{{i}}' class='{{( done ? \"done\" : \"pending\" )}}'>" +
+var item = "<li data-index='{{i}}' class='{{ done ? \"done\" : \"pending\" }}'>" +
              "<input type='checkbox' checked='{{done}}'>" +
-             "<span proxy-tap='edit'>" +
+             "<span on-tap='edit'>" +
                "{{description}}" +
 
                "{{#.editing}}" +
-                 "<input id='editTodo' class='edit' value='{{description}}' proxy-blur='stop_editing'>" +
+                 "<input id='editTodo' class='edit' value='{{description}}' on-blur='stop_editing'>" +
                "{{/.editing}}" +
              "</span>" +
-             "<a class='button' proxy-tap='remove'>x</a>" +
+             "<a class='button' on-tap='remove'>x</a>" +
            "</li>";
 
 var TodoList = Ractive.extend({
@@ -37,7 +37,7 @@ var TodoList = Ractive.extend({
     input = this.nodes.editTodo;
     input.select();
 
-    window.addEventListener( 'keypress', keydownHandler = function ( event ) {
+    window.addEventListener( 'keydown', keydownHandler = function ( event ) {
       switch ( event.which ) {
         case 13: // ENTER
         input.blur();

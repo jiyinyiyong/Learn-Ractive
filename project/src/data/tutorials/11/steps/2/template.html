@@ -1,7 +1,7 @@
 <div class='graphic'>
   <div class='header'>
     {{#fullscreenEnabled}}
-      <button proxy-tap='toggleFullscreen'>Toggle fullscreen</button>
+      <button on-tap='toggleFullscreen'>Toggle fullscreen</button>
     {{/fullscreenEnabled}}
 
     <h3>Neuron cell diagram</h3>
@@ -630,7 +630,7 @@
   			c0.457-5.152,0.825-11.313,2.674-16.174c0.854-2.25,2.524-5.808,4.955-6.787c2.819-1.07,5.45-2.35,7.979-3.38L420.78,152.599z"/>
   	</g>
   	
-  	<rect proxy-tap='reset' class='tapcatcher' x='0' y='0' width='819.18' height='596.441'/>
+  	<rect on-tap='reset' class='tapcatcher' x='0' y='0' width='819.18' height='596.441'/>
 
   	<g id="Layer_1">
   		<g id="schwann_x5F_cells_x5F_back">
@@ -675,7 +675,7 @@
   				c7.894,3.725,15.434-2.97,20.58-7.214c-8.694,17.575-48.064,6.845-64.598,7.892c-11.143,0.707-22.484,1.471-33.5,2.182
   				c-10.301,0.681-16.49-5.359-19.58-13.18L456.82,290.818z"/>
   		</g>
-  		<path id="neuron" proxy-tap='showCloseUp:neuron' fill="#A01515" d="M0.503,76.729c2.83-0.528,7.563-0.355,10.36,0.316c2.041,0.49,5.254,3.469,7.163,1.379
+  		<path id="neuron" on-tap='showCloseUp:neuron' fill="#A01515" d="M0.503,76.729c2.83-0.528,7.563-0.355,10.36,0.316c2.041,0.49,5.254,3.469,7.163,1.379
   			c1.417-1.552-0.201-4.639-0.342-6.341c-0.217-2.626,0.175-4.025,0.81-6.636c1.501-6.179,1.587-12.623,3.01-18.824
   			c1.499-6.535,1-10.119-2.478-15.973C17.155,27.5,5.17,12.767,10.916,10.068c-0.265,4.166,1.679,8.245,3.589,11.974
   			c2.728,5.325,10.155,10.943,10.924,16.951c0.391,3.05-1.581,7.212-2.539,9.978c-1.948,5.618-3.463,11.247-4.01,17.181
@@ -933,9 +933,9 @@
   		</g>
   	</g>
 
-  	<rect proxy-tap='reset' class='tapcatcher' pointer-events='{{( showLabels ? "none" : "normal" )}}' x='0' y='0' width='819.18' height='596.441'/>
+  	<rect on-tap='reset' class='tapcatcher' pointer-events='{{ showLabels ? "none" : "normal" }}' x='0' y='0' width='819.18' height='596.441'/>
 
-  	<g id="cutaway" class='detail {{( closeup === "neuron" ? "visible" : "hidden" )}}'>
+  	<g id="cutaway" class='detail {{ closeup === "neuron" ? "visible" : "hidden" }}'>
   		<g>
   			<path fill="#2F80A8" d="M115.703,415.027c-5.621,1.029-25.052,8.281-29.133,1.807c-2.904-4.604,5.93-13.555,8.313-16.977
   				c5.936-8.52,12.771-16.387,20.304-23.529c4.813-4.562,11.244-9.41,13.353-16.115c1.729-5.496-0.654-10.441-2.032-15.799
@@ -1756,7 +1756,7 @@
   		<g id="labels">
   			
         <!-- Rough ER -->
-        <g class='label {{( info === "rough_er" ? "selected" : "" )}}' proxy-tap='moreInfo:rough_er'>
+        <g class='label {{ info === "rough_er" ? "selected" : "" }}' on-tap='moreInfo:rough_er'>
           <line x1="350" y1="170" x2="280" y2="240" class='outline'/>
           <line x1="350" y1="170" x2="280" y2="240"/>
 
@@ -1768,7 +1768,7 @@
         </g>
 
         <!-- Ribosomes -->
-        <g class='label {{( info === "ribosomes" ? "selected" : "" )}}' proxy-tap='moreInfo:ribosomes'>
+        <g class='label {{ info === "ribosomes" ? "selected" : "" }}' on-tap='moreInfo:ribosomes'>
           <line class='no-arrow outline' x1="233" y1="150" x2="228" y2="242"/>
           <ellipse class='outline' cx="228" cy="248" rx="7" ry="7"/>
 
@@ -1782,7 +1782,7 @@
         </g>
 
         <!-- Polyribosomes -->
-        <g class='label {{( info === "polyribosomes" ? "selected" : "" )}}' proxy-tap='moreInfo:polyribosomes'>
+        <g class='label {{ info === "polyribosomes" ? "selected" : "" }}' on-tap='moreInfo:polyribosomes'>
           <line class='no-arrow outline' x1="200" y1="200" x2="184" y2="227"/>
           <ellipse class='outline' cx="185" cy="235" rx="8" ry="8"/>
 
@@ -1796,7 +1796,7 @@
         </g>
 
         <!-- Golgi apparatus -->
-        <g class='label {{( info === "golgi" ? "selected" : "" )}}' proxy-tap='moreInfo:golgi'>
+        <g class='label {{ info === "golgi" ? "selected" : "" }}' on-tap='moreInfo:golgi'>
           <line x1="118" y1="245" x2="160" y2="292" class='outline'/>
           <line x1="118" y1="245" x2="160" y2="292"/>
 
@@ -1807,7 +1807,7 @@
         </g>
 
         <!-- Nucleus -->
-        <g class='label {{( info === "nucleus" ? "selected" : "" )}}' proxy-tap='moreInfo:nucleus'>
+        <g class='label {{ info === "nucleus" ? "selected" : "" }}' on-tap='moreInfo:nucleus'>
           <line x1="86" y1="320" x2="207" y2="311" class='outline'/>
           <line x1="86" y1="320" x2="207" y2="311"/>
 
@@ -1818,7 +1818,7 @@
         </g>
 
         <!-- Nucleolus -->
-        <g class='label {{( info === "nucleolus" ? "selected" : "" )}}' proxy-tap='moreInfo:nucleolus'>
+        <g class='label {{ info === "nucleolus" ? "selected" : "" }}' on-tap='moreInfo:nucleolus'>
           <line x1="85" y1="390" x2="230" y2="333" class='outline'/>
           <line x1="85" y1="390" x2="230" y2="333"/>
 
@@ -1829,7 +1829,7 @@
         </g>
 
         <!-- Membrane -->
-        <g class='label {{( info === "membrane" ? "selected" : "" )}}' proxy-tap='moreInfo:membrane'>
+        <g class='label {{ info === "membrane" ? "selected" : "" }}' on-tap='moreInfo:membrane'>
           <line x1="60" y1="450" x2="145" y2="410" class='outline'/>
           <line x1="60" y1="450" x2="145" y2="410"/>
 
@@ -1840,7 +1840,7 @@
         </g>
 
         <!-- Microtubule -->
-        <g class='label {{( info === "microtubules" ? "selected" : "" )}}' proxy-tap='moreInfo:microtubules'>
+        <g class='label {{ info === "microtubules" ? "selected" : "" }}' on-tap='moreInfo:microtubules'>
           <polyline points="190,430 210,490 220,440" class='outline'/>
           <polyline points="190,430 210,490 220,440"/>
 
@@ -1851,7 +1851,7 @@
         </g>
         
         <!-- Mitochondrion -->
-        <g class='label {{( info === "mitochondrion" ? "selected" : "" )}}' proxy-tap='moreInfo:mitochondrion'>
+        <g class='label {{ info === "mitochondrion" ? "selected" : "" }}' on-tap='moreInfo:mitochondrion'>
   				<line x1="400" y1="390" x2="320" y2="360" class='outline'/>
           <line x1="400" y1="390" x2="320" y2="360"/>
 
@@ -1862,7 +1862,7 @@
   			</g>
 
   			<!-- Smooth ER -->
-        <g class='label {{( info === "smooth_er" ? "selected" : "" )}}' proxy-tap='moreInfo:smooth_er'>
+        <g class='label {{ info === "smooth_er" ? "selected" : "" }}' on-tap='moreInfo:smooth_er'>
   				<line x1="400" y1="464" x2="285" y2="405" class='outline'/>
           <line x1="400" y1="464" x2="285" y2="405"/>
 
@@ -1877,7 +1877,7 @@
   	<g id="closeups">
   		
   		<!-- axon detail -->
-  		<g class='detail {{( closeup === "axon" ? "visible" : "hidden" )}}'>
+  		<g class='detail {{ closeup === "axon" ? "visible" : "hidden" }}'>
   			
   			<!-- graphic -->
   			<g>
@@ -2081,7 +2081,7 @@
   			<g>
   				
           <!-- Myelin sheath -->
-          <g class='label {{( info === "schwann_cell" ? "selected" : "" )}}' proxy-tap='moreInfo:schwann_cell'>
+          <g class='label {{ info === "schwann_cell" ? "selected" : "" }}' on-tap='moreInfo:schwann_cell'>
   					<polyline points="710,361 709,220 560,282" class='outline'/>
             <polyline points="710,361 709,220 560,282"/>
             
@@ -2094,7 +2094,7 @@
   				</g>
 
   				<!-- Nucleus -->
-          <g class='label {{( info === "schwann_cell" ? "selected" : "" )}}' proxy-tap='moreInfo:schwann_cell'>
+          <g class='label {{ info === "schwann_cell" ? "selected" : "" }}' on-tap='moreInfo:schwann_cell'>
   					<line x1="610" y1="365" x2="660" y2="370" class='outline'/>
             <line x1="610" y1="365" x2="660" y2="370"/>
 
@@ -2106,7 +2106,7 @@
   				</g>
 
   				<!-- Microfilament -->
-          <g class='label {{( info === "microfilament" ? "selected" : "" )}}' proxy-tap='moreInfo:microfilament'>
+          <g class='label {{ info === "microfilament" ? "selected" : "" }}' on-tap='moreInfo:microfilament'>
   					<polyline points="624,462 670,440 626,437" class='outline'/>
             <polyline points="624,462 670,440 626,437"/>
 
@@ -2117,7 +2117,7 @@
   				</g>
 
   				<!-- Microtubule -->
-          <g class='label {{( info === "microtubules" ? "selected" : "" )}}' proxy-tap='moreInfo:microtubules'>
+          <g class='label {{ info === "microtubules" ? "selected" : "" }}' on-tap='moreInfo:microtubules'>
   					<line x1="645" y1="499" x2="610" y2="480" class='outline'/>
             <line x1="645" y1="499" x2="610" y2="480"/>
 
@@ -2128,7 +2128,7 @@
   				</g>
 
   				<!-- Axon -->
-          <g class='label {{( info === "axon" ? "selected" : "" )}}' proxy-tap='moreInfo:axon'>
+          <g class='label {{ info === "axon" ? "selected" : "" }}' on-tap='moreInfo:axon'>
   					<line x1="650" y1="560" x2="580" y2="510" class='outline'/>
             <line x1="650" y1="560" x2="580" y2="510"/>
             
@@ -2141,7 +2141,7 @@
   		</g>
   		
   		<!-- synapse detail -->
-  		<g class='detail {{( closeup === "synapse" ? "visible" : "hidden" )}}'>
+  		<g class='detail {{ closeup === "synapse" ? "visible" : "hidden" }}'>
 
   			<!-- graphic -->
   			<g>
@@ -2341,7 +2341,7 @@
   			<!-- labels -->
   			<g>
   				<!-- Microtubules & neurofibrils -->
-          <g class='label {{( info === "microtubules" ? "selected" : "" )}}' proxy-tap='moreInfo:microtubules'>
+          <g class='label {{ info === "microtubules" ? "selected" : "" }}' on-tap='moreInfo:microtubules'>
             <line x1="330" y1="80" x2="461" y2="73" class='outline'/>
             <line x1="330" y1="80" x2="461" y2="73"/>
 
@@ -2353,7 +2353,7 @@
           </g>
 
           <!-- Neurotransmitter -->
-          <g class='label {{( info === "neurotransmitter" ? "selected" : "" )}}' proxy-tap='moreInfo:neurotransmitter'>
+          <g class='label {{ info === "neurotransmitter" ? "selected" : "" }}' on-tap='moreInfo:neurotransmitter'>
             <line x1="340" y1="160" x2="397" y2="147" class='outline'/>
             <line x1="340" y1="160" x2="397" y2="147"/>
 
@@ -2364,7 +2364,7 @@
           </g>
 
           <!-- Receptors -->
-          <g class='label {{( info === "receptors" ? "selected" : "" )}}' proxy-tap='moreInfo:receptors'>
+          <g class='label {{ info === "receptors" ? "selected" : "" }}' on-tap='moreInfo:receptors'>
             <polyline points='390,165 350,210 425,185' class='outline'/>
             <polyline points='390,165 350,210 425,185'/>
 
@@ -2375,7 +2375,7 @@
   				</g>
 
   				<!-- Synaptic vesicles -->
-          <g class='label {{( info === "synaptic_vesicles" ? "selected" : "" )}}' proxy-tap='moreInfo:synaptic_vesicles'>
+          <g class='label {{ info === "synaptic_vesicles" ? "selected" : "" }}' on-tap='moreInfo:synaptic_vesicles'>
   					<line x1="590" y1="85" x2="492" y2="123" class='outline'/>
             <line x1="590" y1="85" x2="492" y2="123"/>
 
@@ -2386,7 +2386,7 @@
   				</g>
 
   				<!-- Synaptic cleft -->
-          <g class='label {{( info === "synaptic_cleft" ? "selected" : "" )}}' proxy-tap='moreInfo:synaptic_cleft'>
+          <g class='label {{ info === "synaptic_cleft" ? "selected" : "" }}' on-tap='moreInfo:synaptic_cleft'>
   					<line x1="563" y1="160" x2="456" y2="155" class='outline'/>
             <line x1="563" y1="160" x2="456" y2="155"/>
 
@@ -2401,8 +2401,8 @@
   		</g>
   	</g>
 
-  	<g id="hotspots" class='{{( showLabels ? "visible" : "hidden" )}}'>
-  		<g class='hotspot' proxy-tap='showCloseUp:axon'>
+  	<g id="hotspots" class='{{ showLabels ? "visible" : "hidden" }}'>
+  		<g class='hotspot' on-tap='showCloseUp:axon'>
   			<path d="M757.188,131.592c2.539,1.987,4.214,4.549,5.725,7.328
   				c0.6,1.102,1.05,1.992,2.088,2.791c0.308,0.237,4.354,1.83,4.212,1.281c-0.845-3.266,4.817-5.336,6.787-2.663
   				c0.159,0.215,0.373-3.079,0.185-3.6c-0.651-1.801-2.022-3.457-3.406-4.746c-1.19-1.09-2.47-2.12-3.761-3.14l0.011-0.004
@@ -2484,7 +2484,7 @@
   				c-1.296-1.836-3.366-3.473-5.672-4.671l-0.005,0.013c-1.959-1.021-4.09-1.73-6.066-1.991c2.538-1.715,6.821-0.577,9.084,0.961
   				c1.188,0.808,2.546,2.046,2.898,3.506C788.894,200.19,788.805,201.351,788.614,202.207z"/>
   		</g>
-  		<circle class='hotspot' proxy-tap='showCloseUp:synapse' cx="239" cy="35.863" r='15'/>
+  		<circle class='hotspot' on-tap='showCloseUp:synapse' cx="239" cy="35.863" r='15'/>
   		
       <text class='large white' transform='translate(250,310)'>Tap here</text>
   		<text class='large white' transform='translate(250,350)'>to see inside</text>
@@ -2502,10 +2502,10 @@
       <line x1='630' y1='470' x2='600' y2='490' class='hint'/>
   	</g>
 
-  	<g id="default-labels" class='{{( showLabels ? "visible" : "hidden" )}}'>
+  	<g id="default-labels" class='{{ showLabels ? "visible" : "hidden" }}'>
   		
       <!-- Dendrites -->
-      <g class='label {{( info === "dendrites" ? "selected" : "" )}}' proxy-tap='moreInfo:dendrites'>
+      <g class='label {{ info === "dendrites" ? "selected" : "" }}' on-tap='moreInfo:dendrites'>
   			<polyline points="465,554 530,535 470,505"/>
   			<polyline points="142,105 150,40 190,67"/>
 
@@ -2521,7 +2521,7 @@
   		</g>
 
   		<!-- Axon hillock -->
-      <g class='label {{( info === "axon_hillock" ? "selected" : "" )}}' proxy-tap='moreInfo:axon_hillock'>
+      <g class='label {{ info === "axon_hillock" ? "selected" : "" }}' on-tap='moreInfo:axon_hillock'>
   			<path d="M453.05,294.498c-0.524,0.039-0.926,0.478-0.926,0.996c0,0.025,0.001,0.05,0.003,0.075c0,0,0.512,6.884,0.633,8.513
   				c-21.237,0.563-32.001,17.244-32.108,17.416l-0.627,0.998c0,0,3.999,1.678,6.838,2.867h-8.364
   				c-7.395,0-11.851,19.855-12.821,24.666h-7.179c-0.552,0-1,0.447-1,1c0,0.555,0.448,1,1,1h8.828l0.154-0.812
@@ -2535,7 +2535,7 @@
   		</g>
 
   		<!-- Axodendritic synapse -->
-      <g class='label {{( info === "synapse" ? "selected" : "" )}}' proxy-tap='moreInfo:synapse'>
+      <g class='label {{ info === "synapse" ? "selected" : "" }}' on-tap='moreInfo:synapse'>
   			
   			<polyline points="145,500 124,550 210,547"/>
 
@@ -2547,7 +2547,7 @@
   		</g>
 
   		<!-- Axosomatic synapse -->
-      <g class='label {{( info === "synapse" ? "selected" : "" )}}' proxy-tap='moreInfo:synapse'>
+      <g class='label {{ info === "synapse" ? "selected" : "" }}' on-tap='moreInfo:synapse'>
   			<line x1='400' y1='200' x2='345' y2='215'/>
 
         <g transform='translate(346, 153)'>
@@ -2558,7 +2558,7 @@
   		</g>
 
   		<!-- Axoaxonic synapse -->
-      <g class='label {{( info === "synapse" ? "selected" : "" )}}' proxy-tap='moreInfo:synapse'>
+      <g class='label {{ info === "synapse" ? "selected" : "" }}' on-tap='moreInfo:synapse'>
   			<line x1="760" y1="55" x2="750" y2="95"/>
 
         <g transform='translate(680, 30)'>
@@ -2569,7 +2569,7 @@
   		</g>
 
       <!-- Node of Ranvier -->
-      <g class='label {{( info === "ranvier" ? "selected" : "" )}}' proxy-tap='moreInfo:ranvier'>
+      <g class='label {{ info === "ranvier" ? "selected" : "" }}' on-tap='moreInfo:ranvier'>
   			<polyline points="685,250 675,194 730,220"/>
 
         <g transform='translate(555, 197)'>
@@ -2581,6 +2581,6 @@
   </svg>
 
   <div class='detail'>
-    <p>{{{( detail[ info ] || 'Tap on the labels for more info' )}}}</p>
+    <p>{{{ detail[ info ] || 'Tap on the labels for more info' }}}</p>
   </div>
 </div>

@@ -6,16 +6,16 @@
 
 <pre class='prettyprint lang-html'>
 &lt;script id='item' type='text/ractive'&gt;
-&lt;li data-index='{{i}}' class='{{( done ? "done" : "pending" )}}'&gt;
+&lt;li data-index='{{i}}' class='{{ done ? "done" : "pending" }}'&gt;
   &lt;input type='checkbox' checked='{{done}}'&gt;
-  &lt;span proxy-tap='edit'&gt;
+  &lt;span on-tap='edit'&gt;
     {{description}}
 
     {{#.editing}}
-      &lt;input id='editTodo' class='edit' value='{{description}}' proxy-blur='stop_editing'&gt;
+      &lt;input id='editTodo' class='edit' value='{{description}}' on-blur='stop_editing'&gt;
     {{/.editing}}
   &lt;/span&gt;
-  &lt;a class='button' proxy-tap='remove'&gt;x&lt;/a&gt;
+  &lt;a class='button' on-tap='remove'&gt;x&lt;/a&gt;
 &lt;/li&gt;
 &lt;/script&gt;
 </pre>
@@ -28,16 +28,16 @@
 
 <pre class='prettyprint lang-html'>
 &lt;!-- {{>item}} --&gt;
-&lt;li data-index='{{i}}' class='{{( done ? "done" : "pending" )}}'&gt;
+&lt;li data-index='{{i}}' class='{{ done ? "done" : "pending" }}'&gt;
   &lt;input type='checkbox' checked='{{done}}'&gt;
-  &lt;span proxy-tap='edit'&gt;
+  &lt;span on-tap='edit'&gt;
     {{description}}
 
     {{#.editing}}
-      &lt;input id='editTodo' class='edit' value='{{description}}' proxy-blur='stop_editing'&gt;
+      &lt;input id='editTodo' class='edit' value='{{description}}' on-blur='stop_editing'&gt;
     {{/.editing}}
   &lt;/span&gt;
-  &lt;a class='button' proxy-tap='remove'&gt;x&lt;/a&gt;
+  &lt;a class='button' on-tap='remove'&gt;x&lt;/a&gt;
 &lt;/li&gt;
 &lt;!-- {{/item}} --&gt;
 </pre>

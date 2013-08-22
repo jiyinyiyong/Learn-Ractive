@@ -5,8 +5,12 @@
 <p>With <span class='logo'>Ractive.js</span>, you can subscribe to <em>proxy events</em> instead. You declare a proxy event like this...</p>
 
 <pre class='prettyprint lang-html'>
-&lt;button proxy-click='activate'&gt;Activate!&lt;/button&gt;
+&lt;button on-click='activate'&gt;Activate!&lt;/button&gt;
 </pre>
+
+<div class='hint'>
+	<p>In previous versions you would write <code>proxy-click='activate'</code> instead. You can still use this form if you prefer, though it may be deprecated in future.</p>
+</div>
 
 <p>...and subscribe to it like this:</p>
 
@@ -23,5 +27,5 @@ ractive.on( 'activate', function ( event ) {
 <p>Update the template and JavaScript, then execute.</p>
 
 <div class='hint'>
-	<p>If you use your developer tools to inspect the button, you'll notice that it doesn't have a <code>proxy-click</code> attribute. When <span class='logo'>Ractive.js</span> parses the template, it knows to treat attributes beginning <code>proxy-</code> differently. You'll learn more about parsing in a later tutorial.</p>
+	<p>If you use your developer tools to inspect the button, you'll notice that it doesn't have a <code>on-click</code> attribute. When <span class='logo'>Ractive.js</span> parses the template, it knows to treat attributes beginning <code>on-</code> differently. You'll learn more about parsing in a later tutorial.</p>
 </div>

@@ -4,10 +4,10 @@
 
 <p>We <em>could</em> replace the number with a string, like '62.6 million'. But numbers are a hell of a lot easier to work with.</p>
 
-<p>Instead, we can use an <em>expression</em>. Expressions look like regular mustaches, except with parentheses inside the curly braces:</p>
+<p>Instead, we can use an <em>expression</em>. Expressions look just like regular mustaches:</p>
 
 <pre class='prettyprint lang-html'>
-{{( format(population) )}}
+{{ format(population) }}
 </pre>
 
 <p>Add a <code>format</code> property alongside the country data (it may seem weird adding a function as 'data', but it will make sense in due course!):</p>

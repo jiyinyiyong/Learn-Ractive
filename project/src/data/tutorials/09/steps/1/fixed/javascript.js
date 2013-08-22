@@ -21,7 +21,7 @@ var TodoList = Ractive.extend({
     input = this.nodes.editTodo;
     input.select();
 
-    window.addEventListener( 'keypress', keydownHandler = function ( event ) {
+    window.addEventListener( 'keydown', keydownHandler = function ( event ) {
       switch ( event.which ) {
         case 13: // ENTER
         input.blur();

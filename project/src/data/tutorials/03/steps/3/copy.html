@@ -3,10 +3,10 @@
 <p>It's possible to define custom events in <span class='logo'>Ractive.js</span>. Explaining how to <em>create</em> them is outside the scope of this tutorial, but <em>using</em> them is easy:</p>
 
 <pre class='prettyprint lang-html'>
-&lt;button proxy-tap='activate'&gt;Activate!&lt;/button&gt;
+&lt;button on-tap='activate'&gt;Activate!&lt;/button&gt;
 </pre>
 
-<p>Note that we're using <code>proxy-tap</code> here instead of <code>proxy-click</code> &ndash; <code>tap</code> is a custom event.</p>
+<p>Note that we're using <code>on-tap</code> here instead of <code>on-click</code> &ndash; <code>tap</code> is a custom event.</p>
 
 <p>The trouble with <code>click</code> is that it's nonsense. If you put your mouse down on the 'activate' button, waggle it about, then lift your finger up after a few seconds, the browser will in most cases consider it a 'click'. I don't. Do you?</p>
 

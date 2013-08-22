@@ -6,7 +6,7 @@
 
 <pre class='prettyprint lang-html'>
 &lt;td&gt;&lt;div style='background-color: red;
-    	        width: {{( red * 100 )}}%;'&gt;&lt;/div&gt;&lt;/td&gt;
+    	        width: {{ red * 100 }}%;'&gt;&lt;/div&gt;&lt;/td&gt;
 </pre>
 
 <p>Update the first three <code>&lt;div&gt;</code> elements in the template accordingly.</p>
@@ -14,9 +14,9 @@
 <p>To show the result, we can use an <code>rgb(r,g,b)</code> CSS colour value. But instead of percentages, these need to be between 0-255:</p>
 
 <pre class='prettyprint lang-html'>
-&lt;div style='background-color: rgb({{( red   * 255 )}},
-    	                          {{( green * 255 )}},
-    	                          {{( blue  * 255 )}})'&gt;&lt;/div&gt;
+&lt;div style='background-color: rgb({{ red   * 255 }},
+    	                          {{ green * 255 }},
+    	                          {{ blue  * 255 }})'&gt;&lt;/div&gt;
 </pre>
 
 <p>Update the template and execute the code. Did it work?</p>
@@ -24,9 +24,9 @@
 <p>No, it didn't. That's because CSS insists that you use integers &ndash; no decimals allowed. So let's use <code>Math.round</code> to turn the numbers into integers:</p>
 
 <pre class='prettyprint lang-html'>
-&lt;div style='background-color: rgb({{( Math.round( red   * 255 ) )}},
-    	                          {{( Math.round( green * 255 ) )}},
-    	                          {{( Math.round( blue  * 255 ) )}})'&gt;&lt;/div&gt;
+&lt;div style='background-color: rgb({{ Math.round( red   * 255 ) }},
+    	                          {{ Math.round( green * 255 ) }},
+    	                          {{ Math.round( blue  * 255 ) }})'&gt;&lt;/div&gt;
 </pre>
 
 <p>Execute the code. Ta-da! Try changing the colours using the console.</p>
